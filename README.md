@@ -1,7 +1,7 @@
 # Portal
 
 ## Why this project
-{Short paragraph about why we have this repo.}
+The Secure Data Commons is an online data warehousing and analysis platform for transportation researchers. On this portal, researchers can take advantage of pre-established programming environments to access and analyze a growing set of transportation-related data sets. The SDC platform provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes, and others.
 
 ## Contributing
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
