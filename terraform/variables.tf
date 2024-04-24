@@ -30,6 +30,7 @@ locals {
     terraform_bucket            = data.terraform_remote_state.infrastructure.outputs.common.terraform_bucket
     backup_bucket               = data.terraform_remote_state.infrastructure.outputs.common.backup_bucket
     instance_maintenance_bucket = data.terraform_remote_state.infrastructure.outputs.common.instance_maintenance_bucket
+    app_slug                    = "portal2"
   }
   default_tags = {
     "Repository URL" = "https://github.com/USDOT-SDC/"
