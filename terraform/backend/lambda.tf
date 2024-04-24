@@ -1,7 +1,7 @@
 data "archive_file" "hello_world" {
   type        = "zip"
-  source_file = "${path.module}/src/lambda_function.py"
-  output_path = "${path.module}/lambda_deployment_package.zip"
+  source_file = "${path.module}/lambdas/hello_world/src/lambda_function.py"
+  output_path = "${path.module}/lambdas/hello_world/lambda_deployment_package.zip"
 }
 
 resource "aws_lambda_function" "hello_world" {
