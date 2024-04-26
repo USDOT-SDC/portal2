@@ -1,0 +1,109 @@
+import boto3
+import json
+import os
+import ast, json
+
+RESTAPIID = os.getenv("RESTAPIID")
+AUTHORIZERID = os.getenv("AUTHORIZERID")
+TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
+TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
+TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
+TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
+
+
+print('Loading function')
+dynamo_resource = boto3.resource('dynamodb')
+    
+    
+def get_user_details(id_token):
+    apigateway = boto3.client('apigateway')
+    response = apigateway.test_invoke_authorizer(
+    restApiId=RESTAPIID,
+    authorizerId=AUTHORIZERID,
+    headers={
+        'Authorization': id_token
+    })
+    print('test invoke authorizer response: ', response)
+    roles_response=response['claims']['family_name']
+    email=response['claims']['email']
+    full_username=response['claims']['cognito:username'].split('\\')[1]
+    roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
+    role_list= roles_list_formatted.split(",")
+
+    roles=[]
+    for r in role_list:
+        if ":role/" in r:
+            roles.append(r.split(":role/")[1])
+
+    return { 'role' : roles , 'email': email, 'username': full_username }
+    
+def get_datasets():
+    try:
+        table = dynamo_resource.Table(TABLENAME_AVAILABLE_DATASET)
+        response = table.scan(TableName=TABLENAME_AVAILABLE_DATASET)
+        return { 'datasets' : response }
+    except Exception:
+        print(Exception)
+      
+        
+def get_user_trustedstatus(userid):
+    trustedUsersTable = dynamo_resource.Table(TABLENAME_TRUSTED_USERS)
+
+    response = trustedUsersTable.query(
+        KeyConditionExpression=Key('UserID').eq(userid),
+        FilterExpression=Attr('TrustedStatus').eq('Trusted')
+    )
+    userTrustedStatus = {}
+    for x in response['Items']:
+        userTrustedStatus[x['Dataset-DataProvider-Datatype']] = 'Trusted'
+
+    return userTrustedStatus
+
+
+def get_user_autoexportstatus(userid):
+    autoExportUsersTable = dynamo_resource.Table(TABLENAME_AUTOEXPORT_USERS)
+
+    response = autoExportUsersTable.query(
+        KeyConditionExpression=Key('UserID').eq(userid),
+        FilterExpression=Attr('AutoExportStatus').eq('Approved')
+    )
+    userAutoExportStatus = {}
+    for x in response['Items']:
+        userAutoExportStatus[x['Dataset-DataProvider-Datatype']] = 'Approved'
+
+    return userAutoExportStatus
+
+
+def lambda_handler(event, context):
+    user_info={}
+    roles=[]
+    try:
+        id_token = event['headers']['authorization']
+        info_dict=get_user_details(id_token)
+        user_info['role']=info_dict['role']
+        user_info['email']=info_dict['email']
+        user_info['username']=info_dict['username']
+        user_info['datasets']=get_datasets()['datasets']['Items']
+        user_info['userTrustedStatus'] = get_user_trustedstatus(info_dict['username'])
+        user_info['userAutoExportStatus'] = get_user_autoexportstatus(info_dict['username'])
+    except Exception:
+        print(Exception)
+        
+    table = dynamo_resource.Table(TABLENAME_USER_STACKS)
+
+    # Get the item with role name
+    try:
+        response_table = table.get_item(Key={'username': user_info['username'] })
+    except Exception:
+        print(Exception)
+
+    # Convert unicode to ascii
+    try: 
+        user_info['stacks']=ast.literal_eval(json.dumps(response_table['Item']['stacks']))
+        user_info['team_slug']=response_table['Item']['teamName']
+        user_info['upload_locations']=response_table['Item']['upload_locations']
+    except Exception:
+        print(Exception)
+    
+    # Lambday with proxy integration response must be in the format: {'isBase64Encoded': true|false, 'statusCode':<htmlstatuscode>, 'headers':{'<name>':'<value',...}, 'body':<body>}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(user_info)}
