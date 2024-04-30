@@ -105,5 +105,5 @@ def lambda_handler(event, context):
     except Exception:
         print(Exception)
     
-    # Lambday with proxy integration response must be in the format: {'isBase64Encoded': true|false, 'statusCode':<htmlstatuscode>, 'headers':{'<name>':'<value',...}, 'body':<body>}
+    # Lambda with proxy integration response must be in the format: {'isBase64Encoded': true|false, 'statusCode':<htmlstatuscode>, 'headers':{'<name>':'<value',...}, 'body':<body>}
     return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(user_info)}

@@ -1,0 +1,26 @@
+import boto3
+import logging
+
+logger = logging.getLogger()
+
+def lambda_handler(event, context):
+    params = event['queryStringParameters']
+    if not params or "readmepathkey" not in params or "readmebucket" not in params:
+        logger.error("The query parameters 'readmepathkey' or 'readmebucket' is missing")
+        raise ("The query parameters 'readmepathkey' or 'readmebucket' is missing")
+
+    try:
+        client_s3 = boto3.client('s3')
+        response = client_s3.get_object(
+        Bucket=params['readmebucket'],
+        Key=params['readmepathkey']
+        )
+        data = response['Body'].read().decode('utf-8')
+    except BaseException as be:
+        logging.exception("Error: Failed to get data from s3 file" + str(be) )
+        raise ("Internal error at server side")
+
+    # return Response(body={'data': data },
+    #                 status_code=200,
+    #                 headers={'Content-Type': 'text/plain'})
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(data)}
