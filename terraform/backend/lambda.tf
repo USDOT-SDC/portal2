@@ -10,7 +10,7 @@ resource "aws_lambda_function" "hello_world" {
   source_code_hash = data.archive_file.hello_world.output_base64sha256
   role             = aws_iam_role.hello_world.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.11"
+  runtime          = "python3.12"
   timeout          = 60
   depends_on       = [data.archive_file.hello_world]
   tags             = local.common_tags
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "get_user_info" {
   source_code_hash = data.archive_file.get_user_info.output_base64sha256
   role             = aws_iam_role.webportal_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.11"
+  runtime          = "python3.12"
   timeout          = 60
   environment {
     variables = {
@@ -44,13 +44,19 @@ resource "aws_lambda_function" "get_user_info" {
   tags             = local.common_tags
 }
 
+data "archive_file" "export_request" {
+  type        = "zip"
+  source_file = "${path.module}/lambdas/export_request/src/lambda_function.py"
+  output_path = "${path.module}/lambdas/export_request/lambda_deployment_package.zip"
+}
+
 resource "aws_lambda_function" "export_request" {
   function_name    = "${var.common.app_slug}_export_request"
   filename         = data.archive_file.export_request.output_path
   source_code_hash = data.archive_file.export_request.output_base64sha256
   role             = aws_iam_role.webportal_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.11"
+  runtime          = "python3.12"
   timeout          = 60
   environment {
     variables = {
@@ -66,13 +72,19 @@ resource "aws_lambda_function" "export_request" {
   tags             = local.common_tags
 }
 
+data "archive_file" "manage_workstation" {
+  type        = "zip"
+  source_file = "${path.module}/lambdas/manage_workstation/src/lambda_function.py"
+  output_path = "${path.module}/lambdas/manage_workstation/lambda_deployment_package.zip"
+}
+
 resource "aws_lambda_function" "manage_workstation" {
   function_name    = "${var.common.app_slug}_manage_workstation"
   filename         = data.archive_file.manage_workstation.output_path
   source_code_hash = data.archive_file.manage_workstation.output_base64sha256
   role             = aws_iam_role.webportal_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.11"
+  runtime          = "python3.12"
   timeout          = 60
   environment {
     variables = {
