@@ -48,4 +48,32 @@
 #   id = "E2PSKEPV2RCMK7"
 # }
 
+# import {
+#   to = module.be.aws_api_gateway_resource.health
+#   id = "hdvvw7yfy4/8k6c5b"
+# }
+
+# import {
+#   to = module.be.aws_api_gateway_method.health_any
+#   id = "hdvvw7yfy4/8k6c5b/ANY"
+# }
+
+# import {
+#   to = module.be.aws_api_gateway_integration.health_any_mock
+#   id = "hdvvw7yfy4/8k6c5b/ANY"
+# }
+
+# import {
+#   to = module.be.aws_api_gateway_method_response.health_any_200
+#   id = "hdvvw7yfy4/8k6c5b/ANY/200"
+# }
+
+# import {
+#   to = module.be.aws_api_gateway_integration_response.health_any_200
+#   id = "hdvvw7yfy4/8k6c5b/ANY/200"
+# }
+
+
+
+
 
