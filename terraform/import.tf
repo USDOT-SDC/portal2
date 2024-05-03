@@ -38,9 +38,14 @@
 #   id = "Z103672221FNFH7O9E9OG_sftp.sdc-dev.dot.gov_CNAME"
 # }
 
+# import {
+#   to = module.be.aws_cloudfront_distribution.portal
+#   id = "E16BWGUA8YO3CX"
+# }
 
-
-
-
+# import {
+#   to = module.be.aws_cloudfront_origin_access_control.portal
+#   id = "E2PSKEPV2RCMK7"
+# }
 
 
