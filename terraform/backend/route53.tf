@@ -9,10 +9,6 @@ variable "prod_fqdn" {
 
 locals {
   fqdn = var.common.environment == "dev" ? var.dev_fqdn : var.prod_fqdn
-  ecs_tags = { # ECS auto creates these tags. Putting them in Terraform will prevent config drift.
-    "App Support" = "Jeff.Ussing.CTR"
-    "Fed Owner"   = "Dan Morgan"
-  }
 }
 
 # === Public DNS Zone ===
@@ -125,4 +121,24 @@ resource "aws_route53_record" "sftp" {
   type    = "CNAME"
   ttl     = 300
   records = [local.transfer_server_url]
+}
+
+
+# ==== Test Subdomains ====
+# === Sub1 (Test Portal) Canonical Name Record ===
+resource "aws_route53_record" "sub1" {
+  zone_id = aws_route53_zone.public.zone_id
+  name    = "sub1.${local.fqdn}"
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_cloudfront_distribution.portal.domain_name]
+}
+
+# === Sub2 (Test Portal API) Canonical Name Record ===
+resource "aws_route53_record" "sub2" {
+  zone_id = aws_route53_zone.public.zone_id
+  name    = "sub2.${local.fqdn}"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["${aws_api_gateway_rest_api.portal.id}.execute-api.${var.common.region}.amazonaws.com"]
 }
