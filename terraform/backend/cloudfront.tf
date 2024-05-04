@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "portal" {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
     target_origin_id       = local.s3_origin_id
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
