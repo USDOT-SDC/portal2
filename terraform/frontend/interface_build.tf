@@ -1,7 +1,7 @@
 locals {
   src_path          = "${path.module}\\interface\\src"
   build_path        = "${path.module}\\interface_build"
-  build_config_path = "${path.module}\\interface\\config_${var.common.environment}"
+  build_config_path = "${path.module}\\interface\\config_${var.common.environment}"  
 }
 
 # This, or something like it, will be used once the frontend code is ready
