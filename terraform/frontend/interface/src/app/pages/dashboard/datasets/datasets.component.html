@@ -1,0 +1,336 @@
+<div id="sdc-datasets">
+    <div class="row">
+        <div class="col-auto d-lg-none d-xl-block">
+            <div class="h-100 position-relative">
+                <div class="sticky-top pt-2" style="z-index: 10;">
+                    <div class="list-group">
+                        <a href="/dashboard/datasets#ds-user-datasets" class="list-group-item list-group-item-action"> <small>My Datasets / Algorithm</small> </a>
+                        <a href="/dashboard/datasets#ds-edge-datasets" class="list-group-item list-group-item-action"> <small>My Edge Database </small> </a>
+                        <a href="/dashboard/datasets#ds-sdc-datasets" class="list-group-item list-group-item-action"> <small>SDC Datasets </small> </a>
+                        <a href="/dashboard/datasets#ds-sdc-algorithms" class="list-group-item list-group-item-action"> <small>SDC Algorithms </small> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="d-flex flex-column gap-2">
+
+                <section id="ds-user-datasets">
+                    <div class="d-flex align-items-center justify-content-between position-relative mb-3">
+                        <h6 class="m-0">My Datasets / Algorithm</h6>
+                        <a class="btn btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#ds-user-datasets-collapse" role="button"> <i class="fa-solid fa-chevron-down"></i> </a>
+                    </div>
+                    <div class="collapse show" id="ds-user-datasets-collapse">
+                        <div class="pe-5">
+
+                            <p>This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They are not available to anyone else unless you publish the dataset. Learn more on how to upload your datasets / algorithms and publish them for other users.</p>
+                            <hr>
+
+                            <div class="card">
+                                <div class="card-header p-2">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-secondary" type="button">Clear</button>
+                                                <input type="text" class="form-control" placeholder="Search Files...">
+                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect01">Sort</label>
+                                                <select class="form-select" id="inputGroupSelect01" (change)="sort_ds_and_alg($event)">
+                                                    <option selected>- Sort Files -</option>
+                                                    <option value="1">FileName: A to Z</option>
+                                                    <option value="2">FileName: Z to A</option>
+                                                    <!-- <option value="3">FileName: 0 to 9</option> -->
+                                                    <!-- <option value="4">FileName: 9 to 0</option> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button class="btn btn-outline-primary" (click)="modal_open_file_upload()"> <i class="fa-solid fa-upload me-2"></i> Upload </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr class="table-light">
+                                                    <th scope="col"><input class="form-check-input mb-0" type="checkbox" id="select-all-files"></th>
+                                                    <th scope="col" class="text-start"> <small>Filename </small> </th>
+                                                    <th scope="col" class="text-center"><small>Export </small> </th>
+                                                    <th scope="col" class="text-center"><small>Publish </small> </th>
+                                                    <th scope="col" class="text-center"><small>Export Request Status</small> </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
+                                                    <ng-container *ngFor="let item of user_datasets_algorithms">
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <input class="form-check-input mb-0" type="checkbox" id="select-all-files">
+                                                            </th>
+                                                            <td class="text-start" style="width: 55%;"><b>{{item.filename}}</b></td>
+                                                            <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-file-export"></i></button> </td>
+                                                            <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-cloud-arrow-up"></i></button> </td>
+                                                            <td class="text-center" style="width: 25%;">{{ item.status || '--'}}</td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-template #NoUserDatasetsOrAlgorithms>
+                                                    <tr>
+                                                        <td colspan="5">
+                                                            <div class="d-flex align-items-center justify-content-center p-4">
+                                                                <p class="m-0 text-body-secondary">No Datasets or Algorithms Found</p>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                </ng-template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-footer border-top-none">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <button class="btn btn-outline-primary" disabled><i class="fa-solid fa-download me-2"></i> Download Selected Files</button>
+
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angles-left"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angle-left"></i></button>
+                                            <div class="p-1 px-2 text-secondary">1</div>
+                                            <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angle-right"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angles-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <hr>
+                </section>
+
+                <section id="ds-edge-datasets">
+                    <div class="d-flex align-items-center justify-content-between position-relative mb-3">
+                        <h6 class="m-0">My Edge Database</h6>
+                        <a class="btn btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#ds-edge-datasets-collapse" role="button"> <i class="fa-solid fa-chevron-down"></i> </a>
+                    </div>
+                    <div class="collapse show" id="ds-edge-datasets-collapse">
+                        <div class="pe-5">
+                            <p>Researchers can export their summarized, aggregated and/or analysis results data, which do not contain sensitive information, to the public Edge database. This enhances analytical capabilities, enabling connections from the Edge database to local applications and/or other public data sources.</p>
+                            <p>Users are required to submit initial table export requests, and any subsequent changes to the given table schema, for review and approval by the Data Steward.</p>
+
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <p class="m-0"><a class="text-decoration-none" target="_blank" href="https://securedatacommons.atlassian.net/wiki/spaces/DESK/pages/1462468790/RT+Demo+Edge+Database-Exporting+the+Results+of+Your+Research">Learn more</a> about requesting table exports to the Edge Database.</p>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary"> Request Table Export to Edge DB </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr>
+                </section>
+
+                <section id="ds-sdc-datasets">
+                    <div class="d-flex align-items-center justify-content-between position-relative mb-3">
+                        <h6 class="m-0">SDC Datasets</h6>
+                        <a class="btn btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#ds-sdc-datasets-collapse" role="button"> <i class="fa-solid fa-chevron-down"></i> </a>
+                    </div>
+                    <div class="collapse show" id="ds-sdc-datasets-collapse">
+
+                        <div class="pe-5">
+                            <p>These are datasets that are available within SDC platform that are published / enabled by SDC team or published by other users. Access to these datasets are available upon request. Learn more about the different types of datasets and how to request access to these datasets.</p>
+                            <hr>
+
+                            <div class="table-responsive" style="max-width: 825px;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th scope="col"> <small>Name </small> </th>
+                                            <th scope="col"> <small>Category </small> </th>
+                                            <th scope="col"> <small>Description </small> </th>
+                                            <th scope="col"> <small>Geographic&nbsp;Scope </small> </th>
+                                            <th scope="col"> <small>Start/End&nbsp;for&nbsp;Data&nbsp;Availability</small> </th>
+                                            <th scope="col"> <small>Owner </small> </th>
+                                            <th scope="col"> <small>Request&nbsp;Access </small> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngIf="sdc_datasets.length > 0; else NoSDCDatasets">
+                                            <ng-container *ngFor="let dataset of sdc_datasets">
+                                                <tr>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-template #NoSDCDatasets>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <div class="d-flex align-items-center justify-content-center p-4">
+                                                        <p class="m-0 text-body-secondary">No SDC Datasets Found</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </section>
+
+                <section id="ds-sdc-algorithms">
+                    <div class="d-flex align-items-center justify-content-between position-relative mb-3">
+                        <h6 class="m-0">SDC Algorithms</h6>
+                        <a class="btn btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#ds-sdc-algorithms-collapse" role="button"> <i class="fa-solid fa-chevron-down"></i> </a>
+                    </div>
+                    <div class="collapse show" id="ds-sdc-algorithms-collapse">
+                        <div class="pe-5">
+                            <p>These are algorithms that are available within SDC platform that are published / enabled by SDC team or published by other users. Access to these algorithms are available upon request. Learn more about the different types of algorithms and how to request access to these algorithms.</p>
+                            <hr>
+
+                            <div class="table-responsive" style="max-width: 825px;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th scope="col"> <small>Name </small> </th>
+                                            <th scope="col"> <small>Description </small> </th>
+                                            <th scope="col"> <small>Programming tools / language</small> </th>
+                                            <th scope="col"> <small>Owner </small> </th>
+                                            <th scope="col"> <small>Request Access </small> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngIf="sdc_algorithms.length > 0; else NoSDCAlgorithms">
+                                            <ng-container *ngFor="let algorithm of sdc_algorithms">
+                                                <tr>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                    <td>--</td>
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-template #NoSDCAlgorithms>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <div class="d-flex align-items-center justify-content-center p-4">
+                                                        <p class="m-0 text-body-secondary">No SDC Algorithms Found</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<!-- :: FILE UPLOAD MODALS :: -->
+<!-- :: FILE UPLOAD MODALS :: -->
+
+<!-- Modal: Upload Files -->
+<app-modal #Modal_UploadFiles [size]="'md'">
+    <ng-container modal-header>
+        <div class="d-flex align-items-center justify-content-start p-2">
+            <h5 class="m-0">Upload files to SDC platform</h5>
+        </div>
+    </ng-container>
+    <ng-container modal-body>
+        <div class="p-2">
+            <div class="row">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <div>
+                            <label class="form-label"> Upload Location </label>
+                            <select class="form-select">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_prefix_input" class="form-label">Append a new prefix</label>
+                        <input type="text" class="form-control" id="new_prefix_input">
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <app-file-upload></app-file-upload>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container modal-footer>
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn btn-secondary" (click)="Modal_UploadFiles.close()">Close</button>
+        </div>
+    </ng-container>
+</app-modal>
+
+<!-- Modal: Request Export Uploaded Data -->
+<app-modal #Modal_RequestExportData>
+    <ng-container modal-header></ng-container>
+    <ng-container modal-body></ng-container>
+    <ng-container modal-footer></ng-container>
+</app-modal>
+
+<!-- :: FILE UPLOAD MODALS :: -->
+<!-- :: FILE UPLOAD MODALS :: -->
+
+
+<!-- :: REQUEST FORM MODALS :: -->
+<!-- :: REQUEST FORM MODALS :: -->
+
+<!-- Modal: Request Trusted User Form -->
+<app-modal #Modal_RequestTrustedUser>
+    <ng-container modal-header></ng-container>
+    <ng-container modal-body></ng-container>
+    <ng-container modal-footer></ng-container>
+</app-modal>
+
+<!-- Modal: Request Export Table Edge DB Form -->
+<app-modal #Modal_RequestTableExport>
+    <ng-container modal-header></ng-container>
+    <ng-container modal-body></ng-container>
+    <ng-container modal-footer></ng-container>
+</app-modal>
+
+<!-- Modal: Request SDC Dataset Form -->
+<app-modal #Modal_RequestDataAccess>
+    <ng-container modal-header></ng-container>
+    <ng-container modal-body></ng-container>
+    <ng-container modal-footer></ng-container>
+</app-modal>
+
+<!-- :: REQUEST FORM MODALS :: -->
+<!-- :: REQUEST FORM MODALS :: -->
