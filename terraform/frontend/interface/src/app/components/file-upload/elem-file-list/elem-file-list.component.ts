@@ -20,7 +20,7 @@ export class ElemFileListComponent implements OnInit {
     const sizes = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     const formattedBytes = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-    return formattedBytes + ' ' + sizes[i];
+    return formattedBytes + `\ ` + sizes[i];
   }
 
   ngOnInit(): void {
