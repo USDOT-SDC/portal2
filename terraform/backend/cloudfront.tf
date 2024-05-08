@@ -5,7 +5,7 @@ locals {
 resource "aws_cloudfront_distribution" "portal" {
   enabled = true
   comment = "Portal 2"
-  aliases = ["dev-portal-ecs-sdc.dot.gov"]
+  aliases = ["sub1.sdc-dev.dot.gov"]
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "portal" {
   }
   tags = local.ecs_tags
   viewer_certificate {
-    acm_certificate_arn      = "arn:aws:acm:us-east-1:505135622787:certificate/907238e5-e4fd-4a45-becf-743289908c11"
+    acm_certificate_arn      = aws_acm_certificate.external.arn
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
