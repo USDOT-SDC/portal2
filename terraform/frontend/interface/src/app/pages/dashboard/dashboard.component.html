@@ -1,0 +1,88 @@
+<div class="container px-5">
+    <ng-container [ngSwitch]="route">
+        <ng-container *ngSwitchCase="'datasets'">
+            {{ "" // COMPONENT: DATASETS }}
+            {{ "" // FOUND IN: 'src/app/dashboard/datasets/'}}
+            <app-datasets></app-datasets>
+        </ng-container>
+        <ng-container *ngSwitchCase="'workstations'">
+            {{ "" // COMPONENT: WORKSTATIONS }}
+            {{ "" // FOUND IN: 'src/app/dashboard/workstations/' }}
+            <app-workstations></app-workstations>
+        </ng-container>
+        <ng-container *ngSwitchCase="'faqs'">
+            {{ "" // COMPONENT: DASHBOARD FAQS }}
+            {{ "" // FOUND IN: 'src/app/dashboard/dashboard-faq/' }}
+            <app-dashboard-faq></app-dashboard-faq>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <div class="row">
+                <div class="col-12 pt-4 mb-3">
+                    <p>Welcome to the Secure Data Commons Platform (SDC), a sandbox environment in AWS managed by U.S. Department of transportation. The SDC platform provides a collaborative environment for traffic engineers, researchers, data scientists and anyone who is interested in carrying out research and analysis on different datasets related to traffic, weather, crashes etc.</p>
+                    <p class="mb-4">Ready to Get Started? Follow the steps below or directly jump to any of the sections that you wish to access. SDC Users will have the following access in the platform:</p>
+
+                    <hr>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="card h-100 card-body">
+                        <p class="mb-auto"> <a class="text-decoration-none" href="/dashboard/datasets">Check out the list</a> of currently available datasets (curated, published), data dictionaries owned by you and others. <a class="text-decoration-none" href="/dashboard/faqs#sdc-access-datasets">Learn more</a> about what curated and published datasets mean. </p>
+
+                        <div class="d-flex align-items-center justify-content-start gap-3 mt-3">
+                            <div class="icon">
+                                <i class="fa-solid fa-location-pin fa-2x text-warning"></i>
+                                <span>1</span>
+                            </div>
+                            <p class="m-0"> Curated and published datasets </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="card h-100 card-body">
+
+                        <p class="mb-auto"> <a class="text-decoration-none" href="/dashboard/workstations">Access the workstations</a> assigned to you, if you have requested as part of the registration process </p>
+
+                        <div class="d-flex align-items-center justify-content-start gap-3 mt-3">
+                            <div class="icon">
+                                <i class="fa-solid fa-location-pin fa-2x text-warning"></i>
+                                <span>2</span>
+                            </div>
+                            <p class="m-0"> Access to workstations with programming tools </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="card h-100 card-body">
+
+                        <p class="mb-auto"> <a class="text-decoration-none" href="/dashboard/faqs#sdc-upload-algorithm">Learn more</a> about how you can bring your algorithms and code to the SDC platform </p>
+
+                        <div class="d-flex align-items-center justify-content-start gap-3 mt-3">
+                            <div class="icon">
+                                <i class="fa-solid fa-location-pin fa-2x text-warning"></i>
+                                <span>3</span>
+                            </div>
+                            <p class="m-0"> Bring your own datasets / algorithms </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="card h-100 card-body">
+
+                        <p class="mb-auto"> Learn more about how you can publish your research analysis and algorithms with other researchers </p>
+
+                        <div class="d-flex align-items-center justify-content-start gap-3 mt-3">
+                            <div class="icon">
+                                <i class="fa-solid fa-location-pin fa-2x text-warning"></i>
+                                <span>4</span>
+                            </div>
+                            <p class="m-0"> Publish your datasets / algorithms </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
