@@ -17,8 +17,13 @@ resource "aws_cloudfront_distribution" "portal" {
     cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
     compress               = true
   }
-  default_root_object = "index.html"
   http_version        = "http2and3"
+  default_root_object = "index.html"
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
   origin {
     domain_name              = aws_s3_bucket.portal.bucket_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.portal.id
@@ -33,9 +38,9 @@ resource "aws_cloudfront_distribution" "portal" {
   }
   tags = local.ecs_tags
   viewer_certificate {
-    acm_certificate_arn            = "arn:aws:acm:us-east-1:505135622787:certificate/907238e5-e4fd-4a45-becf-743289908c11"
-    minimum_protocol_version       = "TLSv1.2_2021"
-    ssl_support_method             = "sni-only"
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:505135622787:certificate/907238e5-e4fd-4a45-becf-743289908c11"
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
   }
   web_acl_id          = "arn:aws:wafv2:us-east-1:505135622787:global/webacl/FMManagedWebACLV2-Enable-Shield-Advanced-Global-Policy-1681826198080/81323598-c0ec-4d6e-8690-95c47433d82e"
   retain_on_delete    = true  # Disables instead of deletes when destroying through Terraform. If set, needs to be deleted manually afterwards.
