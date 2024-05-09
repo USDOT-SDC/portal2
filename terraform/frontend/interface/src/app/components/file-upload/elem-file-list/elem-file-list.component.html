@@ -1,40 +1,39 @@
 <div class="card h-100" id="file-list-wrapper">
     <ul class="list-group list-group-flush">
         <ng-container *ngFor="let file of files; let file_index = index;">
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="row align-items-start justify-content-start gap-3">
-                        <div class="col-auto">
-                            <div class="thumbnail">
-                                <ng-container *ngIf="file.file_thumb; else NoThumbnailToShow">
-                                    <picture>
-                                        <img class="img-thumbnail" [src]="file.file_thumb" alt="">
-                                    </picture>
-                                </ng-container>
-                                <ng-template #NoThumbnailToShow>
-                                    <div class="img-thumbnail">
-                                        <i class="fa-solid fa-file-lines fa-2x"></i>
-                                    </div>
-                                </ng-template>
-                            </div>
+            <li class="list-group-item p-3">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between gap-3 flex-grow-1">
+                        <div class="thumbnail">
+                            <ng-container *ngIf="file.file_thumb; else NoThumbnailToShow">
+                                <picture>
+                                    <img class="img-thumbnail" [src]="file.file_thumb" alt="">
+                                </picture>
+                            </ng-container>
+                            <ng-template #NoThumbnailToShow>
+                                <div class="img-thumbnail bg-light">
+                                    <i class="fa-solid fa-file-lines fa-2x"></i>
+                                </div>
+                            </ng-template>
                         </div>
-                        <div class="col">
-                            <div class="content">
-                                <h6 class="mb-1">{{file.file_name}}</h6>
-                                <p class="mb-1"><small>Size: {{formatBytes(file.file_size)}}</small></p>
-
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                                    <label class="form-check-label" for="flexSwitchCheckDefault">Contains PII/CBI</label>
+                        <div class="flex-grow-1">
+                            <h6 class="text-truncate mb-3" style="max-width: 280px;" [title]="file.file_name">{{file.file_name}}</h6>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" role="switch" [id]="'file_toggle_0' + file_index">
+                                    <label class="form-check-label text-info-emphasis" [for]="'file_toggle_0' + file_index"><b>Contains PII/CBI</b></label>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex flex-column align-items-end justify-content-end">
+                        <button class="btn btn-sm btn-outline-dark px-2 py-1 mb-2" (click)="remove_file(file_index)">
+                            <!-- <i class="fa-solid fa-trash-can"></i> -->
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                        <p class="m-0 text-nowrap"><small>Size: {{formatBytes(file.file_size)}}</small></p>
+                    </div>
                 </div>
-                <button class="btn btn-sm btn-dark px-2 py-1" (click)="remove_file(file_index)">
-                    <!-- <i class="fa-solid fa-trash-can"></i> -->
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
             </li>
         </ng-container>
     </ul>
