@@ -65,7 +65,7 @@ resource "aws_route53_record" "guacamole" {
   ttl             = 300
   type            = "CNAME"
   zone_id         = aws_route53_zone.public.zone_id
-  records = [local.guacamole_elb]
+  records         = [local.guacamole_elb]
 }
 
 # === Portal API Canonical Name Record ===
@@ -127,18 +127,21 @@ resource "aws_route53_record" "sftp" {
 # ==== Test Subdomains ====
 # === Sub1 (Test Portal) Canonical Name Record ===
 resource "aws_route53_record" "sub1" {
-  zone_id = aws_route53_zone.public.zone_id
   name    = "sub1.${local.fqdn}"
   type    = "CNAME"
+  zone_id = aws_route53_zone.public.zone_id
   ttl     = 300
   records = [aws_cloudfront_distribution.portal.domain_name]
 }
 
 # === Sub2 (Test Portal API) Canonical Name Record ===
 resource "aws_route53_record" "sub2" {
-  zone_id = aws_route53_zone.public.zone_id
   name    = "sub2.${local.fqdn}"
-  type    = "CNAME"
-  ttl     = 300
-  records = ["${aws_api_gateway_rest_api.portal.id}.execute-api.${var.common.region}.amazonaws.com"]
+  type    = "A"
+  zone_id = aws_route53_zone.public.zone_id
+  alias {
+    evaluate_target_health = true
+    name                   = aws_api_gateway_domain_name.portal.cloudfront_domain_name
+    zone_id                = aws_api_gateway_domain_name.portal.cloudfront_zone_id
+  }
 }
