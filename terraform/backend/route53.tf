@@ -70,13 +70,14 @@ resource "aws_route53_record" "guacamole" {
 
 # === Portal API Canonical Name Record ===
 resource "aws_route53_record" "portal_api" {
-  zone_id = aws_route53_zone.public.zone_id
   name    = "portal-api.${local.fqdn}"
-  # type    = "A"
-  type    = "CNAME"
-  ttl     = 300
-  records = ["${aws_api_gateway_rest_api.portal.id}.execute-api.${var.common.region}.amazonaws.com"]
-  # records = [aws_api_gateway_stage.v1.invoke_url]
+  type    = "A"
+  zone_id = aws_route53_zone.public.zone_id
+  alias {
+    evaluate_target_health = true
+    name                   = aws_api_gateway_domain_name.portal_api.cloudfront_domain_name
+    zone_id                = aws_api_gateway_domain_name.portal_api.cloudfront_zone_id
+  }
 }
 
 # === Portal Canonical Name Record ===
@@ -141,7 +142,7 @@ resource "aws_route53_record" "sub2" {
   zone_id = aws_route53_zone.public.zone_id
   alias {
     evaluate_target_health = true
-    name                   = aws_api_gateway_domain_name.portal.cloudfront_domain_name
-    zone_id                = aws_api_gateway_domain_name.portal.cloudfront_zone_id
+    name                   = aws_api_gateway_domain_name.sub2.cloudfront_domain_name
+    zone_id                = aws_api_gateway_domain_name.sub2.cloudfront_zone_id
   }
 }
