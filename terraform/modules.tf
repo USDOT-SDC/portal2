@@ -13,10 +13,7 @@ module "fe" {
   source      = "./frontend"
   common      = local.common
   backend = {
-    rest_api = {
-      id  = module.be.rest_api.id
-      url = module.be.rest_api.url
-    }
+    resource_urls = module.be.resource_urls
     s3 = {
       portal_bucket = module.be.s3.portal_bucket
     }
