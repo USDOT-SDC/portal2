@@ -1,0 +1,27 @@
+#file-list-wrapper {
+    max-height: 400px;
+    overflow: auto;
+
+    div.thumbnail {
+        aspect-ratio: 1;
+        max-width: 64px;
+        height: auto;
+
+        div.img-thumbnail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+        }
+
+        picture {
+            img.img-thumbnail {
+                width: 64px;
+                height: 64px;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+    }
+}

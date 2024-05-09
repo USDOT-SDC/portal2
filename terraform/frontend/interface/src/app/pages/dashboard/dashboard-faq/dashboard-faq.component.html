@@ -1,0 +1,345 @@
+<div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+    <h3 class="mb-0">Frequently Asked Questions</h3>
+    <button class="btn btn-link text-decoration-none" (click)="toggle_collapse_all()"> <i class="fa-regular me-2" [ngClass]=" all_expanded ? 'fa-square-plus' : 'fa-square-minus' "></i>{{ all_expanded ? 'Expand' : 'Collapse' }} All</button>
+</div>
+
+<ol class="mb-4 pb-2 border-bottom">
+
+    <li id="sdc-access-datasets" class="mb-3">
+        <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+            <h6>How can I get access to the SDC Datasets?</h6>
+            <a class="btn py-1 px-2 btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#sdc-access-datasets-collapse" role="button" aria-expanded="false" aria-controls="collapseExample"> <i class="fa-solid fa-chevron-down"></i> </a>
+        </div>
+        <div class="collapse show" id="sdc-access-datasets-collapse">
+            <div class="card card-body bg-light mb-4">
+                <p>Users can request access to the datasets that are available within the SDC platform as published / enabled by the SDC team or published by other users.</p>
+
+                <ol>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">Once you are logged in, click on <b>DATASETS</b> in the top menu. </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-01-image-01.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center">Locate the <b>DATASETS</b> tab on the navigation.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">Expand the <b>SDC Datasets</b> panel. Below this you can see all available datasets. </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-01-image-02.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center">Expand the <b>SDC Datasets</b> panel.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">To access a given Dataset, click on <b>Request</b>.</div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-01-image-03.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center">Click on <b>Request</b>.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">The <b>SDC Data Access Request Form</b> will pop-up. Complete the form and click <b>Send Request</b>.</div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-01-image-04.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center">Complete the form and click <b>Send Request</b>.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li>The request will be sent to the support team and access to the requested dataset will be given upon validataion and approval of the information in the form.</li>
+                </ol>
+            </div>
+            <hr>
+        </div>
+    </li>
+
+    <li id="sdc-understand-datasets" class="mb-3">
+        <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+            <h6>How can I understand what a particular dataset consists of?</h6>
+            <a class="btn py-1 px-2 btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#sdc-understand-datasets-collapse" role="button" aria-expanded="false" aria-controls="collapseExample"> <i class="fa-solid fa-chevron-down"></i> </a>
+        </div>
+        <div class="collapse" id="sdc-understand-datasets-collapse">
+            <div class="card card-body bg-light mb-4">
+
+                <div class="row">
+                    <div class="col-5"> Click anywhere on a given Dataset entry for the corresponding <b>README description</b> to display below it. </div>
+                    <div class="col-7">
+                        <figure class="figure border rounded">
+                            <img src="/assets/images/faqs/dashboard/faq-02-image-01.png" class="figure-img img-fluid">
+                            <figcaption class="figure-caption text-center">Click anywhere on an entry to view the <b>README</b>.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+        </div>
+    </li>
+
+    <li id="sdc-launch-workstation" class="mb-3">
+        <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+            <h6>How do I launch a workstation?</h6>
+            <a class="btn py-1 px-2 btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#sdc-launch-workstation-collapse" role="button" aria-expanded="false" aria-controls="collapseExample"> <i class="fa-solid fa-chevron-down"></i> </a>
+        </div>
+        <div class="collapse" id="sdc-launch-workstation-collapse">
+            <div class="card card-body bg-light mb-4">
+
+                <p>Users can see their assigned workstations by clicking on WORKSTATIONS from the top menu. By default, all workstations are in a stopped state.</p>
+
+                <ol>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5"> Click on the <b>Start</b> button to start your workstation machine. </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-03-image-01.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5"> The workstation should become available within a few minutes, confirmed by the following message. </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-03-image-02.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Click the corresponding <b>Launch</b> button for your workstation. </p>
+                                <p class="text-info-emphasis"> <i><b>Note:</b> The Launch button does not start your workstation. You must start it before you can log in.</i> </p>
+                            </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-03-image-03.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>This opens the workstation login page. Enter your SDC username and password at the prompts to access your workstation desktop. </p>
+                                <p class="text-info-emphasis"><i><b>Note:</b> The workstation may take a few minutes to initialize before the login screen appears.</i></p>
+                            </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-03-image-04.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+
+            </div>
+            <hr>
+        </div>
+    </li>
+
+    <li id="sdc-upload-algorithm" class="mb-3">
+        <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+            <h6>How do I upload my own datasets/algorithm?</h6>
+            <a class="btn py-1 px-2 btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#sdc-upload-algorithm-collapse" role="button" aria-expanded="false" aria-controls="collapseExample"> <i class="fa-solid fa-chevron-down"></i> </a>
+        </div>
+        <div class="collapse" id="sdc-upload-algorithm-collapse">
+            <div class="card card-body bg-light mb-4">
+                <p> Users who want to share data with other users from their project team can upload their own data to their assigned team/individual S3 buckets. </p>
+
+                <ol>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> Click on <b>DATASETS</b> on the top menu. </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> Click on <b>Upload Files</b> under <b>My Datasets/Algorithm</b>. </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5"> A pop-up window appears prompting you to choose one or more files for upload to the assigned bucket. (The assigned bucket name will be displayed on the upload pop-up window.) </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-04-image-01.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5"> Once you have chosen your file(s), click the <b>Upload button</b>. A success message will be displayed upon successful upload. </div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-04-image-02.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> Files that are uploaded from the web portal will be saved in the folder <b>username/uploaded_files</b>. </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> To make these files available to members of the project team, users then need to move files from username/uploaded files to the project team S3 bucket using the CyberDuck tool. </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> Users would be able to access only the files that are under the uploaded_files and export_requests folders. </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <hr>
+        </div>
+    </li>
+
+    <li id="sdc-publish-algorithm" class="mb-3">
+        <div class="d-flex align-items-center justify-content-between position-relative mb-2">
+            <h6>How do I publish my dataset/algorithm?</h6>
+            <a class="btn py-1 px-2 btn-sm btn-outline-secondary stretched-link" data-bs-toggle="collapse" href="#sdc-publish-algorithm-collapse" role="button" aria-expanded="false" aria-controls="collapseExample"> <i class="fa-solid fa-chevron-down"></i> </a>
+        </div>
+        <div class="collapse" id="sdc-publish-algorithm-collapse">
+            <div class="card card-body bg-light mb-4">
+
+                <p>Follow the below steps to publish your datasets / algorithms and share with other SDC Users.</p>
+
+                <ol>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-5"> Navigate to Datasets page and scroll to the <b>My Datasets / Algorithms</b> section</div>
+                            <div class="col-7">
+                                <figure class="figure border rounded">
+                                    <img src="/assets/images/faqs/dashboard/faq-05-image-01.png" class="figure-img img-fluid">
+                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p> Click on the upload icon under publish for the dataset/algorithm you wish to publish </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p>In the pop-up window that shows up, you will have two options either a Dataset or Algorithm:</p>
+                                <ol type="a">
+                                    <li class="mb-3">
+                                        <p>Select the dropdown value as Dataset and fill the required values</p>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <ol type="i">
+                                                    <li> <b>Name </b> - Name of the dataset, which you wish to call it. Users will see your dataset with this name under SDC Datasets section</li>
+                                                    <li> <b>Description </b> - Provide a short description so users can get an idea about your dataset</li>
+                                                    <li> <b>File/folder name </b> - Name of the file or folder where your dataset resides in your Home folder. We need this information, so the support team can publish this dataset and make it available to other users</li>
+                                                    <li> <b>Readme / Data dictionary file name </b> - This file should provide detailed instructions about your dataset, how it was created or any relevant information that helps user to understand and use the dataset. Save this file in your home folder relative to the dataset file/folder name</li>
+                                                    <li> <b>Geographic scope </b> - Indicate the geographic scope for your dataset whether it belongs to a specific state, region, country etc</li>
+                                                    <li> <b>Start/End Date for data availability</b> - Provide the start and end dates of the data that belongs in your dataset. For example, your dataset may contain data from March 2017 to August 2017</li>
+                                                </ol>
+                                            </div>
+                                            <div class="col-6">
+                                                <figure class="figure border rounded">
+                                                    <img src="/assets/images/faqs/dashboard/faq-05-image-02.png" class="figure-img img-fluid">
+                                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-3">
+                                        <p>Select the dropdown value as Algorithm </p>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <ol type="i">
+                                                    <li> <b>Name </b> - Enter the name for your algorithm. Users will see your algorithm with this name under SDC Datasets section</li>
+                                                    <li> <b>Description </b> - Provide a short description about your algorithm</li>
+                                                    <li> <b>File/Folder name </b> - Name of the file or folder where your algorithm resides in your Home folder. We need this information, so SDC support team can publish this algorithm and make it available to other users</li>
+                                                    <li> <b>Readme / Data dictionary file name</b> - This file should provide detailed instructions about your algorithm, how it was created or any relevant information that helps user to understand and use the algorithm. Save this file in your home folder relative to the algorithm file/folder name</li>
+                                                    <li> <b>Programming Tools/language </b> - Provide the details of programming tools and/or languages that were used to create this algorithm, so users can leverage the same to run your program.</li>
+                                                </ol>
+                                            </div>
+                                            <div class="col-6">
+                                                <figure class="figure border rounded">
+                                                    <img src="/assets/images/faqs/dashboard/faq-05-image-03.png" class="figure-img img-fluid">
+                                                    <figcaption class="figure-caption text-center"> </figcaption>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </li>
+
+</ol>
+
+<h3>Helpful Links</h3>
+
+<ul>
+
+    <li>
+        <a href="https://securedatacommons.atlassian.net/wiki/spaces/DESK/pages/2223964161/RT+Guide+Researchers+User+Guide" target="_blank" rel="noopener noreferrer">Researcher User Guide</a>
+        <p>Provides guidance on set-up and usage of the SDC web portal system for Research teams.</p>
+    </li>
+
+    <li>
+        <a href="https://securedatacommons.atlassian.net/wiki/spaces/DESK/pages/1346273335/DP+Guides" target="_blank" rel="noopener noreferrer">Data Provider User Guide</a>
+        <p>Provides guidance on set-up and usage of the SDC web portal system for Data Providers.</p>
+    </li>
+
+    <li>
+        <a href="https://securedatacommons.atlassian.net/servicedesk/customer/portal/2" target="_blank" rel="noopener noreferrer">SDC Help Center: Service Desk Request</a>
+        <p>Submit requests for additional data access, technical support or to report bugs via this Help Center resource.</p>
+    </li>
+
+    <li>
+        <a href="https://www.transportation.gov/data/secure" target="_blank" rel="noopener noreferrer">Secure Data Commons (SDC) Microsite</a>
+        <p>Provides overview of the SDC offerings for your team's project, data, or analysis efforts.</p>
+    </li>
+
+</ul>
