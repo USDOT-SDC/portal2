@@ -1,7 +1,11 @@
-output "rest_api" {
+output "resource_urls" {
   value = {
-    id  = aws_api_gateway_rest_api.portal.id
-    url = aws_api_gateway_stage.v1.invoke_url
+    portal     = aws_route53_record.portal.name
+    portal_api = "${aws_route53_record.portal_api.name}/${aws_api_gateway_stage.v1.stage_name}"
+    guacamole  = aws_route53_record.guacamole.name
+    sftp       = aws_route53_record.sftp.name
+    sub1       = aws_route53_record.sub1.name
+    sub2       = "${aws_route53_record.sub2.name}/${aws_api_gateway_stage.v1.stage_name}"
   }
 }
 

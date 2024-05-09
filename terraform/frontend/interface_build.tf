@@ -1,21 +1,30 @@
 locals {
-  src_path          = "${path.module}\\interface\\src"
-  build_path        = "${path.module}\\interface_build"
-  build_config_path = "${path.module}\\interface\\config_${var.common.environment}"  
+  working_dir   = "${path.module}\\interface"
+  src_path      = "${path.module}\\interface\\src"
+  build_path    = "${path.module}\\interface_build"
+  configuration = var.common.environment == "dev" ? "development" : "production"
 }
 
-# This, or something like it, will be used once the frontend code is ready
-# resource "terraform_data" "ng_build" {
-#   provisioner "local-exec" {
-#     command = "ng build --configuration=${local.build_config_path}"
-#   }
-# }
+resource "terraform_data" "npm_install" {
+  provisioner "local-exec" {
+    working_dir = local.working_dir
+    command     = "npm install"
+  }
+}
+
+resource "terraform_data" "ng_build" {
+  provisioner "local-exec" {
+    working_dir = local.working_dir
+    command     = "ng build --configuration ${local.configuration}"
+  }
+  depends_on = [terraform_data.npm_install]
+}
 
 module "interface_build" {
-  source   = "hashicorp/dir/template"
-  base_dir = local.src_path # using src_path for testing
-  # base_dir   = local.build_path
-  # depends_on = [terraform_data.ng_build]
+  source = "hashicorp/dir/template"
+  # base_dir = local.src_path # using src_path for testing
+  base_dir   = local.build_path
+  depends_on = [terraform_data.ng_build]
 }
 
 resource "aws_s3_object" "interface_build" {
