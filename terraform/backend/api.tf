@@ -5,6 +5,32 @@ resource "aws_api_gateway_rest_api" "portal" {
   tags        = local.common_tags
 }
 
+# === REST API Domain Name ===
+resource "aws_api_gateway_domain_name" "portal_api" {
+  domain_name     = "portal-api.${local.fqdn}"
+  certificate_arn = aws_acm_certificate.external.arn
+}
+
+resource "aws_api_gateway_domain_name" "sub2" {
+  domain_name     = "sub2.${local.fqdn}"
+  certificate_arn = aws_acm_certificate.external.arn
+}
+
+# === REST API Domain Name Mapping ===
+resource "aws_api_gateway_base_path_mapping" "portal_api" {
+  api_id      = aws_api_gateway_rest_api.portal.id
+  stage_name  = aws_api_gateway_stage.v1.stage_name
+  domain_name = aws_api_gateway_domain_name.portal_api.domain_name
+  base_path = "v1"
+}
+
+resource "aws_api_gateway_base_path_mapping" "sub2" {
+  api_id      = aws_api_gateway_rest_api.portal.id
+  stage_name  = aws_api_gateway_stage.v1.stage_name
+  domain_name = aws_api_gateway_domain_name.sub2.domain_name
+  base_path = "v1"
+}
+
 # === REST API Stage ===
 resource "aws_api_gateway_stage" "v1" {
   deployment_id = aws_api_gateway_deployment.portal.id
@@ -14,7 +40,7 @@ resource "aws_api_gateway_stage" "v1" {
 }
 
 # The health resource is an example of the Terraform resources
-# necessary to build a complete API resource intagration.
+# necessary to build a complete API resource integration.
 # === Resource ===
 resource "aws_api_gateway_resource" "health" {
   rest_api_id = aws_api_gateway_rest_api.portal.id
