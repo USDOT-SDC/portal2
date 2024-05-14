@@ -13,6 +13,9 @@ output "backend" {
     s3 = {
       portal_bucket = module.be.s3.portal_bucket
     }
+    route53_zone = {
+      public = module.be.route53_zone_public
+    }
   }
 }
 
