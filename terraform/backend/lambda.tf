@@ -14,16 +14,16 @@ resource "aws_lambda_function" "hello_world" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.hello_world]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.hello_world]
+  tags       = local.common_tags
 }
 
 data "archive_file" "data_dictionary" {
@@ -42,16 +42,16 @@ resource "aws_lambda_function" "data_dictionary" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.data_dictionary]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.data_dictionary]
+  tags       = local.common_tags
 }
 
 data "archive_file" "desired_instance_types" {
@@ -70,16 +70,16 @@ resource "aws_lambda_function" "desired_instance_types" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.desired_instance_types]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.desired_instance_types]
+  tags       = local.common_tags
 }
 
 data "archive_file" "download_url" {
@@ -98,16 +98,16 @@ resource "aws_lambda_function" "download_url" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.download_url]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.download_url]
+  tags       = local.common_tags
 }
 
 data "archive_file" "export_objects" {
@@ -126,16 +126,16 @@ resource "aws_lambda_function" "export_objects" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.export_objects]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.export_objects]
+  tags       = local.common_tags
 }
 
 data "archive_file" "export_request" {
@@ -154,16 +154,16 @@ resource "aws_lambda_function" "export_request" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.export_request]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.export_request]
+  tags       = local.common_tags
 }
 
 data "archive_file" "export_table" {
@@ -182,16 +182,16 @@ resource "aws_lambda_function" "export_table" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.export_table]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.export_table]
+  tags       = local.common_tags
 }
 
 data "archive_file" "get_health" {
@@ -210,16 +210,16 @@ resource "aws_lambda_function" "get_health" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.get_health]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.get_health]
+  tags       = local.common_tags
 }
 
 data "archive_file" "get_user_info" {
@@ -238,16 +238,16 @@ resource "aws_lambda_function" "get_user_info" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.get_user_info]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.get_user_info]
+  tags       = local.common_tags
 }
 
 data "archive_file" "instance_status" {
@@ -266,16 +266,16 @@ resource "aws_lambda_function" "instance_status" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.instance_status]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.instance_status]
+  tags       = local.common_tags
 }
 
 data "archive_file" "manage_workstation_schedule" {
@@ -294,16 +294,16 @@ resource "aws_lambda_function" "manage_workstation_schedule" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.manage_workstation_schedule]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.manage_workstation_schedule]
+  tags       = local.common_tags
 }
 
 data "archive_file" "manage_workstation_size" {
@@ -322,16 +322,16 @@ resource "aws_lambda_function" "manage_workstation_size" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.manage_workstation_size]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.manage_workstation_size]
+  tags       = local.common_tags
 }
 
 data "archive_file" "manage_workstation_volume" {
@@ -350,16 +350,16 @@ resource "aws_lambda_function" "manage_workstation_volume" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.manage_workstation_volume]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.manage_workstation_volume]
+  tags       = local.common_tags
 }
 
 data "archive_file" "perform_instance_action" {
@@ -378,43 +378,43 @@ resource "aws_lambda_function" "perform_instance_action" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.perform_instance_action]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.perform_instance_action]
+  tags       = local.common_tags
 }
 
-data "archive_file" "persigned_url" {
+data "archive_file" "presigned_url" {
   type        = "zip"
-  source_file = "${path.module}/lambdas/persigned_url/src/lambda_function.py"
-  output_path = "${path.module}/lambdas/persigned_url/lambda_deployment_package.zip"
+  source_file = "${path.module}/lambdas/presigned_url/src/lambda_function.py"
+  output_path = "${path.module}/lambdas/presigned_url/lambda_deployment_package.zip"
 }
 
-resource "aws_lambda_function" "persigned_url" {
-  function_name    = "${var.common.app_slug}_persigned_url"
-  filename         = data.archive_file.persigned_url.output_path
-  source_code_hash = data.archive_file.persigned_url.output_base64sha256
+resource "aws_lambda_function" "presigned_url" {
+  function_name    = "${var.common.app_slug}_presigned_url"
+  filename         = data.archive_file.presigned_url.output_path
+  source_code_hash = data.archive_file.presigned_url.output_base64sha256
   role             = aws_iam_role.webportal_lambda.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.persigned_url]
+  depends_on       = [data.archive_file.presigned_url]
   tags             = local.common_tags
 }
 
@@ -434,16 +434,16 @@ resource "aws_lambda_function" "request_export" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.request_export]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.request_export]
+  tags       = local.common_tags
 }
 
 data "archive_file" "s3_metadata" {
@@ -462,16 +462,16 @@ resource "aws_lambda_function" "s3_metadata" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.s3_metadata]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.s3_metadata]
+  tags       = local.common_tags
 }
 
 data "archive_file" "send_email" {
@@ -490,16 +490,16 @@ resource "aws_lambda_function" "send_email" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.send_email]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.send_email]
+  tags       = local.common_tags
 }
 
 data "archive_file" "update_autoexport_status" {
@@ -518,16 +518,16 @@ resource "aws_lambda_function" "update_autoexport_status" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.update_autoexport_status]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.update_autoexport_status]
+  tags       = local.common_tags
 }
 
 data "archive_file" "update_file_status" {
@@ -546,16 +546,16 @@ resource "aws_lambda_function" "update_file_status" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.update_file_status]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.update_file_status]
+  tags       = local.common_tags
 }
 
 data "archive_file" "update_trusted_status" {
@@ -574,16 +574,16 @@ resource "aws_lambda_function" "update_trusted_status" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.update_trusted_status]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.update_trusted_status]
+  tags       = local.common_tags
 }
 
 data "archive_file" "workstation_schedule" {
@@ -602,14 +602,14 @@ resource "aws_lambda_function" "workstation_schedule" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID = local.restapi_id
-      AUTHORIZERID = local.authorizer_id
-      TABLENAME_USER_STACKS = local.tablename_user_stacks
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.workstation_schedule]
-  tags             = local.common_tags
+  depends_on = [data.archive_file.workstation_schedule]
+  tags       = local.common_tags
 }
