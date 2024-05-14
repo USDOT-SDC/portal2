@@ -30,11 +30,12 @@ locals {
   }
 }
 module "api_resource" {
-  for_each        = local.api_resources
-  module_name     = "API Resource, ${each.key}"
-  module_slug     = "api-resource_${each.key}"
-  source          = "./api_resource"
-  common          = var.common
-  rest_api_portal = aws_api_gateway_rest_api.portal
-  foo             = each.value
+  for_each              = local.api_resources
+  module_name           = "API Resource, ${each.key}"
+  module_slug           = "api-resource_${each.key}"
+  source                = "./api_resource"
+  common                = var.common
+  rest_api_portal       = aws_api_gateway_rest_api.portal
+  api_authorizer_portal = aws_api_gateway_authorizer.portal
+  foo                   = each.value
 }

@@ -2,6 +2,7 @@ variable "module_name" {}
 variable "module_slug" {}
 variable "common" {}
 variable "rest_api_portal" {}
+variable "api_authorizer_portal" {}
 variable "foo" {}
 # locals {
 #   common_tags = {
