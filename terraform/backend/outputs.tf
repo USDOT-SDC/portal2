@@ -14,3 +14,7 @@ output "s3" {
     portal_bucket = aws_s3_bucket.portal.id
   }
 }
+
+output "route53_zone_public" {
+  value = aws_route53_zone.public
+}
