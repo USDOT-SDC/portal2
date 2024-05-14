@@ -152,8 +152,6 @@ def lambda_handler(event, context):
         logging.info("Respnse - " + str(response))
     except BaseException as be:
         logging.exception("Error: Failed to process manage workstation request" + str(be))
-        raise ChaliceViewError("Failed to process manage workstation request")
+        raise ("Failed to process manage workstation request")
 
-    return Response(body=response,
-                    status_code=200,
-                    headers={'Content-Type': 'application/json'})
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'application/json'}, 'body':response}

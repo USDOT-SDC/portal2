@@ -1,5 +1,6 @@
 import boto3
 import logging
+import json
 
 logger = logging.getLogger()
 
@@ -20,7 +21,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to get data from s3 file" + str(be) )
         raise ("Internal error at server side")
 
-    # return Response(body={'data': data },
-    #                 status_code=200,
-    #                 headers={'Content-Type': 'text/plain'})
     return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(data)}

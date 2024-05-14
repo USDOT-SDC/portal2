@@ -1,4 +1,5 @@
 import boto3
+from boto3.dynamodb.conditions import Attr, Key
 import logging
 import ast, json
 from datetime import datetime
@@ -44,7 +45,7 @@ def lambda_handler(event, context):
     logging.info("Received request {}".format(paramsString))
     params = json.loads(paramsString)
 
-    useremail = params['userEmail']
+    useremail = params['ApprovalForm']['email']
     userdatasets = []
     response = {"exportRequests": {"tableRequests":[], "s3Requests":[]}, "trustedRequests": [], "autoExportRequests": []}
     try:
