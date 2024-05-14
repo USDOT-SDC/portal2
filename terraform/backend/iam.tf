@@ -36,6 +36,31 @@ resource "aws_iam_role" "hello_world" {
       }
     )
   }
+  inline_policy {
+    name = "api_handler"
+    policy = jsonencode(
+      {
+        Version : "2012-10-17",
+        Statement : [
+          {
+            Effect : "Allow",
+            Action : [
+              "ses:SendEmail",
+              "pricing:DescribeServices",
+              "pricing:GetAttributeValues",
+              "s3:*",
+              "apigateway:*",
+              "appstream:*",
+              "dynamodb:*",
+              "ec2:*",
+              "pricing:GetProducts",
+            ],
+            Resource : "*"
+          }
+        ]
+      }
+    )
+  }
   tags = local.common_tags
 }
 
@@ -70,6 +95,31 @@ resource "aws_iam_role" "webportal_lambda" {
               "logs:PutLogEvents",
               "logs:PutMetricFilter",
               "logs:PutRetentionPolicy"
+            ],
+            Resource : "*"
+          }
+        ]
+      }
+    )
+  }
+  inline_policy {
+    name = "api_handler"
+    policy = jsonencode(
+      {
+        Version : "2012-10-17",
+        Statement : [
+          {
+            Effect : "Allow",
+            Action : [
+              "ses:SendEmail",
+              "pricing:DescribeServices",
+              "pricing:GetAttributeValues",
+              "s3:*",
+              "apigateway:*",
+              "appstream:*",
+              "dynamodb:*",
+              "ec2:*",
+              "pricing:GetProducts",
             ],
             Resource : "*"
           }
