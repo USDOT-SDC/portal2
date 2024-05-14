@@ -390,16 +390,16 @@ resource "aws_lambda_function" "perform_instance_action" {
   tags             = local.common_tags
 }
 
-data "archive_file" "persigned_url" {
+data "archive_file" "presigned_url" {
   type        = "zip"
-  source_file = "${path.module}/lambdas/persigned_url/src/lambda_function.py"
-  output_path = "${path.module}/lambdas/persigned_url/lambda_deployment_package.zip"
+  source_file = "${path.module}/lambdas/presigned_url/src/lambda_function.py"
+  output_path = "${path.module}/lambdas/presigned_url/lambda_deployment_package.zip"
 }
 
-resource "aws_lambda_function" "persigned_url" {
-  function_name    = "${var.common.app_slug}_persigned_url"
-  filename         = data.archive_file.persigned_url.output_path
-  source_code_hash = data.archive_file.persigned_url.output_base64sha256
+resource "aws_lambda_function" "presigned_url" {
+  function_name    = "${var.common.app_slug}_presigned_url"
+  filename         = data.archive_file.presigned_url.output_path
+  source_code_hash = data.archive_file.presigned_url.output_base64sha256
   role             = aws_iam_role.webportal_lambda.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
@@ -414,7 +414,7 @@ resource "aws_lambda_function" "persigned_url" {
       TABLENAME_AUTOEXPORT_USERS = local.tablename_autoexport_users
     }
   }
-  depends_on       = [data.archive_file.persigned_url]
+  depends_on       = [data.archive_file.presigned_url]
   tags             = local.common_tags
 }
 
