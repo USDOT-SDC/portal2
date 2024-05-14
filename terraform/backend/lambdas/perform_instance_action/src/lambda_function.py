@@ -1,0 +1,35 @@
+import boto3
+
+
+logger = logging.getLogger()
+
+
+def lambda_handler(event, context):
+    params = event['queryStringParameters']
+    if not params or "instance_id" not in params:
+        logger.error("The query parameters 'instance_id' is missing")
+        raise BadRequestError("The query parameters 'instance_id' is missing")
+
+    if not params or "action" not in params:
+        logger.error("The query parameters 'action' is missing")
+        raise BadRequestError("The query parameters 'action' is missing")
+    
+    resource = boto3.resource('ec2')
+    instance = resource.Instance(params['instance_id'])
+
+    if params['action'] == 'run':
+        try:
+            response = instance.start()
+        except BaseException as be:
+            logging.exception("Error: Failed to start instance" + str(be) )
+            raise ("Internal error at server side")
+    else:
+        try:
+            response = instance.stop(Force=True)
+        except BaseException as be:
+            logging.exception("Error: Failed to stop instance" + str(be) )
+            raise ("Internal error at server side")
+
+    return Response(body={'Status': response},
+                    status_code=200,
+                    headers={'Content-Type': 'text/plain'})
