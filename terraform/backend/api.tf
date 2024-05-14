@@ -5,6 +5,18 @@ resource "aws_api_gateway_rest_api" "portal" {
   tags        = local.common_tags
 }
 
+# === REST API Authorizer ===
+data "aws_cognito_user_pools" "portal" {
+  name = "${var.common.environment}-sdc-dot-cognito-pool"
+}
+
+resource "aws_api_gateway_authorizer" "portal" {
+  name          = "PortalCognitoUserPoolAuthorizer"
+  type          = "COGNITO_USER_POOLS"
+  rest_api_id   = aws_api_gateway_rest_api.portal.id
+  provider_arns = data.aws_cognito_user_pools.portal.arns
+}
+
 # === REST API Domain Name ===
 resource "aws_api_gateway_domain_name" "portal_api" {
   domain_name     = "portal-api.${local.fqdn}"
