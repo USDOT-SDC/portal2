@@ -414,13 +414,8 @@ resource "aws_lambda_function" "presigned_url" {
       TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
-<<<<<<< HEAD
   depends_on       = [data.archive_file.presigned_url]
   tags             = local.common_tags
-=======
-  depends_on = [data.archive_file.presigned_url]
-  tags       = local.common_tags
->>>>>>> 4404f21f39b7bdf90a652ce01c9cef18b4f335cc
 }
 
 data "archive_file" "request_export" {
