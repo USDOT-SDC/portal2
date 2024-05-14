@@ -9,17 +9,11 @@ resource "aws_api_gateway_rest_api" "portal" {
 resource "aws_api_gateway_domain_name" "portal_api" {
   domain_name     = "portal-api.${local.fqdn}"
   certificate_arn = aws_acm_certificate.external.arn
-  endpoint_configuration {
-    types = ["EDGE"]
-  }
 }
 
 resource "aws_api_gateway_domain_name" "sub2" {
   domain_name     = "sub2.${local.fqdn}"
   certificate_arn = aws_acm_certificate.external.arn
-  endpoint_configuration {
-    types = ["EDGE"]
-  }
 }
 
 # === REST API Domain Name Mapping ===
