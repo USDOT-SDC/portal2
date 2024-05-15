@@ -144,8 +144,7 @@ resource "aws_lambda_function" "export_table" {
       AUTHORIZERID                = local.authorizer_id
       TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
     }
   }
   depends_on = [data.archive_file.export_table]
@@ -166,16 +165,6 @@ resource "aws_lambda_function" "get_health" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.get_health]
   tags       = local.common_tags
 }
@@ -222,16 +211,6 @@ resource "aws_lambda_function" "instance_status" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.instance_status]
   tags       = local.common_tags
 }

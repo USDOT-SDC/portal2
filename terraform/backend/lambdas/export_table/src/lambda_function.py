@@ -1,15 +1,14 @@
 import boto3
 import os
 import logging
-import json
+import ast, json
+import datetime, time
 
 
 RESTAPIID = os.getenv("RESTAPIID")
 AUTHORIZERID = os.getenv("AUTHORIZERID")
 TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
 TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
-TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
-TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
 TABLENAME_EXPORT_FILE_REQUEST = os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
 
 logger = logging.getLogger()
@@ -34,6 +33,29 @@ def get_combined_export_workflow():
             combinedExportWorkflow.update(dataset['exportWorkflow'])
     return combinedExportWorkflow
 
+
+def get_user_details(id_token):
+    apigateway = boto3.client('apigateway')
+    response = apigateway.test_invoke_authorizer(
+    restApiId=RESTAPIID,
+    authorizerId=AUTHORIZERID,
+    headers={
+        'Authorization': id_token
+    })
+    print('test invoke authorizer response: ', response)
+    roles_response=response['claims']['family_name']
+    email=response['claims']['email']
+    full_username=response['claims']['cognito:username'].split('\\')[1]
+    roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
+    role_list= roles_list_formatted.split(",")
+
+    roles=[]
+    for r in role_list:
+        if ":role/" in r:
+            roles.append(r.split(":role/")[1])
+
+    return { 'role' : roles , 'email': email, 'username': full_username }
+ 
 
 def get_user_details_from_username(username):
     try:
