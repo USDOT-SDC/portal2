@@ -2,7 +2,8 @@ import logging
 import json
 import boto3
 import time
-import date, datetime
+import os
+from datetime import date
 
 
 TABLENAME_MANAGE_USER_INDEX = os.getenv("TABLENAME_MANAGE_USER_INDEX")
