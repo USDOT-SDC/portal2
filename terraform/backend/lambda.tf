@@ -40,16 +40,6 @@ resource "aws_lambda_function" "data_dictionary" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.data_dictionary]
   tags       = local.common_tags
 }
@@ -68,16 +58,6 @@ resource "aws_lambda_function" "desired_instance_types" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.desired_instance_types]
   tags       = local.common_tags
 }
@@ -96,16 +76,6 @@ resource "aws_lambda_function" "download_url" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.download_url]
   tags       = local.common_tags
 }
@@ -124,16 +94,6 @@ resource "aws_lambda_function" "export_objects" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.export_objects]
   tags       = local.common_tags
 }
@@ -154,12 +114,10 @@ resource "aws_lambda_function" "export_request" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
       TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
       TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
     }
   }
   depends_on = [data.archive_file.export_request]

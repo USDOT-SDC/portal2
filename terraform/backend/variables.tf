@@ -11,6 +11,7 @@ locals {
   tablename_available_dataset = "${var.common.environment}-AvailableDataset"
   tablename_trusted_users     = "${var.common.environment}-TrustedUsersTable"
   tablename_autoexport_users  = "${var.common.environment}-AutoExportUsersTable"
+  tablename_export_file_request = "${var.common.environment}-RequestExportTable"
   ecs_tags = { # ECS auto creates these tags. Putting them in Terraform will prevent config drift.
     "App Support" = "Jeff.Ussing.CTR"
     "Fed Owner"   = "Dan Morgan"

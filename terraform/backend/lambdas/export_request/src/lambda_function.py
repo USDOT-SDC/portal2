@@ -1,16 +1,11 @@
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
 import logging
-import ast, json
-from datetime import datetime
-import hashlib
+import json
 import time
 import os
 
 
-RESTAPIID = os.getenv("RESTAPIID")
-AUTHORIZERID = os.getenv("AUTHORIZERID")
-TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
 TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
 TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
 TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
