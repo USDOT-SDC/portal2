@@ -1,4 +1,9 @@
 import boto3
+import logging
+import os
+
+
+RECEIVER = os.getenv("RECEIVER_EMAIL")
 
 
 logger = logging.getLogger()

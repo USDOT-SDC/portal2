@@ -2,12 +2,12 @@ import logging
 import json
 import boto3
 import time
+from datetime import datetime, date 
 import os
-from datetime import date
+from boto3.dynamodb.conditions import Key, Attr
+import uuid
 
 
-TABLENAME_MANAGE_USER_INDEX = os.getenv("TABLENAME_MANAGE_USER_INDEX")
-TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
 TABLENAME_MANAGE_UPTIME = os.getenv("TABLENAME_MANAGE_UPTIME")
 TABLENAME_MANAGE_UPTIME_INDEX = os.getenv("TABLENAME_MANAGE_UPTIME_INDEX")
 
@@ -115,9 +115,10 @@ def insert_schedule_uptime_to_table(params):
     username = params['username']
     instance_id = params['instance_id']
     resp = table.query(
-        # Add the name of the index you want to use in your query.
         IndexName=TABLENAME_MANAGE_UPTIME_INDEX,
-        KeyConditionExpression=Key('username').eq(username),FilterExpression=Attr('instance_id').eq(instance_id))
+        KeyConditionExpression=Key('username').eq(username),
+        FilterExpression=Attr('instance_id').eq(instance_id)
+        )
     active = False
     for item in resp['Items']:
         reqID=item['RequestId']
@@ -131,7 +132,7 @@ def insert_schedule_uptime_to_table(params):
         ExpressionAttributeValues={':active': active })
 
     try:
-        request_date = datetime.datetime.now()
+        request_date = datetime.now()
         request_date = str(request_date)
         table.put_item(
             Item={
@@ -152,9 +153,7 @@ def insert_schedule_uptime_to_table(params):
 
 
 def user_requests_process(params):
-    manageUptime = params['manageUptime']
     startAfterResize = params['startAfterResize']
-    print(manageUptime)
     print(startAfterResize)
     insert_schedule_uptime_to_table(params)
     if startAfterResize == True:

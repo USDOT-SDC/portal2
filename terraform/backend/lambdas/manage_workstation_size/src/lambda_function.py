@@ -2,10 +2,14 @@ import logging
 import json
 import boto3
 import time
-import date, datetime
+from datetime import date, datetime
+import os
+from boto3.dynamodb.conditions import Key, Attr
+import uuid
 
 
 TABLENAME_MANAGE_USER_INDEX = os.getenv("TABLENAME_MANAGE_USER_INDEX")
+TABLENAME_MANAGE_USER = os.getenv("TABLENAME_MANAGE_USER")
 TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
 
 
@@ -164,7 +168,7 @@ def insert_request_to_table(params):
             ExpressionAttributeValues={':active': active })
 
     try:
-        request_date = datetime.datetime.now()
+        request_date = datetime.now()
         request_date = str(request_date)
         table.put_item(
             Item={
@@ -222,9 +226,7 @@ def update_configuration_type_to_table(params):
 
 
 def user_requests_process(params):
-    manageWorkstation = params['manageWorkstation']
     startAfterResize = params['startAfterResize']
-    print(manageWorkstation)
     print(startAfterResize)
     resize_workstation(params)
     insert_request_to_table(params)

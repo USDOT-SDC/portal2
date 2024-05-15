@@ -1,5 +1,7 @@
 import boto3
 import logging
+import os
+from boto3.dynamodb.conditions import Key, Attr
 
 
 TABLENAME_EXPORT_FILE_REQUEST = os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
@@ -52,6 +54,4 @@ def lambda_handler(event, context):
         raise ("Failed to get s3 metadata")
 
     print("Response == ", response)
-    return Response(body=response["Metadata"],
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':response["Metadata"]}

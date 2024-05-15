@@ -231,12 +231,8 @@ resource "aws_lambda_function" "manage_workstation_schedule" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_MANAGE_UPTIME = local.tablename_manage_uptime
+      TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
     }
   }
   depends_on = [data.archive_file.manage_workstation_schedule]
@@ -259,12 +255,9 @@ resource "aws_lambda_function" "manage_workstation_size" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
       TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_MANAGE_USER = local.tablename_manage_user
+      TABLENAME_MANAGE_USER_INDEX     = local.tablename_manage_user_index
     }
   }
   depends_on = [data.archive_file.manage_workstation_size]
@@ -313,16 +306,6 @@ resource "aws_lambda_function" "perform_instance_action" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on = [data.archive_file.perform_instance_action]
   tags       = local.common_tags
 }
@@ -341,16 +324,6 @@ resource "aws_lambda_function" "presigned_url" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  environment {
-    variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
-    }
-  }
   depends_on       = [data.archive_file.presigned_url]
   tags             = local.common_tags
 }
@@ -377,6 +350,8 @@ resource "aws_lambda_function" "request_export" {
       TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
       TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
       TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+      RECEIVER_EMAIL              = local.receiver_email
     }
   }
   depends_on = [data.archive_file.request_export]
@@ -399,12 +374,7 @@ resource "aws_lambda_function" "s3_metadata" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
     }
   }
   depends_on = [data.archive_file.s3_metadata]
@@ -427,12 +397,7 @@ resource "aws_lambda_function" "send_email" {
   timeout          = 60
   environment {
     variables = {
-      RESTAPIID                   = local.restapi_id
-      AUTHORIZERID                = local.authorizer_id
-      TABLENAME_USER_STACKS       = local.tablename_user_stacks
-      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+      RECEIVER_EMAIL               = local.receiver_email
     }
   }
   depends_on = [data.archive_file.send_email]

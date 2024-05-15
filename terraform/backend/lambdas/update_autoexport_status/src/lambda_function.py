@@ -1,5 +1,6 @@
 import boto3
 import json
+import os
 
 
 RECEIVER = os.getenv("RECEIVER_EMAIL")
