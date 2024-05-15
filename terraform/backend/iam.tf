@@ -1,4 +1,4 @@
-resource "aws_iam_role" "hello_world" {
+resource "aws_iam_role" "portal_lambdas" {
   name = "platform.lambda.${var.common.app_slug}.${var.module_slug}.role"
   assume_role_policy = jsonencode(
     {
@@ -36,28 +36,8 @@ resource "aws_iam_role" "hello_world" {
       }
     )
   }
-  tags = local.common_tags
-}
-
-resource "aws_iam_role" "webportal_lambda" {
-  name = "platform.lambda.${var.common.app_slug}.${var.module_slug}.role"
-  assume_role_policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "lambda.amazonaws.com",
-            "AWS" : "arn:aws:iam::${var.common.account_id}:root"
-          },
-          "Action" : "sts:AssumeRole"
-        }
-      ]
-    }
-  )
   inline_policy {
-    name = "allow_logs"
+    name = "api_handler"
     policy = jsonencode(
       {
         Version : "2012-10-17",
@@ -65,11 +45,15 @@ resource "aws_iam_role" "webportal_lambda" {
           {
             Effect : "Allow",
             Action : [
-              "logs:CreateLogGroup",
-              "logs:CreateLogStream",
-              "logs:PutLogEvents",
-              "logs:PutMetricFilter",
-              "logs:PutRetentionPolicy"
+              "ses:SendEmail",
+              "pricing:DescribeServices",
+              "pricing:GetAttributeValues",
+              "s3:*",
+              "apigateway:*",
+              "appstream:*",
+              "dynamodb:*",
+              "ec2:*",
+              "pricing:GetProducts",
             ],
             Resource : "*"
           }
