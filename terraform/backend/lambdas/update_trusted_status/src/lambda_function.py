@@ -1,8 +1,10 @@
 import boto3
 import json
+import os
+import logging
 
 
-TABLENAME_EXPORT_FILE_REQUEST = os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
+TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
 RECEIVER = os.getenv("RECEIVER_EMAIL")
 
 logger = logging.getLogger()
@@ -44,7 +46,7 @@ def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
         raise NotFoundError("Failed to send notification")
 
 
-def updatetrustedtatus():
+def lambda_handler(event, context):
     paramsQuery = event['queryStringParameters']
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")

@@ -1,8 +1,9 @@
 import boto3
+import botocore
 import json
 import os
 import logging
-from boto3.dynamodb.conditions import Attr, scan_db
+from boto3.dynamodb.conditions import Attr
 
 
 TABLENAME_EXPORT_FILE_REQUEST = os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
@@ -47,6 +48,36 @@ def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
         raise NotFoundError("Failed to send notification")
 
 
+def scan_db(table, scan_kwargs=None):
+    """
+    Overview:
+        Get all records of the dynamodb table where the FilterExpression holds true
+        
+    Function Details:
+        :param: scan_kwargs: dict: Used to pass filter conditions, know more about kwargs- geeksforgeeks.org/args-kwargs-python/
+        :param: table: string: Dynamodb table name
+        :return: records: dict: List of DynamoDB records returned.
+    """
+    if scan_kwargs is None:
+        scan_kwargs = {}
+    table = dynamodb_client.Table(table)
+
+    complete = False
+    records = []
+    while not complete:
+        try:
+            response = table.scan(**scan_kwargs)
+        except botocore.exceptions.ClientError as error:
+            raise Exception('Error quering DB: {}'.format(error))
+
+        records.extend(response.get('Items', []))
+        next_key = response.get('LastEvaluatedKey')
+        scan_kwargs['ExclusiveStartKey'] = next_key
+
+        complete = True if next_key is None else False
+    return records
+
+
 def lambda_handler(event, context):
     paramsQuery = event['queryStringParameters']
     paramsString = paramsQuery['message']
@@ -66,6 +97,7 @@ def lambda_handler(event, context):
         'FilterExpression': Attr('RequestType').eq('Table') & Attr('RequestReviewStatus').eq('Approved') & Attr('S3KeyHash').eq(s3KeyHash) # Filter Expression for DynamoDB Scan. Get entries where status = 'approved'
         }
         table_requests = scan_db(TABLENAME_EXPORT_FILE_REQUEST, kwargs)
+        print("table requests: ", table_requests)
         for request in table_requests:
             exportFileRequestTable.update_item(
                 Key={

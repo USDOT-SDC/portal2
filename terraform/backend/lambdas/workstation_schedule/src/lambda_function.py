@@ -1,6 +1,9 @@
 import boto3
 import logging
 import json
+import os
+from boto3.dynamodb.conditions import Key, Attr
+
 
 
 TABLENAME_MANAGE_DISK = os.getenv("TABLENAME_MANAGE_DISK")
@@ -12,6 +15,14 @@ TABLENAME_MANAGE_UPTIME_INDEX = os.getenv("TABLENAME_MANAGE_UPTIME_INDEX")
 
 
 logger = logging.getLogger()
+
+
+def format_date(date):
+    yyyy = date[0:4]
+    mm = date[5:7]
+    dd = date[8:10]
+    formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
+    return formated_date
 
 
 def lambda_handler(event, context):

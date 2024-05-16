@@ -448,8 +448,12 @@ resource "aws_lambda_function" "update_file_status" {
   timeout          = 60
   environment {
     variables = {
-      TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-      RECEIVER_EMAIL                = local.receiver_email
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
+      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
   depends_on = [data.archive_file.update_file_status]
@@ -472,8 +476,12 @@ resource "aws_lambda_function" "update_trusted_status" {
   timeout          = 60
   environment {
     variables = {
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
+      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
       TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-      RECEIVER_EMAIL              = local.receiver_email
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
   depends_on = [data.archive_file.update_trusted_status]
@@ -496,12 +504,12 @@ resource "aws_lambda_function" "workstation_schedule" {
   timeout          = 60
   environment {
     variables = {
-        TABLENAME_MANAGE_DISK_INDEX = local.tablename_manage_disk
-        TABLENAME_MANAGE_DISK_INDEX = local.tablename_manage_disk_index
-        TABLENAME_MANAGE_USER = local.tablename_manage_user
-        TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
-        TABLENAME_MANAGE_UPTIME = local.tablename_manage_uptime
-        TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
+      RESTAPIID                   = local.restapi_id
+      AUTHORIZERID                = local.authorizer_id
+      TABLENAME_USER_STACKS       = local.tablename_user_stacks
+      TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
+      TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+      TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
     }
   }
   depends_on = [data.archive_file.workstation_schedule]

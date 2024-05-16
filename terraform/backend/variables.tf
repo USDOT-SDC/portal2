@@ -12,6 +12,8 @@ locals {
   tablename_trusted_users     = "${var.common.environment}-TrustedUsersTable"
   tablename_autoexport_users  = "${var.common.environment}-AutoExportUsersTable"
   tablename_export_file_request = "${var.common.environment}-RequestExportTable"
+  tablename_manage_disk       = "${var.common.environment}-ManageDiskspaceRequestsTable"
+  tablename_manage_disk_index = "${var.common.environment}-diskspace-username-index"
   tablename_manage_uptime     = "${var.common.environment}-ScheduleUptimeTable"
   tablename_manage_uptime_index = "${var.common.environment}-scheduleuptime-username-index"
   tablename_manage_user       = "${var.common.environment}-ManageUserWorkstationTable"
