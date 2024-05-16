@@ -1,4 +1,5 @@
 import boto3
+import logging
 
 
 logger = logging.getLogger()
@@ -21,6 +22,5 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to get info about instance" + str(be) )
         raise ("Internal error at server side")
 
-    return Response(body={'Status': response},
-                    status_code=200,
-                    headers={'Content-Type': 'text/plain'})
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':{'Status': response}}
+

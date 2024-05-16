@@ -1,5 +1,8 @@
 import boto3
 import json
+import os
+import logging
+from boto3.dynamodb.conditions import Attr, scan_db
 
 
 TABLENAME_EXPORT_FILE_REQUEST = os.getenv("TABLENAME_EXPORT_FILE_REQUEST")
@@ -125,6 +128,6 @@ def lambda_handler(event, context):
 
     except BaseException as be:
         logging.exception("Error: Failed to updatefilestatus" + str(be))
-        raise ChaliceViewError("Failed to updatefilestatus")
+        raise ValueError("Failed to updatefilestatus")
 
     return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body': response}

@@ -5,6 +5,7 @@ from datetime import datetime
 import hashlib
 import time
 import os
+from boto3.dynamodb.conditions import Key, Attr
 
 
 RESTAPIID = os.getenv("RESTAPIID")
@@ -264,7 +265,7 @@ def lambda_handler(event, context):
                     'TeamBucket': params['TeamBucket'],
                     'ReqReceivedTimestamp': timemills,
                     'UserEmail': user_email,
-                    'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d')
+                    'ReqReceivedDate': datetime.now().strftime('%Y-%m-%d')
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']
