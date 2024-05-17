@@ -33,14 +33,14 @@ resource "aws_api_gateway_base_path_mapping" "portal_api" {
   api_id      = aws_api_gateway_rest_api.portal.id
   stage_name  = aws_api_gateway_stage.v1.stage_name
   domain_name = aws_api_gateway_domain_name.portal_api.domain_name
-  base_path = "v1"
+  base_path   = "v1"
 }
 
 resource "aws_api_gateway_base_path_mapping" "sub2" {
   api_id      = aws_api_gateway_rest_api.portal.id
   stage_name  = aws_api_gateway_stage.v1.stage_name
   domain_name = aws_api_gateway_domain_name.sub2.domain_name
-  base_path = "v1"
+  base_path   = "v1"
 }
 
 # === REST API Stage ===
@@ -120,13 +120,18 @@ resource "aws_api_gateway_method_response" "health_any_200" {
 resource "aws_api_gateway_deployment" "portal" {
   rest_api_id = aws_api_gateway_rest_api.portal.id
   triggers = {
-    redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.health,
-      aws_api_gateway_method.health_any,
-      aws_api_gateway_integration.health_any_mock,
-      aws_api_gateway_integration_response.health_any_200,
-      aws_api_gateway_method_response.health_any_200
-    ]))
+    redeployment = sha1(
+      jsonencode(
+        [
+          aws_api_gateway_resource.health,
+          aws_api_gateway_method.health_any,
+          aws_api_gateway_integration.health_any_mock,
+          aws_api_gateway_integration_response.health_any_200,
+          aws_api_gateway_method_response.health_any_200,
+          module.api
+        ]
+      )
+    )
   }
   lifecycle {
     create_before_destroy = true
