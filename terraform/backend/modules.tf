@@ -90,7 +90,7 @@ locals {
       }
     }
     hello_world = {
-      http_method = "ANY"
+      http_method           = "ANY"
       environment_variables = {}
     }
     instance_status = {
@@ -107,23 +107,15 @@ locals {
     manage_workstation_schedule = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_MANAGE_UPTIME       = local.tablename_manage_uptime
+        TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
       }
     }
     manage_workstation_size = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_MANAGE_USER       = local.tablename_manage_user
+        TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
       }
     }
     manage_workstation_volume = {
@@ -173,23 +165,13 @@ locals {
     s3_metadata = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
       }
     }
     send_email = {
       http_method = "POST"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        RECEIVER_EMAIL = local.receiver_email
       }
     }
     update_autoexport_status = {
@@ -206,34 +188,25 @@ locals {
     update_file_status = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        RECEIVER_EMAIL                = local.receiver_email
+        TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
       }
     }
     update_trusted_status = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        RECEIVER_EMAIL = local.receiver_email
       }
     }
     workstation_schedule = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_MANAGE_DISK         = local.tablename_manage_disk
+        TABLENAME_MANAGE_DISK_INDEX   = local.tablename_manage_disk_index
+        TABLENAME_MANAGE_UPTIME       = local.tablename_manage_uptime
+        TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
+        TABLENAME_MANAGE_USER         = local.tablename_manage_user
+        TABLENAME_MANAGE_USER_INDEX   = local.tablename_manage_user_index
       }
     }
   }
