@@ -18,3 +18,14 @@ resource "aws_lambda_function" "f" {
   depends_on = [data.archive_file.f]
   tags       = local.common_tags
 }
+
+resource "aws_lambda_permission" "lp" {
+  statement_id  = "AllowAPIInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.f.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  # The /*/*/* part allows invocation from any stage, method and resource path
+  # within API Gateway REST API.
+  source_arn = "${var.rest_api.execution_arn}/*/${var.foo.http_method}/${aws_api_gateway_resource.r.path_part}"
+}

@@ -154,4 +154,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to process manage workstation request" + str(be))
         raise ("Failed to process manage workstation request")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'application/json'}, 'body':response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'application/json'}, 'body':json.dumps(response)}
