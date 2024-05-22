@@ -1,0 +1,41 @@
+<div id="sdc-algorithms">
+    <h3> SDC Algorithms
+        <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="These are algorithms that are available within SDC platform that are published / enabled by SDC team or published by other users. Access to these algorithms are available upon request. Learn more about the different types of algorithms and how to request access to these algorithms."></i></sup>
+    </h3>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Programming&nbsp;Tools/language</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Request&nbsp;Access</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="algorithms.length > 0; else NoAlgorithmsElem;">
+                    <ng-container *ngFor="let algorithm of algorithms">
+                        <tr>
+                            <th scope="row"> </th>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+                <ng-template #NoAlgorithmsElem>
+                    <tr>
+                        <th colspan="7">
+                            <div class="d-flex align-items-center justify-content-center p-4">
+                                <h5 class="text-muted">No Algorithms Found</h5>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+    </div>
+</div>

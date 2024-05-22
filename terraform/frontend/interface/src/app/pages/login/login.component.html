@@ -5,20 +5,28 @@
             <p>If you do not have a Department of Transportation email address, you will be redirected to Login.gov.</p>
             <p>You will be prompted to create a Login.gov account if you do not already have one.</p>
             <hr>
-            <form>
-                <div class="mb-3">
-                    <label for="sdc-email-input" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="sdc-email-input" placeholder="name@example.com" name="email_address" [(ngModel)]="email_address">
-                </div>
-                <button type="submit" class="btn btn-primary" (click)="login()">
+
+
+
+            <div class="d-flex flex-column gap-3">
+
+                {{ "" // BUTTON: Main Login - DOT.GOV SSO }}
+                <button class="btn btn-primary btn-lg" (click)="login()" [disabled]="signing_in == true">
                     <ng-container *ngIf="signing_in == true; else DefaultSignInButton">
-                        <i class="fa-solid fa-circle-notch fa-spin me-2"></i> SIGNING IN...
+                        <i class="fa-solid fa-circle-notch fa-spin me-2"></i> Redirecting Login...
                     </ng-container>
                     <ng-template #DefaultSignInButton>
-                        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> SIGN IN
+                        <!-- <i class="fa-regular fa-address-card me-2"></i> -->Login with <b>&commat;dot.gov</b>
                     </ng-template>
                 </button>
-            </form>
+
+                {{ "" // BUTTON: Alternative Login - LOGIN.GOV }}
+                <button class="btn btn-outline-dark" [disabled]="signing_in == true">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>Login using <b>Login.gov</b>
+                </button>
+                
+            </div>
+
         </div>
         <div id="register-section" class="col-7 px-5">
             <h4>Sign up to the SDC</h4>
