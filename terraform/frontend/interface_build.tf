@@ -46,7 +46,8 @@ resource "terraform_data" "npm_install" {
     working_dir = local.working_dir
     command     = "npm install"
   }
-  depends_on = [local_file.environment_ts]
+  triggers_replace = filemd5("${local.working_dir}/package.json")
+  depends_on       = [local_file.environment_ts]
 }
 
 resource "terraform_data" "ng_build" {
@@ -54,12 +55,12 @@ resource "terraform_data" "ng_build" {
     working_dir = local.working_dir
     command     = "ng build --configuration ${local.configuration}"
   }
-  depends_on = [terraform_data.npm_install]
+  triggers_replace = md5(join("", [for f in fileset(path.root, "frontend/interface/src/**") : filemd5(f)]))
+  depends_on       = [terraform_data.npm_install]
 }
 
 module "interface_build" {
-  source = "hashicorp/dir/template"
-  # base_dir = local.src_path # using src_path for testing
+  source     = "hashicorp/dir/template"
   base_dir   = local.build_path
   depends_on = [terraform_data.ng_build]
 }
