@@ -9,8 +9,8 @@
 **/lambda_deployment_package.zip
 
 # Frontend Interface build
+terraform/frontend/interface_build
 terraform/frontend/interface_build/**
-!terraform/frontend/interface_build/README.md
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,python,windows,terraform,visualstudiocode,node,angular
