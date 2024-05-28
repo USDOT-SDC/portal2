@@ -23,6 +23,7 @@ resource "aws_api_gateway_integration" "i" {
   http_method             = aws_api_gateway_method.m.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
+  content_handling        = "CONVERT_TO_TEXT"
   uri                     = aws_lambda_function.f.invoke_arn
 
 }
