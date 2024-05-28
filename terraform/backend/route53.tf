@@ -68,7 +68,7 @@ resource "aws_route53_record" "guacamole" {
   records         = [local.guacamole_elb]
 }
 
-# === Portal API Canonical Name Record ===
+# === Portal API Address Record ===
 resource "aws_route53_record" "portal_api" {
   name    = "portal-api.${local.fqdn}"
   type    = "A"
@@ -135,7 +135,7 @@ resource "aws_route53_record" "sub1" {
   records = [aws_cloudfront_distribution.portal.domain_name]
 }
 
-# === Sub2 (Test Portal API) Canonical Name Record ===
+# === Sub2 (Test Portal API) Address Record ===
 resource "aws_route53_record" "sub2" {
   name    = "sub2.${local.fqdn}"
   type    = "A"
