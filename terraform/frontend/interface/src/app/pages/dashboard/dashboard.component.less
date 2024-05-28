@@ -1,14 +1,13 @@
-div.icon {
-    max-width: 36px;
-    position: relative;
+div.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
 
-    span {
-        width: 24px;
-        color: white;
-        position: absolute;
-        text-align: center;
-        font-size: small;
-        top: 0.25rem;
-        left: 0;
+    div.sidebar {
+        border-right: solid 1px #cecece;
+        padding: 1rem;
+    }
+
+    div.content {
+        padding: 1rem;
     }
 }

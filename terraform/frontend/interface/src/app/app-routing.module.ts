@@ -9,8 +9,8 @@ import { FaqComponent } from './pages/faq/faq.component';
 
 // DASHBOARD COMPONENTS
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { DatasetsComponent } from './pages/dashboard/datasets/datasets.component';
-import { WorkstationsComponent } from './pages/dashboard/workstations/workstations.component';
+import { DatasetsComponent } from './pages/dashboard/user-datasets/datasets.component';
+import { WorkstationsComponent } from './pages/dashboard/user-workstations/workstations.component';
 
 import { ErrorComponent } from './pages/error/error.component';
 import { AboutDatasetsComponent } from './pages/about-datasets/about-datasets.component';
@@ -28,9 +28,9 @@ const routes: Routes = [
     children: [
       { path: 'datasets', component: DatasetsComponent },
       { path: 'workstations', component: WorkstationsComponent },
-      { path: 'faqs', component: DashboardFaqComponent },
     ]
   },
+  { path: 'dashboard/faqs', component: DashboardFaqComponent },
   { path: '**', component: ErrorComponent }
 ];
 

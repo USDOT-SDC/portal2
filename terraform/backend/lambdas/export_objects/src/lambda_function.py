@@ -1,4 +1,5 @@
 import boto3
+import json
 
 
 def lambda_handler(event, context):
@@ -19,4 +20,4 @@ def lambda_handler(event, context):
             content.add(c['Key'])
     except BaseException as ce:
         print(ce)
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':list(content)}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(list(content))}

@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     console.log("Logging in with Email: ", this.email_address);
     setTimeout(() => {
       location.href = '/dashboard';
-      this.signing_in = false;
+      // this.signing_in = false;
     }, 1500); 
   }
 
