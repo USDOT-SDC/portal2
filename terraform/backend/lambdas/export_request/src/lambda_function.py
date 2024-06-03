@@ -1,7 +1,7 @@
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
 import logging
-import json
+import simplejson as json
 import time
 import os
 
@@ -104,4 +104,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to get submit requests" + str(be))
         raise ("Failed to get submit requests")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(response)}
