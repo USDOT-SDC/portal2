@@ -11,7 +11,7 @@
             <div class="d-flex flex-column gap-3">
 
                 {{ "" // BUTTON: Main Login - DOT.GOV SSO }}
-                <button class="btn btn-primary btn-lg" (click)="login()" [disabled]="signing_in == true">
+                <button class="btn btn-primary btn-lg" (click)="login(true)" [disabled]="signing_in == true">
                     <ng-container *ngIf="signing_in == true; else DefaultSignInButton">
                         <i class="fa-solid fa-circle-notch fa-spin me-2"></i> Redirecting Login...
                     </ng-container>
@@ -21,10 +21,10 @@
                 </button>
 
                 {{ "" // BUTTON: Alternative Login - LOGIN.GOV }}
-                <button class="btn btn-outline-dark" [disabled]="signing_in == true">
+                <button class="btn btn-outline-dark" (click)="login(false)" [disabled]="signing_in == true">
                     <i class="fa-solid fa-right-to-bracket me-2"></i>Login using <b>Login.gov</b>
                 </button>
-                
+
             </div>
 
         </div>

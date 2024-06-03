@@ -2,7 +2,7 @@
     <div class="wrapper">
 
         <div class="sidebar">
-            <h4 class="mb-4">Welcome Back!</h4>
+            <h4 class="mb-4">Welcome Back, <span>{{current_user?.username || "User"}}</span>! </h4>
             <hr>
             <div class="nav flex-column nav-pills text-start me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link text-start mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Resources</button>

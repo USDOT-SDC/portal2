@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +10,12 @@ export class NavbarComponent implements OnInit {
 
   public isLoggedIn: boolean = false;
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
+
+  public logOut() {
+    this.auth.logout().then(() => { location.href = '/'; });
+
+  }
 
   ngOnInit(): void {
     const path: Array<string> = location.pathname.split('/').filter((item: string) => item !== "");
