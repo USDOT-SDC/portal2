@@ -54,6 +54,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
       }
     }
     export_table = {
