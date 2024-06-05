@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 declare var bootstrap: any;
 
@@ -9,10 +10,17 @@ declare var bootstrap: any;
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
 
+  public current_user: any;
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.auth.current_user.subscribe((user: any) => {
+      console.log(user)
+      this.current_user = user;
+    })
+
+  }
 
   ngAfterViewInit(): void {
     const tooltipTriggerList: any = document.querySelectorAll('[data-bs-toggle="tooltip"]');
