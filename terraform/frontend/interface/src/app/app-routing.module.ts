@@ -15,22 +15,21 @@ import { WorkstationsComponent } from './pages/dashboard/user-workstations/works
 import { ErrorComponent } from './pages/error/error.component';
 import { AboutDatasetsComponent } from './pages/about-datasets/about-datasets.component';
 import { DashboardFaqComponent } from './pages/dashboard/dashboard-faq/dashboard-faq.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'datasets', component: AboutDatasetsComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login:access_token', component: LoginComponent },
   { path: 'faqs', component: FaqComponent },
   {
     path: 'dashboard',
-    component: DashboardComponent,
-    children: [
-      { path: 'datasets', component: DatasetsComponent },
-      { path: 'workstations', component: WorkstationsComponent },
-    ]
+    canActivate: [AuthGuard],
+    component: DashboardComponent
   },
-  { path: 'dashboard/faqs', component: DashboardFaqComponent },
+  { path: 'dashboard/faqs', canActivate: [AuthGuard], component: DashboardFaqComponent },
   { path: '**', component: ErrorComponent }
 ];
 

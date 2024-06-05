@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -7,22 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  public email_address: string | undefined;
+
+  private BASE_URL: string = 'https://ecs-dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize'
+  private URI_PARAMS: string = `?redirect_uri=${location.origin}/index.html&response_type=token`;
+
   public signing_in: boolean = false;
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
-  public login() {
-    // Demo Logic - Log and route to Dashboard
+  public login(dot: boolean) {
+
     this.signing_in = true;
-    console.log("Logging in with Email: ", this.email_address);
-    setTimeout(() => {
-      location.href = '/dashboard';
-      // this.signing_in = false;
-    }, 1500); 
+
+    if (dot == true) {
+      console.log("Logging in: COGNITO");
+      this.auth.login();
+    } else {
+      console.log("Logging in: LOGIN.GOV");
+      location.href = `${this.BASE_URL}${this.URI_PARAMS}&client_id=122lj1qh9e5qam3u29fpdt9ati`;
+    }
+
   }
 
   ngOnInit(): void {
+    this.auth.isLoggedIn();
   }
 
 }
