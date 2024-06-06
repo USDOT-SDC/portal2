@@ -1,6 +1,6 @@
 import boto3
 import botocore
-import json
+import simplejson as json
 import os
 import logging
 from boto3.dynamodb.conditions import Attr
@@ -162,4 +162,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to updatefilestatus" + str(be))
         raise ValueError("Failed to updatefilestatus")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body': response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body': json.dumps(response)}

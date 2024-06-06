@@ -1,5 +1,6 @@
 import boto3
 import logging
+import simplejson as json
 
 
 logger = logging.getLogger()
@@ -15,5 +16,5 @@ def lambda_handler(event, context):
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
         raise ("Failed to get presigned url")
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(response)}
     
