@@ -1,5 +1,6 @@
 import boto3
 import logging
+import simplejson as json
 
 
 logger = logging.getLogger()
@@ -22,5 +23,5 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to get info about instance" + str(be) )
         raise ("Internal error at server side")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':{'Status': response}}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps({'Status': response})}
 

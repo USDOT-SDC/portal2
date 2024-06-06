@@ -1,6 +1,6 @@
 import boto3
 import logging
-import json
+import simplejson as json
 import os
 from boto3.dynamodb.conditions import Key, Attr
 

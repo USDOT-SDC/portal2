@@ -64,8 +64,8 @@ locals {
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
         TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+
       }
     }
     get_health = {
@@ -118,6 +118,7 @@ locals {
         TABLENAME_MANAGE_USER       = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
       }
+      timeout = 300
     }
     manage_workstation_volume = {
       http_method = "GET"
@@ -161,6 +162,8 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+        RECEIVER                    = local.receiver_email
       }
     }
     s3_metadata = {

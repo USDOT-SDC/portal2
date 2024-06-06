@@ -1,6 +1,7 @@
 import boto3
 import logging
-import ast, json
+import ast
+import simplejson as json
 from datetime import datetime
 import hashlib
 import time
@@ -281,4 +282,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to process export request" + str(be))
         raise ("Failed to process export request")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(response)}

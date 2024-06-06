@@ -1,5 +1,5 @@
 import boto3
-import json
+import simplejson as json
 import os
 
 
@@ -86,4 +86,4 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to updateautoexportstatus" + str(be))
         raise ("Failed to updateautoexportstatus")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body': response}
+    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body': json.dumps(response)}
