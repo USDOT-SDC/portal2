@@ -16,7 +16,6 @@ def lambda_handler(event, context):
     if not params or "sender" not in params or "message" not in params:
         logger.error("The query parameters 'sender' or 'message' is missing")
         raise BadRequestError("The query parameters 'sender' or 'message' is missing")
-    #sender = params['sender']
     sender = RECEIVER
     message = params['message']
 

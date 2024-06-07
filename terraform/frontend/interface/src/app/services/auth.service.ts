@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Amplify } from "aws-amplify";
-import { signInWithRedirect, getCurrentUser, signOut } from "aws-amplify/auth";
+import { signInWithRedirect, getCurrentUser, fetchAuthSession, signOut } from "aws-amplify/auth";
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -18,7 +18,8 @@ export class AuthService {
   public async isLoggedIn(): Promise<boolean> {
     try {
       const { username, userId } = await getCurrentUser();
-      this.current_user.next({ username, userId });
+      const { tokens } = await fetchAuthSession();
+      this.current_user.next({ username, userId, token: tokens?.idToken?.toString() });
       return true;
     } catch (err) {
       return false;

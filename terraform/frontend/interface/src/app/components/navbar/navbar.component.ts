@@ -13,19 +13,15 @@ export class NavbarComponent implements OnInit {
   constructor(private auth: AuthService) { }
 
   public logOut() {
-    this.auth.logout().then(() => { location.href = '/'; });
-
+    this.auth.logout()
+      .then(() => { location.href = '/'; })
+      .catch(() => { this.isLoggedIn = false; });
   }
 
   ngOnInit(): void {
-    const path: Array<string> = location.pathname.split('/').filter((item: string) => item !== "");
-
-    // Temporary Login Solution - Remove Once Login is in Place
-    if (path.length > 0) {
-      if (path[0] == "dashboard") this.isLoggedIn = true;
-    }
-
-    console.log(path, this.isLoggedIn);
+    this.auth.isLoggedIn()
+      .then((bool) => { this.isLoggedIn = bool; })
+      .catch(() => { this.isLoggedIn = false; });
   }
 
 }
