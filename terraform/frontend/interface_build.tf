@@ -67,7 +67,7 @@ module "interface_build" {
 
 resource "aws_s3_object" "interface_build" {
   for_each               = module.interface_build.files
-  bucket                 = var.backend.s3.portal_bucket
+  bucket                 = var.backend.s3.portal.bucket
   key                    = each.key
   content_type           = each.value.content_type
   source                 = each.value.source_path

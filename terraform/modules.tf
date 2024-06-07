@@ -15,7 +15,7 @@ module "fe" {
   backend = {
     resource_urls = module.be.resource_urls
     s3 = {
-      portal_bucket = module.be.s3.portal_bucket
+      portal = module.be.s3.portal
     }
   }
 }

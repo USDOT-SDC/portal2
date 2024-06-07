@@ -11,7 +11,7 @@ output "resource_urls" {
 
 output "s3" {
   value = {
-    portal_bucket = aws_s3_bucket.portal.id
+    portal = { bucket = aws_s3_bucket.portal.bucket }
   }
 }
 
