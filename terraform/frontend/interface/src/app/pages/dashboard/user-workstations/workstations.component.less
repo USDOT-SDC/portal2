@@ -4,18 +4,23 @@ div#my-workstations {
         padding: 1rem;
         border-radius: 10px;
         border: solid 1px #cecece;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 1rem;
+        text-align: start;
 
         div.workstation {
+            display: inline-block;
             width: 190px;
             padding: 0.75rem;
             border: solid 1px #cecece;
             background-color: white;
             border-radius: 6px;
             transition: all ease-in-out 250ms;
+
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+
+            &:last-of-type {
+                margin: 0;
+            }
 
             div.icon {
                 display: flex;

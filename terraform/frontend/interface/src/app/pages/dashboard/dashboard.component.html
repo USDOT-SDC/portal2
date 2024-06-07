@@ -1,13 +1,19 @@
 <div class="container">
+    <ng-container *ngIf="loading">
+        <div class="loader">
+            <i class="fa-solid fa-circle-notch fa-5x fa-spin"></i>
+            <h6 class="text-center m-0">Initializing Dashboard...</h6>
+        </div>
+    </ng-container>
     <div class="wrapper">
 
         <div class="sidebar">
-            <h4 class="mb-4">Welcome Back, <span>{{current_user?.username || "User"}}</span>! </h4>
+            <h4 class="mb-4">Welcome Back, <br><span class="texts-secondary">{{parseUserName(current_user?.username) | titlecase }}</span>! </h4>
             <hr>
             <div class="nav flex-column nav-pills text-start me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link text-start mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Resources</button>
-                <button class="nav-link text-start mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">SDC Resources</button>
-                <button class="nav-link text-start mb-2" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled" type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false">Request Center</button>
+                <button class="nav-link text-center mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Resources</button>
+                <button class="nav-link text-center mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">SDC Resources</button>
+                <button class="nav-link text-center mb-2" id="v-pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#v-pills-disabled" type="button" role="tab" aria-controls="v-pills-disabled" aria-selected="false">Request Center</button>
             </div>
         </div>
 

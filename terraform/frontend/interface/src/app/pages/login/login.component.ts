@@ -10,7 +10,7 @@ export class LoginComponent implements OnInit {
 
 
   private BASE_URL: string = 'https://ecs-dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize'
-  private URI_PARAMS: string = `?redirect_uri=${location.origin}/index.html&response_type=token`;
+  private URI_PARAMS: string = `?redirect_uri=${location.origin}/dashboard&response_type=token`;
 
   public signing_in: boolean = false;
 

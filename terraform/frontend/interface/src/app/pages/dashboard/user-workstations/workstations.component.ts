@@ -8,6 +8,7 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 })
 export class WorkstationsComponent implements OnInit {
 
+  @ViewChild('Modal_ShutDownWorkstation') Williams_modal: ModalComponent | any;
   @ViewChild('Modal_ShutDownWorkstation') Modal_ShutDownWorkstation: ModalComponent | any;
   @ViewChild('Modal_ResizeWorkstation') Modal_ResizeWorkstation: ModalComponent | any;
   @ViewChild('Modal_ScheduleWorkstation') Modal_ScheduleWorkstation: ModalComponent | any;
