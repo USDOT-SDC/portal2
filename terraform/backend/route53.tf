@@ -1,48 +1,6 @@
-# === Variables to build the FQDN ===
-variable "dev_fqdn" {
-  default = "sdc-dev.dot.gov"
-}
-
-variable "prod_fqdn" {
-  default = "sdc.dot.gov"
-}
-
-locals {
-  fqdn = var.common.environment == "dev" ? var.dev_fqdn : var.prod_fqdn
-}
-
 # === Public DNS Zone ===
-resource "aws_route53_zone" "public" {
-  name    = local.fqdn
-  comment = "Hosted zone for DOT DNS to route any requests to *.${local.fqdn}; this is used for the portal and other resources."
-  tags    = local.ecs_tags
-}
-
-# === Name Server Record ===
-resource "aws_route53_record" "ns" {
-  name            = local.fqdn
-  allow_overwrite = true
-  ttl             = 172800
-  type            = "NS"
-  zone_id         = aws_route53_zone.public.zone_id
-  records = [
-    aws_route53_zone.public.name_servers[0],
-    aws_route53_zone.public.name_servers[1],
-    aws_route53_zone.public.name_servers[2],
-    aws_route53_zone.public.name_servers[3],
-  ]
-}
-
-# === Start of Authority Record ===
-resource "aws_route53_record" "soa" {
-  name            = local.fqdn
-  allow_overwrite = true
-  ttl             = 900
-  type            = "SOA"
-  zone_id         = aws_route53_zone.public.zone_id
-  records = [
-    "${aws_route53_zone.public.name_servers[2]}. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
-  ]
+data "aws_route53_zone" "public" {
+  zone_id = var.route53_zone.public.id
 }
 
 # === Guacamole Canonical Name Record ===
@@ -60,19 +18,19 @@ locals {
 }
 
 resource "aws_route53_record" "guacamole" {
-  name            = "guacamole.${local.fqdn}"
+  name            = "guacamole.${var.fqdn}"
   allow_overwrite = true
   ttl             = 300
   type            = "CNAME"
-  zone_id         = aws_route53_zone.public.zone_id
+  zone_id         = data.aws_route53_zone.public.zone_id
   records         = [local.guacamole_elb]
 }
 
 # === Portal API Address Record ===
 resource "aws_route53_record" "portal_api" {
-  name    = "portal-api.${local.fqdn}"
+  name    = "portal-api.${var.fqdn}"
   type    = "A"
-  zone_id = aws_route53_zone.public.zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
   alias {
     evaluate_target_health = true
     name                   = aws_api_gateway_domain_name.portal_api.cloudfront_domain_name
@@ -95,8 +53,8 @@ locals {
 }
 
 resource "aws_route53_record" "portal" {
-  zone_id = aws_route53_zone.public.zone_id
-  name    = "portal.${local.fqdn}"
+  zone_id = data.aws_route53_zone.public.zone_id
+  name    = "portal.${var.fqdn}"
   type    = "CNAME"
   ttl     = 300
   records = [local.nginx_elb]
@@ -117,8 +75,8 @@ locals {
 }
 
 resource "aws_route53_record" "sftp" {
-  zone_id = aws_route53_zone.public.zone_id
-  name    = "sftp.${local.fqdn}"
+  zone_id = data.aws_route53_zone.public.zone_id
+  name    = "sftp.${var.fqdn}"
   type    = "CNAME"
   ttl     = 300
   records = [local.transfer_server_url]
@@ -128,18 +86,18 @@ resource "aws_route53_record" "sftp" {
 # ==== Test Subdomains ====
 # === Sub1 (Test Portal) Canonical Name Record ===
 resource "aws_route53_record" "sub1" {
-  name    = "sub1.${local.fqdn}"
+  name    = "sub1.${var.fqdn}"
   type    = "CNAME"
-  zone_id = aws_route53_zone.public.zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
   ttl     = 300
   records = [aws_cloudfront_distribution.portal.domain_name]
 }
 
 # === Sub2 (Test Portal API) Address Record ===
 resource "aws_route53_record" "sub2" {
-  name    = "sub2.${local.fqdn}"
+  name    = "sub2.${var.fqdn}"
   type    = "A"
-  zone_id = aws_route53_zone.public.zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
   alias {
     evaluate_target_health = true
     name                   = aws_api_gateway_domain_name.sub2.cloudfront_domain_name

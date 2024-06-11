@@ -1,9 +1,11 @@
 # Backend
 module "be" {
-  module_name = "Backend"
-  module_slug = "be"
-  source      = "./backend"
-  common      = local.common
+  module_name  = "Backend"
+  module_slug  = "be"
+  source       = "./backend"
+  common       = local.common
+  route53_zone = data.terraform_remote_state.infrastructure.outputs.route53_zone
+  fqdn         = local.fqdn
 }
 
 # Frontend
@@ -12,6 +14,7 @@ module "fe" {
   module_slug = "fe"
   source      = "./frontend"
   common      = local.common
+  fqdn        = local.fqdn
   backend = {
     resource_urls = module.be.resource_urls
     s3 = {

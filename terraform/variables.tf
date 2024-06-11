@@ -23,3 +23,10 @@ locals {
     Owner            = "Support Team"
   }
 }
+
+# === Variables to build the FQDN ===
+locals {
+  dev_fqdn  = "sdc-dev.dot.gov"
+  prod_fqdn = "sdc.dot.gov"
+  fqdn      = local.common.environment == "dev" ? local.dev_fqdn : local.prod_fqdn
+}

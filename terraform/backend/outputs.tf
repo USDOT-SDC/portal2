@@ -14,7 +14,3 @@ output "s3" {
     portal = { bucket = aws_s3_bucket.portal.bucket }
   }
 }
-
-output "route53_zone_public" {
-  value = aws_route53_zone.public
-}
