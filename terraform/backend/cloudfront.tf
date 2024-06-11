@@ -5,7 +5,7 @@ locals {
 resource "aws_cloudfront_distribution" "portal" {
   enabled = true
   comment = "Portal 2"
-  aliases = ["sub1.${local.fqdn}"]
+  aliases = ["sub1.${var.fqdn}"]
   default_cache_behavior {
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]

@@ -19,12 +19,12 @@ resource "aws_api_gateway_authorizer" "portal" {
 
 # === REST API Domain Name ===
 resource "aws_api_gateway_domain_name" "portal_api" {
-  domain_name     = "portal-api.${local.fqdn}"
+  domain_name     = "portal-api.${var.fqdn}"
   certificate_arn = aws_acm_certificate.external.arn
 }
 
 resource "aws_api_gateway_domain_name" "sub2" {
-  domain_name     = "sub2.${local.fqdn}"
+  domain_name     = "sub2.${var.fqdn}"
   certificate_arn = aws_acm_certificate.external.arn
 }
 
