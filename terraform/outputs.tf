@@ -12,14 +12,6 @@ output "backend" {
     s3 = {
       portal = module.be.s3.portal
     }
-    route53_zone = {
-      public = {
-        arn     = module.be.route53_zone_public.arn
-        id      = module.be.route53_zone_public.id
-        name    = module.be.route53_zone_public.name
-        zone_id = module.be.route53_zone_public.zone_id
-      }
-    }
   }
 }
 
