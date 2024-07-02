@@ -20,12 +20,12 @@ resource "aws_api_gateway_authorizer" "portal" {
 # === REST API Domain Name ===
 resource "aws_api_gateway_domain_name" "portal_api" {
   domain_name     = "portal-api.${var.fqdn}"
-  certificate_arn = aws_acm_certificate.external.arn
+  certificate_arn = var.common.certificates.external.arn
 }
 
 resource "aws_api_gateway_domain_name" "sub2" {
   domain_name     = "sub2.${var.fqdn}"
-  certificate_arn = aws_acm_certificate.external.arn
+  certificate_arn = var.common.certificates.external.arn
 }
 
 # === REST API Domain Name Mapping ===
