@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 declare var bootstrap: any;
@@ -17,7 +18,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscriptions: Array<Subscription> = [];
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private api: ApiService) { }
 
   public parseUserName(name: string): string {
     if (name == undefined || name == "") return "User TBD";
@@ -28,11 +29,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loading = true;
     this.auth.isLoggedIn().then(() => {
       const user_subscription = this.auth.current_user.subscribe((user: any) => {
-        console.log("User: ", user)
-        setTimeout(() => {
-          this.loading = false;
-          this.current_user = user;
-        }, 500)
+        console.log("User: ", user);
+        this.loading = false;
+        this.current_user = user;
+        this.api.get_user().subscribe((response: any) => { console.log("Response: ", response); })
       });
       this._subscriptions.push(user_subscription)
     });
