@@ -11,4 +11,15 @@ def lambda_handler(event, context):
     except BaseException as be:
         logging.exception("Error: Failed to generate presigned url" + str(be))
         raise ("Failed to get presigned url")
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':response}
+
+    return {
+        'isBase64Encoded': False, 
+        'statusCode':200,
+        'headers':{
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Content-Type': 'text/plain'
+        }, 
+        'body':response
+    }

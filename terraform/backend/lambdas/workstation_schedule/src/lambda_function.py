@@ -64,4 +64,15 @@ def lambda_handler(event, context):
     for item in resp['Items']:
         info = {"uptime_instnace_id" : instance_id,"uptime_schedule_from_date" : format_date(item['schedule_from_date']),"uptime_schedule_to_date" : format_date(item['schedule_to_date'])}
         workstation_schedule['schedulelist'].append(info)
-    return workstation_schedule
+
+    return {
+        'isBase64Encoded': False, 
+        'statusCode':200,
+        'headers':{
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Content-Type': 'text/plain'
+        }, 
+        'body':json.dumps(workstation_schedule)
+    }
