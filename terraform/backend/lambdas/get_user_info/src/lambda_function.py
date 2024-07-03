@@ -78,7 +78,7 @@ def lambda_handler(event, context):
     user_info={}
     roles=[]
     try:
-        id_token = event['headers']['authorization']
+        id_token = event['headers']['Authorization']
         info_dict=get_user_details(id_token)
         user_info['role']=info_dict['role']
         user_info['email']=info_dict['email']
