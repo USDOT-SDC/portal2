@@ -20,5 +20,15 @@ def lambda_handler(event, context):
     except BaseException as be:
         logging.exception("Error: Failed to get data from s3 file" + str(be) )
         raise ("Internal error at server side")
-
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(data)}
+    
+    return {
+        'isBase64Encoded': False, 
+        'statusCode':200,
+        'headers':{
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Content-Type': 'text/plain'
+        }, 
+        'body':json.dumps(data)
+    }

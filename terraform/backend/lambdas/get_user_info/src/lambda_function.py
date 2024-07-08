@@ -1,6 +1,7 @@
 import boto3
 import os
 import ast, json
+from boto3.dynamodb.conditions import Key, Attr
 
 RESTAPIID = os.getenv("RESTAPIID")
 AUTHORIZERID = os.getenv("AUTHORIZERID")
@@ -77,7 +78,7 @@ def lambda_handler(event, context):
     user_info={}
     roles=[]
     try:
-        id_token = event['headers']['authorization']
+        id_token = event['headers']['Authorization']
         info_dict=get_user_details(id_token)
         user_info['role']=info_dict['role']
         user_info['email']=info_dict['email']
@@ -105,4 +106,14 @@ def lambda_handler(event, context):
         print(Exception)
     
     # Lambda with proxy integration response must be in the format: {'isBase64Encoded': true|false, 'statusCode':<htmlstatuscode>, 'headers':{'<name>':'<value',...}, 'body':<body>}
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(user_info)}
+    return {
+        'isBase64Encoded': False, 
+        'statusCode':200,
+        'headers':{
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Content-Type': 'text/plain'
+        }, 
+        'body':json.dumps(user_info)
+    }

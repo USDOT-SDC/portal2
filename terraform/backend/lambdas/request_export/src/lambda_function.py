@@ -140,7 +140,7 @@ def lambda_handler(event, context):
         userID=params['UserID']
         team_name = get_user_details_from_username(userID)
 
-        id_token = event['headers']['authorization']
+        id_token = event['headers']['Authorization']
         info_dict=get_user_details(id_token)
         user_email=info_dict['email']
 
@@ -282,4 +282,14 @@ def lambda_handler(event, context):
         logging.exception("Error: Failed to process export request" + str(be))
         raise ("Failed to process export request")
 
-    return {'isBase64Encoded': False, 'statusCode':200, 'headers':{'Content-Type': 'text/plain'}, 'body':json.dumps(response)}
+    return {
+        'isBase64Encoded': False, 
+        'statusCode':200,
+        'headers':{
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+                'Content-Type': 'text/plain'
+        }, 
+        'body':json.dumps(response)
+    }
