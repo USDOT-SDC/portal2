@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public loading: boolean = false;
 
   public current_user: any;
+  public user_workstations = [];
 
   private _subscriptions: Array<Subscription> = [];
 
@@ -28,11 +29,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
     this.auth.isLoggedIn().then(() => {
+      // Get User from Cognito
       const user_subscription = this.auth.current_user.subscribe((user: any) => {
         console.log("User: ", user);
         this.loading = false;
         this.current_user = user;
-        this.api.get_user().subscribe((response: any) => { console.log("Response: ", response); })
+        // Get User From DB
+        this.api.get_user().subscribe((response: any) => {
+          console.log("Response: ", response);
+          if (response) {
+            this.user_workstations = response.stacks.map((workstation: any) => {
+              const config_params = workstation.current_configuration.replace('vCPUs:', '').replace('RAM(GiB):', '').split(',');
+              workstation['machine'] = { cpu: config_params[0], ram: config_params[1], os: workstation.operating_system.toLowerCase() };
+              return workstation;
+            });;
+          }
+        })
       });
       this._subscriptions.push(user_subscription)
     });

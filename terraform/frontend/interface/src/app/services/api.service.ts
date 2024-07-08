@@ -8,14 +8,14 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiService {
 
-  private BASE_URI: string = `https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/`;
+  private BASE_URI: string = `https://${environment.resource_urls.portal_api}/`;
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   public get auth_header(): HttpHeaders {
     const { token } = this.auth.current_user.getValue();
     // { 'content-type': 'application/json', 'authorization': `Bearer ${token}` };
-    return new HttpHeaders({ 'Content-Type': 'application/json', 'authorization': `Bearer ${token}` })
+    return new HttpHeaders({ 'authorization': `Bearer ${token}` })
   }
 
   public get_user() {
