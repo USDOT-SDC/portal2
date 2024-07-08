@@ -38,7 +38,7 @@ resource "aws_cloudfront_distribution" "portal" {
   }
   tags = local.ecs_tags
   viewer_certificate {
-    acm_certificate_arn      = var.common.certificates.external.arn
+    acm_certificate_arn      = var.certificates.external.arn
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
