@@ -5,6 +5,7 @@ module "be" {
   source       = "./backend"
   common       = local.common
   route53_zone = data.terraform_remote_state.infrastructure.outputs.route53_zone
+  certificates = data.terraform_remote_state.infrastructure.outputs.certificates
   fqdn         = local.fqdn
 }
 
