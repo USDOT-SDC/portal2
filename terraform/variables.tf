@@ -12,6 +12,7 @@ locals {
     terraform_bucket            = data.terraform_remote_state.infrastructure.outputs.s3.terraform
     backup_bucket               = data.terraform_remote_state.infrastructure.outputs.s3.backup
     instance_maintenance_bucket = data.terraform_remote_state.infrastructure.outputs.s3.instance_maintenance
+    certificates                = data.terraform_remote_state.infrastructure.outputs.certificates
     app_slug                    = "portal2"
     secrets_path                = "../../portal2-secrets"
   }
