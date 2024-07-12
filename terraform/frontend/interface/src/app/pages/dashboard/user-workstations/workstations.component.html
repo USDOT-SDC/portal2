@@ -30,7 +30,7 @@
                         </ng-template>
                     </button>
 
-                    <button class="btn btn-sm text-nowrap" [ngClass]="workstation.status == false ? 'btn-outline-secondary' : 'btn-success'" [disabled]="workstation.status == false || workstation.loading == true">
+                    <button class="btn btn-sm text-nowrap" [ngClass]="workstation.status == false ? 'btn-outline-secondary' : 'btn-success'" [disabled]="workstation.status == false || workstation.loading == true" (click)="launch_workstation(workstation.instance_id)">
                         <i class="fa-solid fa-square-arrow-up-right me-1"></i>CONNECT
                     </button>
 

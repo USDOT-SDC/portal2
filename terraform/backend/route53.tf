@@ -4,17 +4,10 @@ data "aws_route53_zone" "public" {
 }
 
 # === Guacamole Canonical Name Record ===
-variable "dev_guacamole_elb" {
-  default = "internal-guacamole-app-1899819619.us-east-1.elb.amazonaws.com"
-}
-
-# TODO, value needs to be updated
-variable "prod_guacamole_elb" {
-  default = ""
-}
-
 locals {
-  guacamole_elb = var.common.environment == "dev" ? var.dev_guacamole_elb : var.prod_guacamole_elb
+  dev_guacamole_elb  = "internal-guacamole-app-1899819619.us-east-1.elb.amazonaws.com"
+  prod_guacamole_elb = "internal-prod-guacamole-load-balancer-923347317.us-east-1.elb.amazonaws.com"
+  guacamole_elb      = var.common.environment == "dev" ? local.dev_guacamole_elb : local.prod_guacamole_elb
 }
 
 resource "aws_route53_record" "guacamole" {
@@ -39,17 +32,10 @@ resource "aws_route53_record" "portal_api" {
 }
 
 # === Portal Canonical Name Record ===
-variable "dev_nginx_elb" {
-  default = "internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com"
-}
-
-# TODO, value needs to be updated
-variable "prod_nginx_elb" {
-  default = ""
-}
-
 locals {
-  nginx_elb = var.common.environment == "dev" ? var.dev_nginx_elb : var.prod_nginx_elb
+  dev_nginx_elb  = "internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com"
+  prod_nginx_elb = "internal-prod-nginx-load-balancer-539264498.us-east-1.elb.amazonaws.com"
+  nginx_elb      = var.common.environment == "dev" ? local.dev_nginx_elb : local.prod_nginx_elb
 }
 
 resource "aws_route53_record" "portal" {
@@ -61,17 +47,10 @@ resource "aws_route53_record" "portal" {
 }
 
 # === SFTP Canonical Name Record ===
-variable "dev_transfer_server_url" {
-  default = "s-17439e56624c4fbb9.server.transfer.us-east-1.amazonaws.com"
-}
-
-# TODO, value needs to be updated
-variable "prod_transfer_server_url" {
-  default = ""
-}
-
 locals {
-  transfer_server_url = var.common.environment == "dev" ? var.dev_transfer_server_url : var.prod_transfer_server_url
+  dev_transfer_server_url  = "s-17439e56624c4fbb9.server.transfer.us-east-1.amazonaws.com"
+  prod_transfer_server_url = "s-7d17ff899e16432eb.server.transfer.us-east-1.amazonaws.com"
+  transfer_server_url      = var.common.environment == "dev" ? local.dev_transfer_server_url : local.prod_transfer_server_url
 }
 
 resource "aws_route53_record" "sftp" {

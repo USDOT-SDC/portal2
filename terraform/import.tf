@@ -30,7 +30,7 @@
 
 # import {
 #   to = module.be.aws_route53_record.portal
-#   id = "Z103672221FNFH7O9E9OG_portal.sdc-dev.dot.gov_CNAME"
+#   id = "Z103672221FNFH7O9E9OG_portal.sdc.dot.gov_CNAME"
 # }
 
 # import {
