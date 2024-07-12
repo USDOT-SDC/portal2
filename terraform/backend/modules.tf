@@ -1,5 +1,6 @@
 # API Resources
 locals {
+  allow_origin_url = var.common.environment == "https://${aws_route53_record.sub1.name}" # update to aws_route53_record.portal.name when ready to cut over
   api_resources = {
     data_dictionary = {
       http_method = "GET"
@@ -10,6 +11,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     desired_instance_types = {
@@ -21,6 +23,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     download_url = {
@@ -32,6 +35,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     export_objects = {
@@ -43,6 +47,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     export_request = {
@@ -55,6 +60,7 @@ locals {
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     export_table = {
@@ -65,7 +71,7 @@ locals {
         TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     get_health = {
@@ -77,6 +83,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     get_user_info = {
@@ -88,6 +95,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     hello_world = {
@@ -103,6 +111,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     manage_workstation_schedule = {
@@ -110,6 +119,7 @@ locals {
       environment_variables = {
         TABLENAME_MANAGE_UPTIME       = local.tablename_manage_uptime
         TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     manage_workstation_size = {
@@ -117,6 +127,7 @@ locals {
       environment_variables = {
         TABLENAME_MANAGE_USER       = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
       timeout = 300
     }
@@ -129,6 +140,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     perform_instance_action = {
@@ -140,6 +152,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     presigned_url = {
@@ -151,6 +164,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     request_export = {
@@ -164,18 +178,21 @@ locals {
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
         RECEIVER                    = local.receiver_email
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     s3_metadata = {
       http_method = "GET"
       environment_variables = {
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     send_email = {
       http_method = "POST"
       environment_variables = {
         RECEIVER_EMAIL = local.receiver_email
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     update_autoexport_status = {
@@ -187,6 +204,7 @@ locals {
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     update_file_status = {
@@ -194,12 +212,14 @@ locals {
       environment_variables = {
         RECEIVER_EMAIL                = local.receiver_email
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     update_trusted_status = {
       http_method = "GET"
       environment_variables = {
         RECEIVER_EMAIL = local.receiver_email
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     workstation_schedule = {
@@ -211,6 +231,7 @@ locals {
         TABLENAME_MANAGE_UPTIME_INDEX = local.tablename_manage_uptime_index
         TABLENAME_MANAGE_USER         = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX   = local.tablename_manage_user_index
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
   }
