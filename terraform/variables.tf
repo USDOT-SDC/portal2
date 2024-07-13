@@ -15,13 +15,14 @@ locals {
     certificates                = data.terraform_remote_state.infrastructure.outputs.certificates
     app_slug                    = "portal2"
     secrets_path                = "../../portal2-secrets"
+    config_version              = var.config_version
   }
   default_tags = {
-    "Repository URL" = "https://github.com/USDOT-SDC/"
     Repository       = "portal2"
     Project          = "Platform"
     Team             = "Platform"
     Owner            = "Support Team"
+    config_version   = var.config_version
   }
 }
 
@@ -30,4 +31,8 @@ locals {
   dev_fqdn  = "sdc-dev.dot.gov"
   prod_fqdn = "sdc.dot.gov"
   fqdn      = local.common.environment == "dev" ? local.dev_fqdn : local.prod_fqdn
+}
+
+variable "config_version" {
+  type = string
 }
