@@ -18,7 +18,7 @@ if exist "%plan_id_file%" (
 )
 set /a plan_id+=1
 set plan_file="tfplans/%config_version%_%env%_%plan_id%"
-set command=terraform plan -var=config_version="%config_version%" -var-file="env/%env%.tfvars" -out=%plan_file%
+set command=terraform plan -var=config_version="%config_version%" -var-file="env_vars/%env%.tfvars" -out=%plan_file%
 echo Your active AWS profile is: %AWS_PROFILE%
 echo.
 echo %command%
