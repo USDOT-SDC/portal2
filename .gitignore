@@ -1,6 +1,6 @@
 ### repo specific ignores ###
 # Terraform plans
-**/tfplan*
+**/tfplans/*
 
 # Terraform local config files
 **/terraform/**/*.conf
