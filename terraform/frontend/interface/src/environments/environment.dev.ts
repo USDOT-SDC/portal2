@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   stage: 'dev',
-  build: '2.0.1',
+  build: '0.0.1',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',

@@ -5,11 +5,10 @@ locals {
   environment_ts_tpl_path   = "${path.module}/environment.ts.tpl"
   environment_ts_path       = "${path.module}/interface/src/environments/environment.${var.common.environment}.ts"
   environment_ts_local_path = "${path.module}/interface/src/environments/environment.ts"
-  configuration             = var.common.environment == "dev" ? "development" : "production"
   tpl_vars = {
     production = var.common.environment == "dev" ? "false" : "true"
     stage      = var.common.environment
-    build      = "2.0.1"
+    build      = var.common.config_version
   }
 }
 
@@ -41,28 +40,9 @@ resource "local_file" "environment_ts_local" {
   depends_on = [data.template_file.environment_ts]
 }
 
-resource "terraform_data" "npm_install" {
-  provisioner "local-exec" {
-    working_dir = local.working_dir
-    command     = "npm install"
-  }
-  triggers_replace = filemd5("${local.working_dir}/package.json")
-  depends_on       = [local_file.environment_ts]
-}
-
-resource "terraform_data" "ng_build" {
-  provisioner "local-exec" {
-    working_dir = local.working_dir
-    command     = "ng build --configuration ${local.configuration}"
-  }
-  triggers_replace = md5(join("", [for f in fileset(path.root, "frontend/interface/src/**") : filemd5(f)]))
-  depends_on       = [terraform_data.npm_install]
-}
-
 module "interface_build" {
   source     = "hashicorp/dir/template"
   base_dir   = local.build_path
-  depends_on = [terraform_data.ng_build]
 }
 
 resource "aws_s3_object" "interface_build" {
