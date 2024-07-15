@@ -5,6 +5,7 @@ import os
 
 RECEIVER = os.getenv("RECEIVER_EMAIL")
 TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
+ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")
 
 dynamodb_client = boto3.resource('dynamodb')
 
@@ -91,7 +92,7 @@ def lambda_handler(event, context):
         'statusCode':200,
         'headers':{
                 'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Origin': 'https://sub1.sdc-dev.dot.gov',
+                'Access-Control-Allow-Origin': ALLOW_ORIGIN_URL,
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
                 'Content-Type': 'text/plain'
         }, 
