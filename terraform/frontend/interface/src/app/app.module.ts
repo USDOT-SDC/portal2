@@ -31,6 +31,7 @@ import { ElemFileListComponent } from './components/file-upload/elem-file-list/e
 import { SdcDatasetsComponent } from './pages/dashboard/sdc-datasets/sdc-datasets.component';
 import { SdcAlgorithmsComponent } from './pages/dashboard/sdc-algorithms/sdc-algorithms.component';
 import { UserRequestCenterComponent } from './pages/dashboard/user-request-center/user-request-center.component';
+import { WorkstationComponent } from './components/workstation/workstation.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { UserRequestCenterComponent } from './pages/dashboard/user-request-cente
     ElemFileListComponent,
     SdcDatasetsComponent,
     SdcAlgorithmsComponent,
-    UserRequestCenterComponent
+    UserRequestCenterComponent,
+    WorkstationComponent
   ],
   imports: [
     BrowserModule,
