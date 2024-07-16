@@ -128,7 +128,8 @@ resource "aws_api_gateway_deployment" "portal" {
           aws_api_gateway_integration.health_any_mock,
           aws_api_gateway_integration_response.health_any_200,
           aws_api_gateway_method_response.health_any_200,
-          module.api
+          module.api,
+          module.ddb_crud,
         ]
       )
     )
