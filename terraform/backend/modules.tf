@@ -53,25 +53,25 @@ locals {
     export_request = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        RESTAPIID                     = aws_api_gateway_rest_api.portal.id
+        AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
+        TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
+        TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
+        TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     export_table = {
       http_method = "POST"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
+        RESTAPIID                     = aws_api_gateway_rest_api.portal.id
+        AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
+        TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     get_health = {
@@ -170,15 +170,15 @@ locals {
     request_export = {
       http_method = "GET"
       environment_variables = {
-        RESTAPIID                   = aws_api_gateway_rest_api.portal.id
-        AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
-        TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
+        RESTAPIID                     = aws_api_gateway_rest_api.portal.id
+        AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
+        TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
+        TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
+        TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-        RECEIVER                    = local.receiver_email
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        RECEIVER                      = local.receiver_email
+        ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
     s3_metadata = {
@@ -191,8 +191,8 @@ locals {
     send_email = {
       http_method = "POST"
       environment_variables = {
-        RECEIVER_EMAIL = local.receiver_email
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        RECEIVER_EMAIL   = local.receiver_email
+        ALLOW_ORIGIN_URL = local.allow_origin_url
       }
     }
     update_autoexport_status = {
@@ -218,8 +218,8 @@ locals {
     update_trusted_status = {
       http_method = "GET"
       environment_variables = {
-        RECEIVER_EMAIL = local.receiver_email
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        RECEIVER_EMAIL   = local.receiver_email
+        ALLOW_ORIGIN_URL = local.allow_origin_url
       }
     }
     workstation_schedule = {
@@ -247,6 +247,15 @@ module "api" {
   foo           = each.value
   runtime       = "python3.12"
   lambda_role   = aws_iam_role.portal_lambdas
+  rest_api      = aws_api_gateway_rest_api.portal
+  authorizer_id = aws_api_gateway_authorizer.portal.id
+}
+
+module "ddb_crud" {
+  module_name   = "API, DynamoDB CRUD"
+  module_slug   = "api-ddb-crud"
+  source        = "./ddb_crud"
+  common        = var.common
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }

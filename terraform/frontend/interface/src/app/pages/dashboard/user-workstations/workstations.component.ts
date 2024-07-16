@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-workstations',
@@ -18,39 +19,41 @@ export class WorkstationsComponent implements OnInit {
 
   public selected_workstation: any;
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
-  public WorkstationTrackBy(index: number, workstation: any): number {
-    return workstation.instance_id;
-  }
+  public WorkstationTrackBy(index: number, workstation: any): number { return workstation.instance_id; }
 
   public toggle_workstation(id: string): void {
     let workstation_data = this.workstations.find((workstation: any) => { if (workstation.instance_id == id) return workstation })
-    console.log({ workstation_data });
-
     workstation_data.loading = true;
+    // console.log({ workstation_data });
 
     if (workstation_data.status == true) {
       this.selected_workstation = workstation_data;
       this.open_shutdown_workstation_modal();
+    } else {
+      const _API = this.api.workstation_action(id, 'run').subscribe((response: any) => {
+        console.log('Workstation: run', response)
+        _API.unsubscribe();
+        workstation_data.status = true;
+        workstation_data.loading = false;
+      })
     }
-    else setTimeout(() => {
-      workstation_data.status = true;
-      workstation_data.loading = false;
-    }, 1500)
 
   }
-  
+
   public launch_workstation(id: string): void { }
 
   public open_shutdown_workstation_modal(): void { this.Modal_ShutDownWorkstation.open(); }
 
   public shutdown_workstation(): void {
-    this.Modal_ShutDownWorkstation.close();
-    setTimeout(() => {
+    const id = this.selected_workstation.instance_id;
+    const _API = this.api.workstation_action(id, 'stop').subscribe((response: any) => {
+      console.log('Workstation: stop', response)
+      _API.unsubscribe();
       this.selected_workstation.status = false;
       this.close_shutdown_workstation_modal();
-    }, 1500)
+    })
   }
 
   public close_shutdown_workstation_modal(): void {
