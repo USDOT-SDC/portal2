@@ -9,7 +9,7 @@ goto end
 
 :normal_start
 cls
-set plan_file="tfplans/%tf_config_version%_%env%_%plan_id%"
+set plan_file="tfplans/%config_version%_%env%_%plan_id%"
 set command=terraform apply %plan_file%
 echo Your active AWS profile is: %AWS_PROFILE%
 echo.
@@ -28,12 +28,12 @@ pushd ..\terraform
 popd ..\scripts
 @REM set current_tag=(git tag --points-at HEAD)
 for /F "tokens=*" %%g in ('git tag --points-at HEAD') do (SET current_tag=%%g)
-if %tf_config_version% NEQ %current_tag% (
-    git tag -f %tf_config_version%
+if %config_version% NEQ %current_tag% (
+    git tag -f %config_version%
     set branch=git branch --show-current
     git push -u origin
-    git push --delete origin %tf_config_version%
-    git push -f origin %tf_config_version%
+    git push --delete origin %config_version%
+    git push -f origin %config_version%
 )
 goto end
 
