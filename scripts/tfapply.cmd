@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 if "%1"=="-help" goto print_help
 if "%1"=="--help" goto print_help
 goto normal_start
@@ -26,11 +27,11 @@ goto end
 pushd ..\terraform
 %command%
 popd ..\scripts
-@REM set current_tag=(git tag --points-at HEAD)
-for /F "tokens=*" %%g in ('git tag --points-at HEAD') do (SET current_tag=%%g)
+for /F "tokens=*" %%t in ('git tag --points-at HEAD') do (set current_tag=%%t)
+for /F %%b in ('git branch --show-current') do (set branch=%%b)
 if %config_version% NEQ %current_tag% (
     git tag -f %config_version%
-    set branch=git branch --show-current
+    git push --set-upstream origin %branch%
     git push -u origin
     git push --delete origin %config_version%
     git push -f origin %config_version%
