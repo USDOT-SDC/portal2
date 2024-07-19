@@ -25,6 +25,10 @@ export class ApiService {
 
   public workstation_status(id: string): Observable<any> { return this.http.get(`${this.BASE_URI}/instance_status?instance_id=${id}`, { headers: this.auth_header }); }
 
-  public workstation_launch(stack: string) { }
+  public get_instance_types(cpu: number, memory: number, os: string): Observable<any> { return this.http.get(`${this.BASE_URI}/desired_instance_types?cpu=${cpu}&memory=${memory}&os=${os}`, { headers: this.auth_header }); }
 
+  public resize_instance(user: { username: string, user_email: string }, workstation: { instance_type: string, instance_id: string, operating_system: string }, instance_params: { requested_instance_type: string, cpu: number, ram: number, start_after_resize: boolean }): Observable<any> {
+    const payload: any = { manageWorkstation: true, username: user.username, user_email: user.user_email, default_instance_type: workstation.instance_type, instance_id: workstation.instance_id, operating_system: workstation.operating_system, startAfterResize: instance_params.start_after_resize, requested_instance_type: instance_params.requested_instance_type, vcpu: instance_params.cpu, memory: instance_params.ram, workstation_schedule_from_date: new Date(), workstation_schedule_to_date: null, };
+    return this.http.get(`${this.BASE_URI}/manage_workstation_size?wsrequest=${JSON.stringify(payload)}`);
+  }
 }
