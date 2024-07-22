@@ -56,12 +56,42 @@
 <app-modal #Modal_RequestTrustedUserStatus>
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> </h5>
+            <h5 class="m-0"> Request Trusted User Status </h5>
         </div>
     </ng-container>
     <ng-container modal-body>
         <div class="p-2">
-
+            <div class="mb-3">
+                <label for="dataset_to_request_trusted_status">For Which Project/Dataset (required)</label>
+                <select class="form-select" id="dataset_to_request_trusted_status" [(ngModel)]="selected_dataset_project">
+                    <option [value]="undefined">- Select Project or Dataset -</option>
+                    <ng-container *ngFor="let project of datasets">
+                        <option [value]="project.Name">{{project.Name}}</option>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
+                <textarea id="dataset_to_request_trusted_status_justification" class="form-control"></textarea>
+            </div>
+            <hr>
+            <div class="card">
+                <div class="card-header">Acceptable Use Policy</div>
+                <div class="card-body">
+                    <ng-container *ngIf="selected_dataset_project; else NoDatasetProjectSelected">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius sunt totam unde ipsa! Nobis officia, harum, laboriosam aliquid officiis odio accusantium voluptatem quisquam reprehenderit delectus velit, voluptates magnam. Nam, dolore!</p>
+                    </ng-container>
+                    <ng-template #NoDatasetProjectSelected>
+                        <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
+                    </ng-template>
+                </div>
+                <div class="card-footer">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy">
+                        <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </ng-container>
     <ng-container modal-footer>

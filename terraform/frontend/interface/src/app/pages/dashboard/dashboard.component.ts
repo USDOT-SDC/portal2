@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public current_user: any;
   public user_workstations: any = [];
+  public user_datasets: any = [];
 
   private _subscriptions: Array<Subscription> = [];
 
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
                 console.log(response)
                 this.auth.user_info.next(response);
                 this.user_workstations = response.stacks;
+                this.user_datasets = response.datasets;
               }
               this.loading = false;
               API.unsubscribe();

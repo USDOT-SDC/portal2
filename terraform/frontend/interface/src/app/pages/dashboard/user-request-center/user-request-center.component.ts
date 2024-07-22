@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 
 @Component({
@@ -10,6 +10,10 @@ export class UserRequestCenterComponent implements OnInit {
 
   @ViewChild('Modal_RequestTrustedUserStatus') Modal_RequestTrustedUserStatus: ModalComponent | any;
   @ViewChild('Modal_RequestEdgeDatabases') Modal_RequestEdgeDatabases: ModalComponent | any;
+
+  @Input() datasets: Array<any> = [];
+
+  public selected_dataset_project: any;
 
   constructor() { }
 
