@@ -61,25 +61,50 @@
     </ng-container>
     <ng-container modal-body>
         <div class="p-2">
-            <div class="mb-3">
-                <label for="dataset_to_request_trusted_status">For Which Project/Dataset (required)</label>
-                <select class="form-select" id="dataset_to_request_trusted_status" [(ngModel)]="selected_dataset_project">
-                    <option [value]="undefined">- Select Project or Dataset -</option>
-                    <ng-container *ngFor="let project of datasets">
-                        <option [value]="project.Name">{{project.Name}}</option>
-                    </ng-container>
-                </select>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
+                        <option [value]="undefined">- Select Project or Dataset -</option>
+                        <ng-container *ngFor="let project of datasets">
+                            <option [value]="project.Name">{{project.Name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider <span *ngIf="selected_dataset_project">(required)</span></label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
+                        <option [value]="undefined">- Select Data Provider -</option>
+                        <ng-container *ngFor="let provider of export_workflows">
+                            <option [value]="provider.name">{{provider.name}}</option>
+                        </ng-container>
+                    </select>
+
+                </div>
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type <span *ngIf="export_workflows_datasets.length > 0 && selected_provider != undefined">(required)</span></label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
+                        <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
+                        <ng-container *ngFor="let dataset of export_workflows_datasets">
+                            <option [value]="dataset.name">{{dataset.name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
             </div>
+
+
+
+
             <div class="mb-3">
-                <label for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
-                <textarea id="dataset_to_request_trusted_status_justification" class="form-control"></textarea>
+                <label class="form-label" for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
+                <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." [(ngModel)]="request_justification"></textarea>
             </div>
             <hr>
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-header">Acceptable Use Policy</div>
-                <div class="card-body">
-                    <ng-container *ngIf="selected_dataset_project; else NoDatasetProjectSelected">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius sunt totam unde ipsa! Nobis officia, harum, laboriosam aliquid officiis odio accusantium voluptatem quisquam reprehenderit delectus velit, voluptates magnam. Nam, dolore!</p>
+                <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
+                    <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
+                        <code class="text-dark" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
                     </ng-container>
                     <ng-template #NoDatasetProjectSelected>
                         <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
@@ -87,7 +112,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy">
+                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [(ngModel)]="request_policy_agreement">
                         <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
                     </div>
                 </div>
@@ -97,6 +122,7 @@
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_request_trusted_user_status()">Close</button>
+            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i></button>
         </div>
     </ng-container>
 </app-modal>
@@ -106,17 +132,122 @@
 <app-modal #Modal_RequestEdgeDatabases>
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> </h5>
+            <h5 class="m-0"> Request to Export Table to Edge Database </h5>
         </div>
     </ng-container>
     <ng-container modal-body>
         <div class="p-2">
+            <!-- <p>Please provide information relevant to your table request, as requested in the form fields below. These details will faciliate the processing of your request and will be shared with the Data Steward to help them review your request and provide their decision.</p>
+            <hr>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label for="ReqEdge_EdgeDatabase" class="form-label"> Please enter the name of the table to be exported to the public Edge database. </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control w-25" id="ReqEdge_EdgePrivateDatabase" placeholder="Your Database:" disabled readonly>
+                        <input type="text" class="form-control w-75" id="ReqEdge_EdgeDatabase" placeholder="Table Name" [(ngModel)]="export_table_name">
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="d-flex flex-column h-100">
+                        <label for="ReqEdge_PrimarryDataProviders" class="form-label mb-auto"> What are the primary Project, Data Provider and Sub-Dataset/Data Type used to create your table? </label>
+                        <select id="ReqEdge_PrimarryDataProviders" class="form-select mt-2" (change)="select_dataset_project($event)" [(ngModel)]="selected_dataset_project">
+                            <option [value]="undefined">- Select Project or Dataset -</option>
+                            <ng-container *ngFor="let project of datasets">
+                                <option [value]="project.Name">{{project.Name}}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div class="d-flex flex-column h-100">
+                        <label for="ReqEdge_AdditionalDataTypes" class="form-label mb-auto"> Please list any additional Sub-Datasets/Data Types, available within SDC, or any external Datasets/DataSources, used to create your table. </label>
+                        <input type="text" class="form-control mt-2" id="ReqEdge_AdditionalDataTypes" placeholder="Additional Data Sources" [(ngModel)]="export_table_additional_sources">
+                    </div>
+                </div>
+                <div class="col-12">
+                </div>
+            </div> -->
 
+            <div class="row">
+                <div class="col-7">
+                    <label for="ReqEdge_EdgeDatabase" class="form-label"> Table to Export </label> <!-- Please enter the name of the table to be exported to the public Edge database. -->
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="ReqEdge_EdgePrivateDatabase" placeholder="Your Database:" disabled readonly>
+                        <input type="text" class="form-control" id="ReqEdge_EdgeDatabase" placeholder="Table Name" [(ngModel)]="export_table_name">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <label for="ReqEdge_AdditionalDataTypes" class="form-label mb-auto"> Additional Sub-Datasets/Data Types </label><!-- Please list any additional Sub-Datasets/Data Types, available within SDC, or any external Datasets/DataSources, used to create your table. -->
+                    <input type="text" class="form-control mt-2" id="ReqEdge_AdditionalDataTypes" placeholder="Additional Data Sources" [(ngModel)]="export_table_additional_sources">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
+                        <option [value]="undefined">- Select Project or Dataset -</option>
+                        <ng-container *ngFor="let project of datasets">
+                            <option [value]="project.Name">{{project.Name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider <span *ngIf="selected_dataset_project">(required)</span></label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
+                        <option [value]="undefined">- Select Data Provider -</option>
+                        <ng-container *ngFor="let provider of export_workflows">
+                            <option [value]="provider.name">{{provider.name}}</option>
+                        </ng-container>
+                    </select>
+
+                </div>
+                <div class="col-6">
+                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type <span *ngIf="export_workflows_datasets.length > 0 && selected_provider != undefined">(required)</span></label>
+                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
+                        <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
+                        <ng-container *ngFor="let dataset of export_workflows_datasets">
+                            <option [value]="dataset.name">{{dataset.name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+                <label for="ReqEdge_Justification" class="form-label"> Please provide the justification for your request. (required)</label>
+                <textarea id="ReqEdge_Justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
+            </div>
+
+            <hr>
+
+            <div class="card bg-light">
+                <div class="card-header">Acceptable Use Policy</div>
+                <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
+                    <ng-container *ngIf="selected_dataset_project; else NoDatasetProjectSelected">
+                        <code class="text-dark" style="text-align: justify;">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>                             
+                            <p>Eius sunt totam unde ipsa! Nobis officia, harum, laboriosam aliquid officiis odio accusantium voluptatem quisquam reprehenderit delectus velit, voluptates magnam. Nam, dolore! Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde fugit eveniet quia saepe odio illum consequatur, cupiditate ipsa. Quasi omnis porro cupiditate suscipit facere autem perferendis pariatur esse, error quia!</p>
+                        </code>
+                    </ng-container>
+                    <ng-template #NoDatasetProjectSelected>
+                        <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
+                    </ng-template>
+                </div>
+                <div class="card-footer">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [disabled]="!selected_dataset_project" [(ngModel)]="request_policy_agreement">
+                        <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </ng-container>
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_request_edge_databases()">Close</button>
+            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i></button>
         </div>
     </ng-container>
 </app-modal>
