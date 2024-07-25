@@ -1,18 +1,22 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-request-center',
   templateUrl: './user-request-center.component.html',
   styleUrls: ['./user-request-center.component.less']
 })
-export class UserRequestCenterComponent implements OnInit {
+export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   @ViewChild('Modal_RequestTrustedUserStatus') Modal_RequestTrustedUserStatus: ModalComponent | any;
   @ViewChild('Modal_RequestEdgeDatabases') Modal_RequestEdgeDatabases: ModalComponent | any;
 
   @Input() datasets: Array<any> = [];
 
+  public is_loading: boolean = false;
 
   public export_table_name: any;
   public export_table_additional_sources: any;
@@ -27,8 +31,9 @@ export class UserRequestCenterComponent implements OnInit {
   public request_justification: any;
   public request_policy_agreement: boolean = false;
 
-  constructor() { }
+  public team_slug: any;
 
+  constructor(private api: ApiService, private auth: AuthService) { }
 
   public open_modal_request_trusted_user_status(): void { this.request_type = 'trusted-user-status'; this.Modal_RequestTrustedUserStatus.open(); }
   public close_modal_request_trusted_user_status(): void { this.Modal_RequestTrustedUserStatus.close(); this.reset_forms(); }
@@ -38,7 +43,7 @@ export class UserRequestCenterComponent implements OnInit {
 
   public select_dataset_project(event: any): void {
     this.selected_dataset_project = event.target.value;
-    const project = this.datasets.find((d: any) => { if (d.Name == this.selected_dataset_project) return d; });
+    const project = this.datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
 
     this.export_workflows = [];
     this.export_workflows_datasets = [];
@@ -81,7 +86,7 @@ export class UserRequestCenterComponent implements OnInit {
     this.export_table_name = undefined;
     this.export_table_additional_sources = undefined;
     this.export_workflows = [];
-    this.export_workflows_datasets = [undefined];
+    this.export_workflows_datasets = [];
     this.selected_dataset_project = undefined;
     this.selected_provider = undefined;
     this.selected_provider_sub_dataset = undefined;
@@ -96,11 +101,11 @@ export class UserRequestCenterComponent implements OnInit {
     // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
 
     if (this.selected_dataset_project == undefined) return false;
-    if (this.request_justification == undefined) return false;
+    if (this.request_justification == undefined || this.request_justification.trim() == "") return false;
     if (this.request_policy_agreement == false) return false;
 
     if (type == 'edge-databases') {
-      if (this.export_table_name == undefined) return false;
+      if (this.export_table_name == undefined || this.export_table_name.trim() == "") return false;
       // if (this.export_table_additional_sources == undefined) return false;
     }
 
@@ -109,27 +114,116 @@ export class UserRequestCenterComponent implements OnInit {
 
   public submit_request(): void {
 
+    this.is_loading = true;
+
     var payload: any = {
       request_type: this.request_type,
       project: this.selected_dataset_project,
       justification: this.request_justification,
       policy_accepted: this.request_policy_agreement
     };
-
-    if (this.request_type == 'trusted-user-status') {
-      payload.provider = this.selected_provider;
-      payload.dataset = this.selected_provider_sub_dataset;
-    }
-
-    if (this.request_type == 'edge-databases') {
-      payload.table_name = this.export_table_name;
-      payload.additional_sources = this.export_table_additional_sources;
-
-    }
+    // payload.provider = this.selected_provider;
+    // payload.dataset =  this.selected_provider_sub_dataset;
+    // payload.table_name = this.export_table_name;
+    // payload.additional_sources = this.export_table_additional_sources;
 
     console.log("SUBMITTING REQUEST", payload);
+
+    if (this.request_type == 'edge-databases') {
+      this.send_export_edge_database_request().then((response: any) => {
+        console.log(response);
+        this.is_loading = false;
+        this.close_modal_request_edge_databases();
+      });
+    }
+
+    if (this.request_type == 'trusted-user-status') {
+      this.send_trusted_user_request().then((response: any) => {
+        console.log(response);
+        this.is_loading = false;
+        this.close_modal_request_trusted_user_status();
+      });
+    }
+
+
   }
 
-  ngOnInit(): void { }
+  private send_export_edge_database_request(): Promise<any> {
 
+    const user = this.auth.current_user.getValue();
+    const database = this.datasets.find(d => d.Name == this.selected_dataset_project);
+
+    console.log({ user, database });
+
+    return new Promise((resolve, reject) => {
+      const message = {
+        RequestedBy_Epoch: new Date().getTime(),
+        ReqReceivedtimestamp: null,
+        RequestedBy: null,
+        WorkflowStatus: null,
+        RequestReviewedBy: null,
+        ReqReviewTimestamp: null,
+        S3Key: this.selected_dataset_project,        // this.messageModel.fileFolderName,
+        TeamBucket: null,   // this.userBucketName,
+        RequestID: null,
+        ApprovalForm: {
+          privateDatabase: this.team_slug,
+          privateTable: '',
+          datasetName: '',
+          derivedDataSetname: '',
+          detailedderiveddataset: '',
+          dataprovider: '',
+          datatype: '',
+          datasources: '',
+          justifyExport: '',
+
+        }, // approvalForm,
+        RequestReviewStatus: "Submitted",
+        UserID: user.username,
+        selectedDataInfo: {
+          selectedDataSet: this.selected_dataset_project,
+          selectedDataProvider: this.selected_provider,
+          selectedDatatype: this.selected_provider_sub_dataset,
+        },
+        acceptableUse: this.request_policy_agreement,
+        DatabaseName: this.team_slug,
+        TableName: this.export_table_name,
+      }
+      resolve(message);
+      /* const API = this.api.send_export_table_request(message).subscribe((response: any) => {
+        console.log(response);
+        resolve(response);
+        API.unsubscribe();
+      }) */
+    })
+  }
+
+  private send_trusted_user_request(): Promise<any> {
+
+    const user = this.auth.current_user.getValue();
+
+    return new Promise((resolve, reject) => {
+      const message = {
+
+      }
+      resolve(message);
+      /* const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
+        console.log(response);
+        resolve(response);
+        API.unsubscribe();
+      }) */
+    });
+  }
+
+  private _subscriptions: Array<Subscription> = [];
+
+  ngOnInit(): void {
+    this._subscriptions.push(this.auth.user_info.subscribe((user) => {
+      // console.log(user);
+      if (user) { this.team_slug = user.team_slug; }
+    }))
+  }
+  ngOnDestroy(): void {
+    this._subscriptions.forEach(s => s.unsubscribe());
+  }
 }

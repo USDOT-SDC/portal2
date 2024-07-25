@@ -29,7 +29,7 @@ div.container {
 
     div.wrapper {
         display: grid;
-        grid-template-columns: 1.25fr 4fr;
+        grid-template-columns: 300px auto;
 
         div.sidebar {
             border-right: solid 1px #cecece;
@@ -39,6 +39,7 @@ div.container {
 
         div.content {
             padding: 1rem;
+            max-width: calc(100vw - 360px);
         }
     }
 }

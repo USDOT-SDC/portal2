@@ -158,7 +158,7 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
       start_after_resize: this.start_after_resize
     };
 
-    const API = this.api.resize_instance(user, workstation, instance_params).subscribe((response: any) => {
+    const API = this.api.send_resize_instance_request(user, workstation, instance_params).subscribe((response: any) => {
       console.log(response);
       this.selected_workstation.status = false;
       this.close_modal_resize_workstation_modal();

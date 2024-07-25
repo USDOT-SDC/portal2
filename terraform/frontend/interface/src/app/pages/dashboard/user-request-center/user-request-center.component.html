@@ -60,14 +60,16 @@
         </div>
     </ng-container>
     <ng-container modal-body>
-        <div class="p-2">
+        <div class="container px-2 py-3">
             <div class="row">
                 <div class="col-12 mb-3">
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngFor="let project of datasets">
-                            <option [value]="project.Name">{{project.Name}}</option>
+                        <ng-container *ngIf="datasets.length > 0">
+                            <ng-container *ngFor="let project of datasets">
+                                <option [value]="project.Name">{{project.Name}}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
                 </div>
@@ -75,8 +77,10 @@
                     <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider <span *ngIf="selected_dataset_project">(required)</span></label>
                     <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
                         <option [value]="undefined">- Select Data Provider -</option>
-                        <ng-container *ngFor="let provider of export_workflows">
-                            <option [value]="provider.name">{{provider.name}}</option>
+                        <ng-container *ngIf="export_workflows.length > 0">
+                            <ng-container *ngFor="let provider of export_workflows">
+                                <option [value]="provider.name">{{provider.name}}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
 
@@ -85,8 +89,10 @@
                     <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type <span *ngIf="export_workflows_datasets.length > 0 && selected_provider != undefined">(required)</span></label>
                     <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
                         <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
-                        <ng-container *ngFor="let dataset of export_workflows_datasets">
-                            <option [value]="dataset.name">{{dataset.name}}</option>
+                        <ng-container *ngIf="export_workflows_datasets.length > 0">
+                            <ng-container *ngFor="let dataset of export_workflows_datasets">
+                                <option [value]="dataset.name">{{dataset.name }}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
                 </div>
@@ -97,7 +103,7 @@
 
             <div class="mb-3">
                 <label class="form-label" for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
-                <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." [(ngModel)]="request_justification"></textarea>
+                <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
             </div>
             <hr>
             <div class="card bg-light">
@@ -122,7 +128,14 @@
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_request_trusted_user_status()">Close</button>
-            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i></button>
+            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">
+                <ng-container *ngIf="is_loading == true; else DefaultButtonState">
+                    <i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Request...
+                </ng-container>
+                <ng-template #DefaultButtonState>
+                    Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i>
+                </ng-template>
+            </button>
         </div>
     </ng-container>
 </app-modal>
@@ -136,7 +149,7 @@
         </div>
     </ng-container>
     <ng-container modal-body>
-        <div class="p-2">
+        <div class="container px-2 py-3">
             <!-- <p>Please provide information relevant to your table request, as requested in the form fields below. These details will faciliate the processing of your request and will be shared with the Data Steward to help them review your request and provide their decision.</p>
             <hr>
             <div class="row">
@@ -172,7 +185,7 @@
                 <div class="col-7">
                     <label for="ReqEdge_EdgeDatabase" class="form-label"> Table to Export </label> <!-- Please enter the name of the table to be exported to the public Edge database. -->
                     <div class="input-group">
-                        <input type="text" class="form-control" id="ReqEdge_EdgePrivateDatabase" placeholder="Your Database:" disabled readonly>
+                        <input type="text" class="form-control" id="ReqEdge_EdgePrivateDatabase" placeholder="Your Database:" disabled readonly [value]="team_slug">
                         <input type="text" class="form-control" id="ReqEdge_EdgeDatabase" placeholder="Table Name" [(ngModel)]="export_table_name">
                     </div>
                 </div>
@@ -187,8 +200,10 @@
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngFor="let project of datasets">
-                            <option [value]="project.Name">{{project.Name}}</option>
+                        <ng-container *ngIf="datasets.length > 0">
+                            <ng-container *ngFor="let project of datasets">
+                                <option [value]="project.Name">{{project.Name}}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
                 </div>
@@ -196,8 +211,10 @@
                     <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider <span *ngIf="selected_dataset_project">(required)</span></label>
                     <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
                         <option [value]="undefined">- Select Data Provider -</option>
-                        <ng-container *ngFor="let provider of export_workflows">
-                            <option [value]="provider.name">{{provider.name}}</option>
+                        <ng-container *ngIf="export_workflows.length > 0">
+                            <ng-container *ngFor="let provider of export_workflows">
+                                <option [value]="provider.name">{{provider.name}}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
 
@@ -206,8 +223,10 @@
                     <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type <span *ngIf="export_workflows_datasets.length > 0 && selected_provider != undefined">(required)</span></label>
                     <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
                         <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
-                        <ng-container *ngFor="let dataset of export_workflows_datasets">
-                            <option [value]="dataset.name">{{dataset.name}}</option>
+                        <ng-container *ngIf="export_workflows_datasets.length > 0">
+                            <ng-container *ngFor="let dataset of export_workflows_datasets">
+                                <option [value]="dataset.name">{{dataset.name}}</option>
+                            </ng-container>
                         </ng-container>
                     </select>
                 </div>
@@ -247,7 +266,14 @@
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_request_edge_databases()">Close</button>
-            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i></button>
+            <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">
+                <ng-container *ngIf="is_loading == true; else DefaultButtonState">
+                    <i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Request...
+                </ng-container>
+                <ng-template #DefaultButtonState>
+                    Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i>
+                </ng-template>
+            </button>
         </div>
     </ng-container>
 </app-modal>
