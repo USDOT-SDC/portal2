@@ -1,0 +1,16 @@
+meta {
+  name: Get S3 Object Metadata
+  type: http
+  seq: 10
+}
+
+get {
+  url: https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/s3_metadata?bucket_name&file_name
+  body: none
+  auth: inherit
+}
+
+query {
+  bucket_name: 
+  file_name: 
+}

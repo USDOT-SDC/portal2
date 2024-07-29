@@ -12,6 +12,8 @@ Amplify.configure(AMPLIFY_CONFIG);
 export class AuthService {
 
   public current_user: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public user_info: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public user_uploaded_data: BehaviorSubject<any> = new BehaviorSubject(undefined);
 
   constructor() { }
 

@@ -1,0 +1,10 @@
+<th scope="row">
+    <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true" (change)="checkbox_selected()">
+</th>
+<td class="text-start"><label class="form-label" [for]="'check_' + dataset.filename | lowercase">{{ dataset.filename }}</label></td>
+<td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-file-export"></i></button> </td>
+<!-- <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-cloud-arrow-up"></i></button> </td> -->
+<td class="text-center">
+    <ng-container *ngIf="is_loading == true; else DisplayElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
+    <ng-template #DisplayElem> {{ dataset.status || '--'}} </ng-template>
+</td>

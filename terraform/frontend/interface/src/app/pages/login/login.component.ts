@@ -23,9 +23,11 @@ export class LoginComponent implements OnInit {
     if (dot == true) {
       console.log("Logging in: COGNITO");
       this.auth.login();
+      this.signing_in = false;
     } else {
       console.log("Logging in: LOGIN.GOV");
       location.href = `${this.BASE_URL}${this.URI_PARAMS}&client_id=122lj1qh9e5qam3u29fpdt9ati`;
+      this.signing_in = false;
     }
 
   }
