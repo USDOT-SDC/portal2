@@ -1,0 +1,16 @@
+meta {
+  name: Get User Bucket Contents
+  type: http
+  seq: 9
+}
+
+get {
+  url: https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/export_objects?userBucketName=dev.sdc.dot.gov.team.sdc-support&username=dilean.barroso.ctr
+  body: none
+  auth: inherit
+}
+
+query {
+  userBucketName: dev.sdc.dot.gov.team.sdc-support
+  username: dilean.barroso.ctr
+}

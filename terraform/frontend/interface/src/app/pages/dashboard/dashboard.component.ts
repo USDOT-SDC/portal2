@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public current_user: any;
   public user_workstations: any = [];
   public user_datasets: any = [];
+  public sdc_datasets: any = [];
 
   private _subscriptions: Array<Subscription> = [];
 
@@ -36,20 +37,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.auth.current_user.subscribe((user: any) => {
 
           console.log("User: ", user);
-
           this.current_user = user;
 
-          if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-            this.user_workstations = [];
-            this.loading = false;
-          }
+          if (location.hostname === "localhost" || location.hostname === "127.0.0.1") { this.loading = false; }
           else {
             const API = this.api.get_user().subscribe((response: any) => {
               if (response) {
                 console.log(response)
                 this.auth.user_info.next(response);
                 this.user_workstations = response.stacks;
-                this.user_datasets = response.datasets;
+                this.sdc_datasets = response.datasets;
               }
               this.loading = false;
               API.unsubscribe();

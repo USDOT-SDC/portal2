@@ -32,6 +32,7 @@ import { SdcDatasetsComponent } from './pages/dashboard/sdc-datasets/sdc-dataset
 import { SdcAlgorithmsComponent } from './pages/dashboard/sdc-algorithms/sdc-algorithms.component';
 import { UserRequestCenterComponent } from './pages/dashboard/user-request-center/user-request-center.component';
 import { WorkstationComponent } from './components/workstation/workstation.component';
+import { UserDatasetComponent } from './components/user-dataset/user-dataset.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { WorkstationComponent } from './components/workstation/workstation.compo
     SdcDatasetsComponent,
     SdcAlgorithmsComponent,
     UserRequestCenterComponent,
-    WorkstationComponent
+    WorkstationComponent,
+    UserDatasetComponent
   ],
   imports: [
     BrowserModule,

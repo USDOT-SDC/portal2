@@ -13,6 +13,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   @ViewChild('Modal_RequestTrustedUserStatus') Modal_RequestTrustedUserStatus: ModalComponent | any;
   @ViewChild('Modal_RequestEdgeDatabases') Modal_RequestEdgeDatabases: ModalComponent | any;
+  @ViewChild('BrandonElement') BrandonElement: ModalComponent | any;
 
   @Input() datasets: Array<any> = [];
 
@@ -34,6 +35,9 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   public team_slug: any;
 
   constructor(private api: ApiService, private auth: AuthService) { }
+
+  public open_modal() { this.BrandonElement.open() }
+  public close_modal() { this.BrandonElement.close() }
 
   public open_modal_request_trusted_user_status(): void { this.request_type = 'trusted-user-status'; this.Modal_RequestTrustedUserStatus.open(); }
   public close_modal_request_trusted_user_status(): void { this.Modal_RequestTrustedUserStatus.close(); this.reset_forms(); }
@@ -189,12 +193,14 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         DatabaseName: this.team_slug,
         TableName: this.export_table_name,
       }
-      resolve(message);
-      /* const API = this.api.send_export_table_request(message).subscribe((response: any) => {
-        console.log(response);
-        resolve(response);
-        API.unsubscribe();
-      }) */
+
+      resolve(undefined);
+
+      /*  const API = this.api.send_export_table_request(message).subscribe((response: any) => {
+         console.log(response);
+         resolve(response);
+         API.unsubscribe();
+       }) */
     })
   }
 
@@ -203,15 +209,14 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
     const user = this.auth.current_user.getValue();
 
     return new Promise((resolve, reject) => {
-      const message = {
+      const message = {}
 
-      }
       resolve(message);
-      /* const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
+      const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
         console.log(response);
         resolve(response);
         API.unsubscribe();
-      }) */
+      })
     });
   }
 
