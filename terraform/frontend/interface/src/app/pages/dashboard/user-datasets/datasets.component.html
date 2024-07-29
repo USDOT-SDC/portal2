@@ -34,7 +34,7 @@
                         <tr class="table-light">
                             <th scope="col"><input class="form-check-input mb-0" type="checkbox" id="select-all-files"></th>
                             <th scope="col" class="text-start"> <small>Filename </small> </th>
-                            <!-- <th scope="col" class="text-center"><small>Export </small> </th> -->
+                            <th scope="col" class="text-center"><small>Export </small> </th>
                             <!-- <th scope="col" class="text-center"><small>Publish </small> </th> -->
                             <th scope="col" class="text-center"><small>Export Request Status</small> </th>
                         </tr>
@@ -42,15 +42,7 @@
                     <tbody>
                         <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
                             <ng-container *ngFor="let item of user_datasets_algorithms">
-                                <tr>
-                                    <th scope="row">
-                                        <input class="form-check-input mb-0" type="checkbox" id="select-all-files">
-                                    </th>
-                                    <td class="text-start"><b>{{item.filename}}</b></td>
-                                    <!-- <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-file-export"></i></button> </td> -->
-                                    <!-- <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-cloud-arrow-up"></i></button> </td> -->
-                                    <td class="text-center">{{ item.status || '--'}}</td>
-                                </tr>
+                                <app-user-dataset [location]="current_user_upload_bucket" [dataset]="item" (emit_action)="handle_file_action($event)"></app-user-dataset>
                             </ng-container>
                         </ng-container>
                         <ng-template #NoUserDatasetsOrAlgorithms>
@@ -69,7 +61,7 @@
         </div>
         <div class="card-footer border-top-none">
             <div class="d-flex align-items-center justify-content-between">
-                <button class="btn btn-outline-primary" disabled><i class="fa-solid fa-download me-2"></i> Download Selected Files</button>
+                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0"><i class="fa-solid fa-download me-2"></i> Download Selected Files</button>
 
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angles-left"></i></button>
@@ -88,42 +80,36 @@
 <app-modal #Modal_UploadFiles [size]="'md'">
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0">Upload files to SDC platform</h5>
+            <h5 class="m-0">Upload files to SDC platform (TEST)</h5>
         </div>
     </ng-container>
     <ng-container modal-body>
         <div class="p-2">
-            <div class="row">
-                <div class="col-3">
-                    <div class="mb-3">
-                        <div>
-                            <label class="form-label"> Upload Location </label>
-                            <select class="form-select">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="new_prefix_input" class="form-label">Append a new prefix</label>
-                        <input type="text" class="form-control" id="new_prefix_input">
-                    </div>
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
-                    </div>
+            <div class="row align-items-end">
+                <div class="col">
+                    <label class="form-label"> Upload Location </label>
+                    <select class="form-select">
+                        <option selected> - Select Upload Location - </option>
+                        <ng-container *ngFor="let location of current_user_upload_locations">
+                            <option [value]="location.path">{{location.path}}</option>
+                        </ng-container>
+                    </select>
                 </div>
-                <div class="col-9">
-                    <app-file-upload></app-file-upload>
+                <div class="col">
+                    <label for="new_prefix_input" class="form-label">Append a new prefix</label>
+                    <input type="text" class="form-control" id="new_prefix_input">
                 </div>
             </div>
+            <hr>
+
+            <app-file-upload></app-file-upload>
+
         </div>
     </ng-container>
     <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between">
-            <button class="btn btn-secondary" (click)="Modal_UploadFiles.close()">Close</button>
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
+            <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
         </div>
     </ng-container>
 </app-modal>

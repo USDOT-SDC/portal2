@@ -1,16 +1,26 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-datasets',
   templateUrl: './datasets.component.html',
   styleUrls: ['./datasets.component.less']
 })
-export class DatasetsComponent implements OnInit {
+export class DatasetsComponent implements OnInit, OnDestroy {
 
   @ViewChild('Modal_UploadFiles') Modal_UploadFiles: ModalComponent | any;
   @ViewChild('Modal_RequestTrustedUser') Modal_RequestTrustedUser: ModalComponent | any;
   @ViewChild('Modal_UploadFiles') Modal_RequestTableExport: ModalComponent | any;
+
+
+  private _subscriptions: Array<Subscription> = [];
+
+  public current_user: any;
+  public current_user_upload_bucket: any;
+  public current_user_upload_locations: any = [];
 
   public user_datasets_algorithms: Array<any> = [];
   public user_edge_databases: Array<any> = [];
@@ -23,7 +33,7 @@ export class DatasetsComponent implements OnInit {
     { file_name: 'example_three.docx', file_size: 0 },
   ]
 
-  constructor() { }
+  constructor(private auth: AuthService, private api: ApiService) { }
 
   // Modal Open - File Upload
   public modal_open_file_upload(): void { this.Modal_UploadFiles.open(); }
@@ -51,7 +61,46 @@ export class DatasetsComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
+  public file_is_folder(filename: string): boolean { return filename.endsWith('/'); }
+
+  public selected_files: Array<any> = [];
+
+  public handle_file_action(event: { action: string, data: any }) {
+    console.log(event);
+    switch (event.action) {
+      case 'selected': this.select_folder(event.data); break;
+      default: break;
+    }
   }
 
+  public select_folder(data: any) {
+    console.log({ file_to_add: data, file_list: this.selected_files })
+    const exists = this.selected_files.findIndex(f => f.filename == data.filename);
+    if (exists == -1) this.selected_files.push(data);
+    else this.selected_files.splice(exists, 1);
+    console.log({ file_list: this.selected_files });
+  }
+
+  ngOnInit(): void {
+    this._subscriptions.push(
+      this.auth.user_info.subscribe((user: any) => {
+        this.current_user = user;
+        if (this.current_user) {
+          this.current_user_upload_locations = user.upload_locations.map((l: any) => { return { path: l } });
+          this.current_user_upload_bucket = user.upload_locations[0].split('/')[0];
+          const user_name = user.username;
+          const user_data_api = this.api.get_user_uploaded_data(this.current_user_upload_bucket, user_name).subscribe((response: any) => {
+            this.user_datasets_algorithms = response
+              .map((file: string) => { return { filename: file, status: false } })
+              .filter((file: any) => { if (this.file_is_folder(file.filename) == false) return file });
+            user_data_api.unsubscribe();
+          })
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.forEach(s => s.unsubscribe())
+  }
 }

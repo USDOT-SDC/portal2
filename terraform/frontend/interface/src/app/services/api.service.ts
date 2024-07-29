@@ -34,4 +34,9 @@ export class ApiService {
   public send_export_table_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/portal2_export_table&message=${JSON.stringify(message)}`); }
 
   public send_trusted_user_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/portal2_export_table&message=${JSON.stringify(message)}`); }
+
+  public get_user_uploaded_data(bucket_name: string, user_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/export_objects?userBucketName=${bucket_name}&username=${user_name}`, { headers: this.auth_header }); }
+
+  public get_s3_object_metadata(bucket_name: string, file_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/s3_metadata?bucket_name=${bucket_name}&file_name=${file_name}`, { headers: this.auth_header }) }
+
 }
