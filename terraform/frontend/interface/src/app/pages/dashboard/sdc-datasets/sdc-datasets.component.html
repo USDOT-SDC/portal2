@@ -4,43 +4,105 @@
         <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="These are datasets that are available within SDC platform that are published / enabled by SDC team or published by other users. Access to these datasets are available upon request. Learn more about the different types of datasets and how to request access to these datasets."></i></sup>
     </h3>
     <hr>
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Geographic&nbsp;Scope</th>
-                    <th scope="col">Start/End&nbsp;for&nbsp;Data&nbsp;Availability</th>
-                    <th scope="col">Owner</th>
-                    <th scope="col">Request&nbsp;Access</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngIf="datasets.length > 0; else NoDatasetsElem;">
-                    <ng-container *ngFor="let dataset of datasets">
-                        <tr>
-                            <th scope="row"> </th>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                    </ng-container>
-                </ng-container>
-                <ng-template #NoDatasetsElem>
-                    <tr>
-                        <th colspan="7">
-                            <div class="d-flex align-items-center justify-content-center p-4">
-                                <h5 class="text-muted">No Datasets Found</h5>
-                            </div>
-                        </th>
+    <div class="card w-100 card-body border-0 p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="table-light">
+                        <th scope="col" style="min-width: 150px;"> Name </th>
+                        <th scope="col" style="min-width: 150px;"> Category </th>
+                        <th scope="col" style="min-width: 300px;"> Description </th>
+                        <th scope="col" style="min-width: 250px;"> Geographic&nbsp;Scope </th>
+                        <th scope="col" style="min-width: 250px;"> Start/End&nbsp;for&nbsp;Data&nbsp;Availability </th>
+                        <th scope="col" style="min-width: 150px;"> Owner </th>
+                        <th scope="col"> Request&nbsp;Access </th>
                     </tr>
-                </ng-template>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="datasets.length > 0; else NoDatasetsElem;">
+                        <ng-container *ngFor="let dataset of datasets">
+                            <tr>
+                                <th style="min-width: 150px;" scope="row"> {{dataset.Name}} </th>
+                                <td style="min-width: 150px;"> {{dataset.Category}} </td>
+                                <td style="min-width: 300px;"> {{dataset.Description}} </td>
+                                <td style="min-width: 250px;"> {{dataset.Geographic_Scope}} </td>
+                                <td style="min-width: 250px;"> {{dataset.Data_Availability_Span}} </td>
+                                <td style="min-width: 150px;"> {{dataset.Owner}} </td>
+                                <td> <button class="btn btn-outline-secondary w-100" (click)="select_dataset_to_request(dataset)">REQUEST</button> </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #NoDatasetsElem>
+                        <tr>
+                            <th colspan="7">
+                                <div class="d-flex align-items-center justify-content-center p-4">
+                                    <h5 class="text-muted">No Datasets Found</h5>
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<!-- Modal: Schedule Workstation -->
+<app-modal #Modal_RequestDatasets [size]="'md'">
+    <ng-container modal-header>
+        <div class="d-flex align-items-center justify-content-between w-100 p-2">
+            <h5 class="m-0"> <i class="fa-solid fa-calendar-week me-2"></i>SDC Data Access Request</h5>
+            <p *ngIf="selected_dataset" class="m-0">Request for: <b>{{selected_dataset.Name}}</b></p>
+        </div>
+    </ng-container>
+    <ng-container modal-body>
+        <div class="container px-2 py-3">
+            <p>Please fill out the following information to obtain access to the data set.</p>
+
+            <hr>
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" role="switch" id="US_DOT_Employee" [(ngModel)]="is_us_dot_employee">
+                            <label class="form-check-label" for="US_DOT_Employee">Are you a USDOT Employee or researcher under contract to USDOT?</label>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">USDOT Email Address</span>
+                            <input class="form-control" type="email" id="USDotEmailAddressElem" placeholder="Please provide a valid USDOT email address." [disabled]="is_us_dot_employee == false" [readonly]="is_us_dot_employee == false" [(ngModel)]="request_dot_email">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="GeographicExtentElem">Geographic Extent of Access</label>
+                        <textarea id="GeographicExtentElem" class="form-control mb-2" placeholder="Enter the State(s) for which you would like to request access." [(ngModel)]="request_justification"></textarea>
+                        <small>Note: Use Commas when requesting multiple states (eg KN, VI, FL...)</small>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="SubmissionTermsAcceptance" [(ngModel)]="accepted_use_policy">
+                <label class="form-check-label" for="SubmissionTermsAcceptance">
+                    <small>By clicking accept, the user agrees to the conditions set in the data provider agreement. If you are a USDOT employee or engaged in USDOT-sponsored research activity, you are agreeing to the overall data agreements that USDOT has with the data providers.</small>
+                    <br>
+                    <small>Failure to comply with these terms may result in termination of the user account for the site and associated data in those accounts.</small>
+                </label>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container modal-footer>
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="close_request_datasets_modal()">Close</button>
+            <button class="btn btn-primary" [disabled]="!is_request_valid()" (click)="submit_data_access_request()">
+                <ng-container *ngIf="is_loading == true; else DefaultButtonState">
+                    <i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Request...
+                </ng-container>
+                <ng-template #DefaultButtonState>
+                    Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i>
+                </ng-template>
+            </button>
+        </div>
+    </ng-container>
+</app-modal>

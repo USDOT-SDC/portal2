@@ -1,0 +1,17 @@
+meta {
+  name: Get Desired Instance Types
+  type: http
+  seq: 8
+}
+
+get {
+  url: https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/desired_instance_types?cpu=2&memory=4&os=windows
+  body: none
+  auth: inherit
+}
+
+query {
+  cpu: 2
+  memory: 4
+  os: windows
+}
