@@ -20,6 +20,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   public current_user: any;
   public current_user_upload_bucket: any;
+  public current_user_upload_locations: any = [];
 
   public user_datasets_algorithms: Array<any> = [];
   public user_edge_databases: Array<any> = [];
@@ -85,6 +86,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       this.auth.user_info.subscribe((user: any) => {
         this.current_user = user;
         if (this.current_user) {
+          this.current_user_upload_locations = user.upload_locations.map((l: any) => { return { path: l } });
           this.current_user_upload_bucket = user.upload_locations[0].split('/')[0];
           const user_name = user.username;
           const user_data_api = this.api.get_user_uploaded_data(this.current_user_upload_bucket, user_name).subscribe((response: any) => {

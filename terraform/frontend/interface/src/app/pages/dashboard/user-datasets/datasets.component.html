@@ -85,37 +85,31 @@
     </ng-container>
     <ng-container modal-body>
         <div class="p-2">
-            <div class="row">
-                <div class="col-3">
-                    <div class="mb-3">
-                        <div>
-                            <label class="form-label"> Upload Location </label>
-                            <select class="form-select">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="new_prefix_input" class="form-label">Append a new prefix</label>
-                        <input type="text" class="form-control" id="new_prefix_input">
-                    </div>
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
-                    </div>
+            <div class="row align-items-end">
+                <div class="col">
+                    <label class="form-label"> Upload Location </label>
+                    <select class="form-select">
+                        <option selected> - Select Upload Location - </option>
+                        <ng-container *ngFor="let location of current_user_upload_locations">
+                            <option [value]="location.path">{{location.path}}</option>
+                        </ng-container>
+                    </select>
                 </div>
-                <div class="col-9">
-                    <app-file-upload></app-file-upload>
+                <div class="col">
+                    <label for="new_prefix_input" class="form-label">Append a new prefix</label>
+                    <input type="text" class="form-control" id="new_prefix_input">
                 </div>
             </div>
+            <hr>
+
+            <app-file-upload></app-file-upload>
+
         </div>
     </ng-container>
     <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between">
-            <button class="btn btn-secondary" (click)="Modal_UploadFiles.close()">Close</button>
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
+            <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
         </div>
     </ng-container>
 </app-modal>
