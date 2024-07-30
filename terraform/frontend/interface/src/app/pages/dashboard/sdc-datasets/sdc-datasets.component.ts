@@ -22,7 +22,7 @@ export class SdcDatasetsComponent implements OnInit {
   public request_justification: any;
   public is_loading: boolean = false;
 
-  constructor(private api: ApiService, private auth: AuthService) { }
+  constructor(private auth: AuthService) { }
 
   public select_dataset_to_request(dataset: any): void {
     this.selected_dataset = dataset;

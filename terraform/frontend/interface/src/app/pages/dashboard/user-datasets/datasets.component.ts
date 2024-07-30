@@ -35,6 +35,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   constructor(private auth: AuthService, private api: ApiService) { }
 
+
   // Modal Open - File Upload
   public modal_open_file_upload(): void { this.Modal_UploadFiles.open(); }
   // Modal Close - File Upload
@@ -65,6 +66,17 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   public selected_files: Array<any> = [];
 
+  public toggle_select_files(event: any) {
+    console.log(event.target.checked)
+    if (event.target.checked == false) {
+      this.user_datasets_algorithms.map(d => d.selected = false);
+      this.selected_files = [];
+    } else {
+      this.user_datasets_algorithms.map(d => { if (d.status !== 'Denied') d.selected = true })
+      this.selected_files = [...this.user_datasets_algorithms];
+    }
+  }
+
   public handle_file_action(event: { action: string, data: any }) {
     console.log(event);
     switch (event.action) {
@@ -76,8 +88,14 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public select_folder(data: any) {
     console.log({ file_to_add: data, file_list: this.selected_files })
     const exists = this.selected_files.findIndex(f => f.filename == data.filename);
-    if (exists == -1) this.selected_files.push(data);
-    else this.selected_files.splice(exists, 1);
+    if (exists == -1) {
+      this.selected_files.push(data)
+      data.selected = true;
+    }
+    else {
+      this.selected_files.splice(exists, 1)
+      data.selected = false;
+    };
     console.log({ file_list: this.selected_files });
   }
 

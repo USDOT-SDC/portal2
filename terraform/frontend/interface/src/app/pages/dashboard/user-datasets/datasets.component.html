@@ -32,7 +32,7 @@
                 <table class="table m-0">
                     <thead>
                         <tr class="table-light">
-                            <th scope="col"><input class="form-check-input mb-0" type="checkbox" id="select-all-files"></th>
+                            <th scope="col"><input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)"></th>
                             <th scope="col" class="text-start"> <small>Filename </small> </th>
                             <th scope="col" class="text-center"><small>Export </small> </th>
                             <!-- <th scope="col" class="text-center"><small>Publish </small> </th> -->
@@ -60,16 +60,12 @@
             </div>
         </div>
         <div class="card-footer border-top-none">
-            <div class="d-flex align-items-center justify-content-between">
-                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0"><i class="fa-solid fa-download me-2"></i> Download Selected Files</button>
-
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angles-left"></i></button>
-                    <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angle-left"></i></button>
-                    <div class="p-1 px-2 text-secondary">1</div>
-                    <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angle-right"></i></button>
-                    <button class="btn btn-sm btn-outline-secondary" disabled><i class="fa-solid fa-angles-right"></i></button>
-                </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0">
+                    <i class="fa-solid fa-download me-2"></i>
+                    <ng-container *ngIf="selected_files.length > 0; else DefaultDownloadElem"> Download {{selected_files.length}} Selected Files</ng-container>
+                    <ng-template #DefaultDownloadElem> Download Selected </ng-template>
+                </button>
             </div>
         </div>
     </div>
@@ -97,7 +93,7 @@
                 </div>
                 <div class="col">
                     <label for="new_prefix_input" class="form-label">Append a new prefix</label>
-                    <input type="text" class="form-control" id="new_prefix_input">
+                    <input type="text" class="form-control" id="new_prefix_input" placeholder="Set a sub folder or directory to upload to...">
                 </div>
             </div>
             <hr>
