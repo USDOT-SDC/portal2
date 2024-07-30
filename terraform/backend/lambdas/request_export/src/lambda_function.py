@@ -1,3 +1,5 @@
+# API which is used when a user submits an export request for approval
+
 import boto3
 import logging
 import ast

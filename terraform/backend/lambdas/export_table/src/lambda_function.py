@@ -1,3 +1,5 @@
+# API used when a user requests to export a table to the edgeDB
+
 import boto3
 import os
 import logging
@@ -138,10 +140,9 @@ def lambda_handler(event, context):
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
+            fakeListOfPOC = ['c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
 
             glue_client = boto3.client('glue')
-            # glueWorkflowName = f"New-Table-Export-Request"
             glueWorkflowName = f"Populate_Schema_Export_Request"
             glue_schemaPopulate_workflow = glue_client.start_workflow_run(Name=glueWorkflowName)
             update_schemaPopulate_workflow = glue_client.put_workflow_run_properties(

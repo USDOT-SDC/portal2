@@ -763,7 +763,7 @@ def createTableExportRequests():
             availableDatasets = get_datasets()['datasets']['Items']
             logging.info("Available datasets:" + str(availableDatasets))
 
-            fakeListOfPOC = ['gautam.naidu.ctr@dot.gov', 'c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
+            fakeListOfPOC = ['c.m.fitzgerald.ctr@dot.gov', 'b.fitzpatrick.ctr@dot.gov'] #For Debugging
 
             glue_client = boto3.client('glue')
             # glueWorkflowName = f"New-Table-Export-Request"

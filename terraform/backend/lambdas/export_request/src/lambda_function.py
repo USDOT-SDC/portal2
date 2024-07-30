@@ -1,3 +1,5 @@
+# API which returns all the requests awaiting approval; these requests should appear in the approval center
+
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
 import logging
