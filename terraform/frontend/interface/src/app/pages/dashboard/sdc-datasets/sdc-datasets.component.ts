@@ -2,15 +2,17 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { RequestEmail } from 'src/app/classes/request-email';
 
 @Component({
   selector: 'app-sdc-datasets',
   templateUrl: './sdc-datasets.component.html',
-  styleUrls: ['./sdc-datasets.component.less']
+  styleUrls: ['./sdc-datasets.component.less'],
 })
 export class SdcDatasetsComponent implements OnInit {
-
-  @ViewChild('Modal_RequestDatasets') Modal_RequestDatasets: ModalComponent | any;
+  @ViewChild('Modal_RequestDatasets') Modal_RequestDatasets:
+    | ModalComponent
+    | any;
 
   @Input() datasets: Array<any> = [];
 
@@ -22,18 +24,29 @@ export class SdcDatasetsComponent implements OnInit {
   public request_justification: any;
   public is_loading: boolean = false;
 
-  constructor(private api: ApiService, private auth: AuthService) { }
+  constructor(private api: ApiService, private auth: AuthService) {}
 
   public select_dataset_to_request(dataset: any): void {
     this.selected_dataset = dataset;
     this.open_request_datasets_modal();
   }
 
-  public open_request_datasets_modal(): void { this.Modal_RequestDatasets.open(); }
+  public open_request_datasets_modal(): void {
+    this.Modal_RequestDatasets.open();
+  }
 
   public is_request_valid(): boolean {
-    if (this.is_us_dot_employee == true) if (this.request_dot_email === undefined || this.request_dot_email.trim() === "") return false;
-    if (this.request_justification === undefined || this.request_justification.trim() === "") return false;
+    if (this.is_us_dot_employee == true)
+      if (
+        this.request_dot_email === undefined ||
+        this.request_dot_email.trim() === ''
+      )
+        return false;
+    if (
+      this.request_justification === undefined ||
+      this.request_justification.trim() === ''
+    )
+      return false;
     if (this.accepted_use_policy == false) return false;
     return true;
   }
@@ -43,28 +56,44 @@ export class SdcDatasetsComponent implements OnInit {
 
     var payload: any = {
       dataset: this.selected_dataset,
-      us_dot_email: this.request_dot_email
+      us_dot_email: this.request_dot_email,
     };
     const user = this.auth.current_user.getValue();
 
-    console.log("SUBMITTING REQUEST", { user, payload });
+    // const message = {
+    //   dataset: this.selected_dataset.Name,
+    //   type: this.selected_dataset.Type,
+    //   category: this.selected_dataset.Category,
+    //   name: 'sample_dataset.csv',
+    //   description: this.selected_dataset.Description,
+    //   readmeFileName: 'readme.txt',
+    //   geographicScope: this.selected_dataset.Geographic_Scope,
+    //   dataAvailability: this.selected_dataset.Data_Availability_Span,
+    // };
+
+    // const requestEmail = new RequestEmail();
+    // const emailContent = requestEmail.generateEmail(message, user);
+    const emailContent = 'THIS IS THE EMAIL CONTENT';
+
+    console.log('SUBMITTING REQUEST', { user, payload });
 
     // API CALL . . . .
-    // this.api.send_email_request(user.email, message = {} ).subscribe((response: any) => { console.log(response); });
+    this.api
+      .send_email_request(this.request_dot_email, emailContent)
+      .subscribe((response: any) => {
+        console.log(response);
+      });
 
     setTimeout(() => {
       this.is_loading = false;
       this.close_request_datasets_modal();
-    }, 1000)
+    }, 1000);
   }
-
 
   public close_request_datasets_modal(): void {
     this.selected_dataset = undefined;
     this.Modal_RequestDatasets.close();
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

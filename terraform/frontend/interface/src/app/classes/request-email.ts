@@ -1,5 +1,5 @@
 const request_email_template = (message: any, user: any) => {
-    const email_template = `<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>
+  const email_template = `<div> Hello,<br><br>Please approve the request for publishing the datasets.<br>
     <ul>
         <li>Dataset / Algorithm Name = ${message.dataset}</li>
         <li>Type = ${message.type}</li>
@@ -14,9 +14,12 @@ const request_email_template = (message: any, user: any) => {
     </ul>
     Thanks, ${user.user_name}<br>
 </div>`;
-}
+};
 
 export class RequestEmail {
+  constructor() {}
 
-    constructor() { }
+  generateEmail(message: any, user: any) {
+    return request_email_template(message, user);
+  }
 }
