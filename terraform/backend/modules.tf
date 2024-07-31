@@ -51,7 +51,7 @@ locals {
       }
     }
     export_request = {
-      http_method = "GET"
+      http_method = "POST"
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
@@ -168,7 +168,7 @@ locals {
       }
     }
     request_export = {
-      http_method = "GET"
+      http_method = "POST"
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
@@ -196,7 +196,7 @@ locals {
       }
     }
     update_autoexport_status = {
-      http_method = "GET"
+      http_method = "POST"
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
@@ -208,7 +208,7 @@ locals {
       }
     }
     update_file_status = {
-      http_method = "GET"
+      http_method = "POST"
       environment_variables = {
         RECEIVER_EMAIL                = local.receiver_email
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
@@ -216,7 +216,7 @@ locals {
       }
     }
     update_trusted_status = {
-      http_method = "GET"
+      http_method = "POST"
       environment_variables = {
         RECEIVER_EMAIL   = local.receiver_email
         ALLOW_ORIGIN_URL = local.allow_origin_url

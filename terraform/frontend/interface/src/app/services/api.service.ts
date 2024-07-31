@@ -37,6 +37,8 @@ export class ApiService {
 
   public get_user_uploaded_data(bucket_name: string, user_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/export_objects?userBucketName=${bucket_name}&username=${user_name}`, { headers: this.auth_header }); }
 
-  public get_s3_object_metadata(bucket_name: string, file_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/s3_metadata?bucket_name=${bucket_name}&file_name=${file_name}`, { headers: this.auth_header }) }
+  public get_s3_object_metadata(bucket_name: string, file_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/s3_metadata?bucket_name=${bucket_name}&file_name=${file_name}`, { headers: this.auth_header }); }
+
+  public update_trusted_user_status(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/update_trusted_status?bucket_name=${JSON.stringify(message)}`); }
 
 }

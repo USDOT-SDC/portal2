@@ -37,7 +37,7 @@ def get_combined_export_workflow():
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['queryStringParameters']
+    paramsQuery = event['body']
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))
