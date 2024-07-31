@@ -73,7 +73,7 @@ def get_user_details_from_username(username):
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['body']
+    paramsQuery = json.loads(event['body'])
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))
