@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { FileUploadComponent } from 'src/app/components/file-upload/file-upload.component';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,6 +17,9 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   @ViewChild('Modal_UploadFiles') Modal_RequestTableExport: ModalComponent | any;
 
 
+  @ViewChild('file_uploader') file_uploader: FileUploadComponent | any;
+
+
   private _subscriptions: Array<Subscription> = [];
 
   public current_user: any;
@@ -27,19 +31,66 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public sdc_datasets: Array<any> = [];
   public sdc_algorithms: Array<any> = [];
 
-  public files_to_upload: Array<any> = [
-    { file_name: 'example.pdf', file_size: 0 },
-    { file_name: 'example_two.pdf', file_size: 0 },
-    { file_name: 'example_three.docx', file_size: 0 },
-  ]
+
 
   constructor(private auth: AuthService, private api: ApiService) { }
 
+  public uploading_files: boolean = false;
+  public file_upload_bucket: any;
+  public file_upload_bucket_prefix: any;
 
   // Modal Open - File Upload
   public modal_open_file_upload(): void { this.Modal_UploadFiles.open(); }
+
+  public upload_files(): void {
+    this.uploading_files = true;
+
+    const [bucket, prefix, files] = [this.file_upload_bucket, this.file_upload_bucket_prefix, this.file_uploader.files_to_upload];
+
+    console.log("===========::UPLOADING:INITIALIZED::===========");
+    console.log({ bucket, prefix, files });
+
+    var promises: Array<Promise<any>> = [];
+
+    // Loop over Each File
+    this.file_uploader.files_to_upload.forEach((file: any, index: number) =>
+      // Push the Promise to Promises
+      promises.push(new Promise((resolve, reject) => {
+        // Send API Request, Promise is dependant on API response
+
+        console.log(`===========::FILE:${index + 1}::===========`);
+        console.log("Grabbing Presigned Upload URL for: ", file.file_name);
+
+        this.api.get_s3_upload_url(bucket, file.file_name, file.file_type).subscribe((presigned_url: any) => {
+
+          console.log("The Presigned Upload URL: ", presigned_url);
+
+          console.log(`Will now Upload ${file.file_name} to ${presigned_url}`);
+
+          this.api.upload_file_to_s3(presigned_url, file).subscribe({
+            next: (uploaded) => resolve(uploaded),
+            error: (error: any) => reject(error)
+          })
+        })
+      }))
+    );
+
+    // Await for all Promises to Complete
+    Promise.all(promises).then((responses: any) => {
+      console.log("Promise Responses: ", responses);
+      this.uploading_files = false;
+      this.modal_close_file_upload();
+    });
+
+  }
+
   // Modal Close - File Upload
-  public modal_close_file_upload(): void { this.Modal_UploadFiles.close(); }
+  public modal_close_file_upload(): void {
+    this.Modal_UploadFiles.close();
+    this.file_upload_bucket = undefined;
+    this.file_upload_bucket_prefix = undefined;
+    this.file_uploader.files_to_upload = [];
+  }
 
   // Modal Open - Request trusted User
   public modal_open_request_trusted_user(): void { this.Modal_RequestTrustedUser.open(); }

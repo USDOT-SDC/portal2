@@ -84,8 +84,8 @@
             <div class="row align-items-end">
                 <div class="col">
                     <label class="form-label"> Upload Location </label>
-                    <select class="form-select">
-                        <option selected> - Select Upload Location - </option>
+                    <select class="form-select" [(ngModel)]="file_upload_bucket">
+                        <option selected [value]="undefined"> - Select Upload Location - </option>
                         <ng-container *ngFor="let location of current_user_upload_locations">
                             <option [value]="location.path">{{location.path}}</option>
                         </ng-container>
@@ -93,19 +93,31 @@
                 </div>
                 <div class="col">
                     <label for="new_prefix_input" class="form-label">Append a new prefix</label>
-                    <input type="text" class="form-control" id="new_prefix_input" placeholder="Set a sub folder or directory to upload to...">
+                    <input type="text" class="form-control" id="new_prefix_input" placeholder="Set a sub folder or directory to upload to..." [(ngModel)]="file_upload_bucket_prefix">
                 </div>
             </div>
             <hr>
 
-            <app-file-upload></app-file-upload>
+            <app-file-upload #file_uploader></app-file-upload>
 
         </div>
     </ng-container>
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
-            <button class="btn btn-success" disabled><i class="fa-solid fa-upload me-2"></i>Upload Files</button>
+            <button class="btn btn-success" [disabled]="file_uploader.files_to_upload.length == 0 || file_upload_bucket == undefined || uploading_files == true" (click)="upload_files()">
+                <ng-container *ngIf="uploading_files == true; else DefaultNonLoadingStatus">
+                    <i class="fa-solid fa-spinner fa-spin me-2"></i>Uploading File(s)...
+                </ng-container>
+                <ng-template #DefaultNonLoadingStatus>
+                    <ng-container *ngIf="file_uploader.files_to_upload.length > 0; else DefaultUploadStatus">
+                        <i class="fa-solid fa-upload me-2"></i>Upload {{file_uploader.files_to_upload.length}} File(s)
+                    </ng-container>
+                    <ng-template #DefaultUploadStatus>
+                        <i class="fa-solid fa-upload me-2"></i>Upload File(s)
+                    </ng-template>
+                </ng-template>
+            </button>
         </div>
     </ng-container>
 </app-modal>

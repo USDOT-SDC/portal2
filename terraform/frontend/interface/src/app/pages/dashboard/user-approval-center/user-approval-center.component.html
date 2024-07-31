@@ -8,11 +8,27 @@
             </div>
         </div>
         <div class="collapse show" id="ExportFileRequests_Collapse">
-            <div class="card card-body bg-light mt-3">
-                <div class="d-flex align-items-center justify-content-center p-4">
-                    <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
-                </div>
+
+            <div class="card mt-3">
+                <ng-container *ngIf="s3_requests.length > 0; else No_ExportFiles_ToShow">
+                    <div class="card-header"> </div>
+                    <ul class="list-group list-group-flush">
+                        <ng-container *ngFor="let request of s3_requests">
+                            <li class="list-group-item">
+                                {{ request | json }}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+                <ng-template #No_ExportFiles_ToShow>
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Export File Requests</h5>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
+
         </div>
     </li>
     <li class="list-group-item p-3">
@@ -24,11 +40,27 @@
             </div>
         </div>
         <div class="collapse show" id="ExportTableRequests_Collapse">
-            <div class="card card-body bg-light mt-3">
-                <div class="d-flex align-items-center justify-content-center p-4">
-                    <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
-                </div>
+
+            <div class="card mt-3">
+                <ng-container *ngIf="table_export_requests.length > 0; else No_ExportTables_ToShow">
+                    <div class="card-header"> </div>
+                    <ul class="list-group list-group-flush">
+                        <ng-container *ngFor="let request of table_export_requests">
+                            <li class="list-group-item">
+                                {{ request | json }}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+                <ng-template #No_ExportTables_ToShow>
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Export Table Requests</h5>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
+
         </div>
     </li>
     <li class="list-group-item p-3">
@@ -40,11 +72,27 @@
             </div>
         </div>
         <div class="collapse show" id="TrustedUserRequests_Collapse">
-            <div class="card card-body bg-light mt-3">
-                <div class="d-flex align-items-center justify-content-center p-4">
-                    <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
-                </div>
+
+            <div class="card mt-3">
+                <ng-container *ngIf="trusted_user_status_requests.length > 0; else No_TrustedUsers_ToShow">
+                    <div class="card-header"> </div>
+                    <ul class="list-group list-group-flush">
+                        <ng-container *ngFor="let request of trusted_user_status_requests">
+                            <li class="list-group-item">
+                                {{ request | json }}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+                <ng-template #No_TrustedUsers_ToShow>
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
+
         </div>
     </li>
 </ul>

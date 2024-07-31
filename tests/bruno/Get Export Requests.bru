@@ -1,0 +1,15 @@
+meta {
+  name: Get Export Requests
+  type: http
+  seq: 9
+}
+
+get {
+  url: https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/export_request
+  body: none
+  auth: inherit
+}
+
+query {
+  ~message: {%22ApprovalForm%22:{%22email%22:%22dilean.barroso.ctr@dot.gov%22}}
+}
