@@ -1,3 +1,5 @@
+# API which is used when a user submits an export request for approval
+
 import boto3
 import logging
 import ast
@@ -126,7 +128,7 @@ def send_notification(listOfPOC, emailContent, subject = 'Export Notification'):
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['queryStringParameters']
+    paramsQuery = event['body']
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))

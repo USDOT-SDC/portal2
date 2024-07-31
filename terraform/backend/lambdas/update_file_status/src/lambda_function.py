@@ -1,3 +1,5 @@
+# API which is called when a data steward approves or denies and export request
+
 import boto3
 import botocore
 import simplejson as json
@@ -80,7 +82,7 @@ def scan_db(table, scan_kwargs=None):
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['queryStringParameters']
+    paramsQuery = event['body']
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))

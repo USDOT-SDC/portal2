@@ -1,3 +1,5 @@
+# API which returns all the requests awaiting approval; these requests should appear in the approval center
+
 import boto3
 from boto3.dynamodb.conditions import Attr, Key
 import logging
@@ -35,7 +37,7 @@ def get_combined_export_workflow():
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['queryStringParameters']
+    paramsQuery = event['body']
     paramsString = paramsQuery['message']
     logger.setLevel("INFO")
     logging.info("Received request {}".format(paramsString))
