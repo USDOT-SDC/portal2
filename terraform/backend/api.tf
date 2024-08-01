@@ -120,19 +120,20 @@ resource "aws_api_gateway_method_response" "health_any_200" {
 resource "aws_api_gateway_deployment" "portal" {
   rest_api_id = aws_api_gateway_rest_api.portal.id
   triggers = {
-    redeployment = sha1(
-      jsonencode(
-        [
-          aws_api_gateway_resource.health,
-          aws_api_gateway_method.health_any,
-          aws_api_gateway_integration.health_any_mock,
-          aws_api_gateway_integration_response.health_any_200,
-          aws_api_gateway_method_response.health_any_200,
-          module.api,
-          module.ddb_crud,
-        ]
-      )
-    )
+    redeployment=sha1(timestamp())
+    # redeployment = sha1(
+    #   jsonencode(
+    #     [
+    #       aws_api_gateway_resource.health,
+    #       aws_api_gateway_method.health_any,
+    #       aws_api_gateway_integration.health_any_mock,
+    #       aws_api_gateway_integration_response.health_any_200,
+    #       aws_api_gateway_method_response.health_any_200,
+    #       module.api,
+    #       module.ddb_crud,
+    #     ]
+    #   )
+    # )
   }
   lifecycle {
     create_before_destroy = true
