@@ -31,9 +31,9 @@ export class ApiService {
 
   public send_email_request(sender: string, message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/send_email?sender=${sender}&message=${JSON.stringify(message)}`); }
 
-  public send_export_table_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/portal2_export_table&message=${JSON.stringify(message)}`); }
+  public send_export_table_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/export_table&message=${JSON.stringify(message)}`); }
 
-  public send_trusted_user_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/portal2_export_table&message=${JSON.stringify(message)}`); }
+  public send_trusted_user_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/request_export&message=${JSON.stringify(message)}`); }
 
   public get_user_uploaded_data(bucket_name: string, user_name: string): Observable<any> { return this.http.get(`${this.BASE_URI}/export_objects?userBucketName=${bucket_name}&username=${user_name}`, { headers: this.auth_header }); }
 
