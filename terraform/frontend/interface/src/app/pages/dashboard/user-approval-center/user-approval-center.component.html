@@ -11,11 +11,32 @@
 
             <div class="card mt-3">
                 <ng-container *ngIf="s3_requests.length > 0; else No_ExportFiles_ToShow">
-                    <div class="card-header"> </div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">Date</div>
+                            <div class="col">Submitted By</div>
+                            <div class="col">Description</div>
+                            <div class="col">Team</div>
+                            <div class="col">Dataset</div>
+                            <div class="col">File Name</div>
+                            <div class="col">Action</div>
+                        </div>
+                    </div>
                     <ul class="list-group list-group-flush">
                         <ng-container *ngFor="let request of s3_requests">
                             <li class="list-group-item">
-                                {{ request | json }}
+                                <div class="row">
+                                    <div class="col">{{request.ReqReceivedTimestamp | date: 'shortDate' }}</div>
+                                    <div class="col">{{request.RequestedBy }}</div>
+                                    <div class="col">{{request.ApprovalForm.justifyExport}}</div>
+                                    <div class="col">{{request.TeamBucket}}</div>
+                                    <div class="col">{{request['Dataset-DataProvider-Datatype'] }}</div>
+                                    <div class="col">{{request.S3Key}}</div>
+                                    <div class="col">
+                                        <button class="btn btn-outline-success btn-sm"><i class="fa-regular fa-thumbs-up"></i></button>
+                                        <button class="btn btn-outline-danger btn-sm"><i class="fa-regular fa-thumbs-down"></i></button>
+                                    </div>
+                                </div>
                             </li>
                         </ng-container>
                     </ul>
@@ -43,11 +64,33 @@
 
             <div class="card mt-3">
                 <ng-container *ngIf="table_export_requests.length > 0; else No_ExportTables_ToShow">
-                    <div class="card-header"> </div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">Date</div>
+                            <div class="col">Submitted By</div>
+                            <div class="col">Email</div>
+                            <div class="col">Team</div>
+                            <div class="col">Dataset</div>
+                            <div class="col">Justification</div>
+                            <div class="col">Action</div>
+                        </div>
+                    </div>
                     <ul class="list-group list-group-flush">
                         <ng-container *ngFor="let request of table_export_requests">
                             <li class="list-group-item">
-                                {{ request | json }}
+                                <!-- {{ request | json }} -->
+                                <div class="row">
+                                    <div class="col">Date</div>
+                                    <div class="col">Submitted By</div>
+                                    <div class="col">Email</div>
+                                    <div class="col">Team</div>
+                                    <div class="col">Dataset</div>
+                                    <div class="col">Justification</div>
+                                    <div class="col">
+                                        <button class="btn btn-outline-success btn-sm"><i class="fa-regular fa-thumbs-up"></i></button>
+                                        <button class="btn btn-outline-danger btn-sm"><i class="fa-regular fa-thumbs-down"></i></button>
+                                    </div>
+                                </div>
                             </li>
                         </ng-container>
                     </ul>
@@ -75,11 +118,29 @@
 
             <div class="card mt-3">
                 <ng-container *ngIf="trusted_user_status_requests.length > 0; else No_TrustedUsers_ToShow">
-                    <div class="card-header"> </div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">Date</div>
+                            <div class="col">Submitted By</div>
+                            <div class="col">Dataset</div>
+                            <div class="col">Justification</div>
+                            <div class="col">Action</div>
+                        </div>
+                    </div>
                     <ul class="list-group list-group-flush">
                         <ng-container *ngFor="let request of trusted_user_status_requests">
                             <li class="list-group-item">
-                                {{ request | json }}
+                                <!-- {{ request | json }} -->
+                                <div class="row">
+                                    <div class="col">Date</div>
+                                    <div class="col">Submitted By</div>
+                                    <div class="col">Dataset</div>
+                                    <div class="col">Justification</div>
+                                    <div class="col">
+                                        <button class="btn btn-outline-success btn-sm"><i class="fa-regular fa-thumbs-up"></i></button>
+                                        <button class="btn btn-outline-danger btn-sm"><i class="fa-regular fa-thumbs-down"></i></button>
+                                    </div>
+                                </div>
                             </li>
                         </ng-container>
                     </ul>

@@ -27,10 +27,17 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
           const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
             console.log(response);
             if (response.exportRequests) {
-              const { exportRequests } = response;
+              const { exportRequests, trustedRequests, autoExportRequests } = response;
               this.table_export_requests = exportRequests.tableRequests;
               this.s3_requests = exportRequests.s3Requests;
-              this.trusted_user_status_requests = exportRequests.trustedRequests;
+
+              if (trustedRequests.length > 0) {
+                this.trusted_user_status_requests = [];
+                trustedRequests.forEach((array: any) => { this.trusted_user_status_requests.push(...array) });
+              }
+
+              console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
+
             }
             API.unsubscribe();
           });
