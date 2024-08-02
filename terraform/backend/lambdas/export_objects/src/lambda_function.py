@@ -1,6 +1,5 @@
 # API which returns objects to populate the files a user wishes to export; this would show up in the My Resources section in the My Data table
 
-
 import boto3
 import json
 import os
@@ -14,15 +13,25 @@ def lambda_handler(event, context):
     print("USER_BUCKET == ", params['userBucketName'])
     try:
         client_s3 = boto3.client('s3')
+        response = client_s3.list_objects(
+            Bucket=params['userBucketName'],
+            Prefix='{}/uploaded_files/'.format(params['username'])
+        )
         export_response = client_s3.list_objects(
             Bucket=params['userBucketName'],
             Prefix='export_requests/'
         )
+        total_content = {}
         total_export_content = {}
         if 'Contents' in export_response:
             total_export_content = export_response['Contents']
+        if 'Contents' in response:
+            total_content=response['Contents']
+        for c in total_content:
+            content.add(c['Key'])
         for c in total_export_content:
             content.add(c['Key'])
+
     except BaseException as ce:
         print(ce)
     
