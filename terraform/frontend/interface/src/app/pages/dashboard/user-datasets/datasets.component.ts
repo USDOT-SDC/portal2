@@ -59,6 +59,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
         // Send API Request, Promise is dependant on API response
 
         console.log(`===========::FILE:${index + 1}::===========`);
+        console.log("File Data: ", file);
         console.log("Grabbing Presigned Upload URL for: ", file.file_name);
 
         this.api.get_s3_upload_url(bucket, file.file_name, file.file_type).subscribe((presigned_url: any) => {
@@ -67,9 +68,9 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
           console.log(`Will now Upload ${file.file_name} to ${presigned_url}`);
 
-          this.api.upload_file_to_s3(presigned_url, file).subscribe({
-            next: (uploaded) => resolve(uploaded),
-            error: (error: any) => reject(error)
+          this.api.upload_file_to_s3(presigned_url, file.file, file.file_type).subscribe({
+            next: (uploaded) => { console.log(uploaded); resolve({ success: true, response: uploaded }) },
+            error: (error: any) => { console.error(error); reject({ success: false, response: error }) }
           })
         })
       }))
