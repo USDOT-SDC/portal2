@@ -7,9 +7,9 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <button class="btn btn-outline-secondary" type="button">Clear</button>
-                        <input type="text" class="form-control" placeholder="Search Files...">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-outline-secondary" type="button" (click)="clear_search_filter()">Clear</button>
+                        <input type="text" class="form-control" placeholder="Search Files..." [(ngModel)]="file_upload_search_term">
+                        <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button> -->
                     </div>
                 </div>
                 <div class="col">
@@ -19,6 +19,8 @@
                             <option selected>- Sort Files -</option>
                             <option value="1">FileName: A to Z</option>
                             <option value="2">FileName: Z to A</option>
+                            <option value="3">Status: Z to A</option>
+                            <option value="4">Status: A to Z</option>
                         </select>
                     </div>
                 </div>
@@ -27,38 +29,30 @@
                 </div>
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table m-0">
-                    <thead>
-                        <tr class="table-light">
-                            <th scope="col"><input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)"></th>
-                            <th scope="col" class="text-start"> <small>Filename </small> </th>
-                            <th scope="col" class="text-center"><small>Export </small> </th>
-                            <!-- <th scope="col" class="text-center"><small>Publish </small> </th> -->
-                            <th scope="col" class="text-center"><small>Export Request Status</small> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
-                            <ng-container *ngFor="let item of user_datasets_algorithms">
-                                <app-user-dataset [location]="current_user_upload_bucket" [dataset]="item" (emit_action)="handle_file_action($event)"></app-user-dataset>
-                            </ng-container>
-                        </ng-container>
-                        <ng-template #NoUserDatasetsOrAlgorithms>
-                            <tr>
-                                <td colspan="5">
-                                    <div class="d-flex align-items-center justify-content-center p-4">
-                                        <p class="m-0 text-body-secondary">No Datasets or Algorithms Found</p>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </ng-template>
-                    </tbody>
-                </table>
+        <div class="card-header">
+            <div class="row">
+                <div class="col-1">
+                    <input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)">
+                </div>
+                <div class="col-6"><b>Filename</b></div>
+                <div class="col-2 text-center"><b>Export</b></div>
+                <div class="col-3 text-center"><b>Export Request Status</b></div>
             </div>
         </div>
+        <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
+            <div class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
+                <ng-container *ngFor="let item of user_datasets_algorithms | filterList: file_upload_search_term : 'filename'">
+                    <app-user-dataset class="list-group-item" [location]="current_user_upload_bucket" [dataset]="item" (emit_action)="handle_file_action($event)"></app-user-dataset>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-template #NoUserDatasetsOrAlgorithms>
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-center">
+                    <p class="m-0 text-body-secondary">No Datasets or Algorithms Found</p>
+                </div>
+            </div>
+        </ng-template>
         <div class="card-footer border-top-none">
             <div class="d-flex align-items-center justify-content-end">
                 <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0">
@@ -76,7 +70,7 @@
 <app-modal #Modal_UploadFiles [size]="'md'">
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0">Upload files to SDC platform (TEST)</h5>
+            <h5 class="m-0">Upload files to SDC platform </h5>
         </div>
     </ng-container>
     <ng-container modal-body>

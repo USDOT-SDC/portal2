@@ -34,6 +34,7 @@ import { UserRequestCenterComponent } from './pages/dashboard/user-request-cente
 import { WorkstationComponent } from './components/workstation/workstation.component';
 import { UserDatasetComponent } from './components/user-dataset/user-dataset.component';
 import { UserApprovalCenterComponent } from './pages/dashboard/user-approval-center/user-approval-center.component';
+import { FilterListPipe } from './pipes/filter-list.pipe';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { UserApprovalCenterComponent } from './pages/dashboard/user-approval-cen
     UserRequestCenterComponent,
     WorkstationComponent,
     UserDatasetComponent,
-    UserApprovalCenterComponent
+    UserApprovalCenterComponent,
+    FilterListPipe
   ],
   imports: [
     BrowserModule,

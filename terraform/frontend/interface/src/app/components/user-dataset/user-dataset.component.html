@@ -1,12 +1,37 @@
-<th scope="row">
-    <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || dataset.status == 'Denied'" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
+<!-- <th scope="row">
+    
 </th>
-<td class="text-start"><label class="form-label" [for]="'check_' + dataset.filename | lowercase">{{ dataset.filename }}</label></td>
-<td class="text-center" style="width: 5%;"> <button class="btn btn-sm" [ngClass]="dataset.status == 'Approved' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Denied'">
-        <i class="fa-solid fa-file-export"></i></button>
+<td class="text-start"></td>
+<td class="text-center" style="width: 5%;">
+    
 </td>
-<!-- <td class="text-center" style="width: 5%;"> <button class="btn btn-sm btn-link"><i class="fa-solid fa-cloud-arrow-up"></i></button> </td> -->
 <td class="text-center">
     <ng-container *ngIf="is_loading == true; else DisplayElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
     <ng-template #DisplayElem> {{ dataset.status || '--'}} </ng-template>
-</td>
+</td> -->
+
+
+
+<!-- <li class="list-group-item"> -->
+<div class="row align-items-center">
+    <div class="col-1">
+        <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || (dataset.status == 'Denied' || dataset.status == 'Submitted')" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
+    </div>
+    <div class="col-6 text-truncate">
+        <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="dataset.status == 'Approved' ? 'text-dark' : 'text-muted'"><b>{{ dataset.filename }}</b></label>
+    </div>
+    <div class="col-2">
+        <div class="d-flex align-items-center justify-content-center w-100">
+            <button class="btn btn-sm" [ngClass]="dataset.status == 'Denied' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Approved'">
+                <i class="fa-solid fa-file-export"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-3 text-center">
+        <ng-container *ngIf="is_loading == true; else DisplayElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
+        <ng-template #DisplayElem>
+            <p class="m-0" [ngClass]="{'text-muted' : dataset.status == 'Submitted', 'text-success' : dataset.status == 'Approved', 'text-danger' : dataset.status == 'Denied'}"><b>{{ dataset.status || '--'}}</b></p>
+        </ng-template>
+    </div>
+</div>
+<!-- </li> -->

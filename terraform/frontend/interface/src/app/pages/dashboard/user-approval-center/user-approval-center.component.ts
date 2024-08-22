@@ -1,15 +1,17 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-user-approval-center',
   templateUrl: './user-approval-center.component.html',
   styleUrls: ['./user-approval-center.component.less']
 })
-export class UserApprovalCenterComponent implements OnInit, OnDestroy {
+export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('Modal_RequestDetails') Modal_UploadFiles: ModalComponent | any;
 
@@ -20,6 +22,8 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
   public table_export_requests: Array<any> = [];
 
   public trusted_user_status_requests: Array<any> = [];
+
+  public view_raw_data: boolean = false;
 
   constructor(private api: ApiService, private auth: AuthService) { }
 
@@ -53,6 +57,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
   public close_request_details_modal(): void {
     this.Modal_UploadFiles.close();
     this.selected_request = undefined;
+    this.view_raw_data = false;
   }
 
   ngOnInit(): void {
@@ -61,8 +66,10 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
         if (user) {
           const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
             console.log(response);
+
             if (response.exportRequests) {
               const { exportRequests, trustedRequests, autoExportRequests } = response;
+
               this.table_export_requests = exportRequests.tableRequests.sort(this.sort_requests);
               this.s3_requests = exportRequests.s3Requests.sort(this.sort_requests);
 
@@ -74,6 +81,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
               console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
 
             }
+
             API.unsubscribe();
           });
         }
@@ -81,8 +89,12 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnDestroy(): void {
-    this._subscription.forEach((s) => s.unsubscribe());
+  ngAfterViewInit(): void {
+    // Initialize Bootstrap JS Tooltips
+    const tooltipTriggerList: any = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
   }
+
+  ngOnDestroy(): void { this._subscription.forEach((s) => s.unsubscribe()); }
 
 }
