@@ -1,41 +1,49 @@
 <nav class="navbar navbar-expand-md bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" [href]="isLoggedIn ? '/dashboard' : '/'"><strong>Secure Data Commons Platform</strong></a>
 
-        <ng-container *ngIf="isLoggedIn == true; else DefaultNavigation">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">DASHBOARD</a>
-                </li>
-                <!-- <li class="nav-item">
+        <a class="navbar-brand text-truncate" [href]="isLoggedIn ? '/dashboard' : '/'" style="max-width: 305px;"><strong>Secure Data Commons Platform</strong></a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ng-container *ngIf="isLoggedIn == true; else DefaultNavigation">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">DASHBOARD</a>
+                    </li>
+                    <!-- <li class="nav-item">
                     <a class="nav-link" href="/dashboard/datasets">DATASETS</a>
                 </li> -->
-                <!-- <li class="nav-item">
+                    <!-- <li class="nav-item">
                     <a class="nav-link" href="/dashboard/workstations">WORKSTATIONS</a>
                 </li> -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard/faqs">FAQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" (click)="logOut()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>LOGOUT</a>
-                </li>
-            </ul>
-        </ng-container>
-        <ng-template #DefaultNavigation>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">ABOUT</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/datasets">DATASETS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">REGISTER/LOGIN</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/faqs">FAQs</a>
-                </li>
-            </ul>
-        </ng-template>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard/faqs">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" (click)="logOut()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>LOGOUT</a>
+                    </li>
+                </ul>
+            </ng-container>
+
+            <ng-template #DefaultNavigation>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/datasets">DATASETS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">REGISTER/LOGIN</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/faqs">FAQs</a>
+                    </li>
+                </ul>
+            </ng-template>
+        </div>
     </div>
 </nav>
