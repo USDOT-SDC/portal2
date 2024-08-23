@@ -16,6 +16,8 @@ import { ErrorComponent } from './pages/error/error.component';
 import { AboutDatasetsComponent } from './pages/about-datasets/about-datasets.component';
 import { DashboardFaqComponent } from './pages/dashboard/dashboard-faq/dashboard-faq.component';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginSyncComponent } from './pages/login/login-sync/login-sync.component';
+import { ResetPasswordComponent } from './pages/login/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +27,8 @@ const routes: Routes = [
   { path: 'datasets', component: AboutDatasetsComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login:access_token', component: LoginComponent },
+  { path: 'login/sync', component: LoginSyncComponent },
+  { path: 'login/reset', component: ResetPasswordComponent },
   { path: 'faqs', component: FaqComponent },
   { path: '**', component: ErrorComponent }
 ];

@@ -35,6 +35,8 @@ import { WorkstationComponent } from './components/workstation/workstation.compo
 import { UserDatasetComponent } from './components/user-dataset/user-dataset.component';
 import { UserApprovalCenterComponent } from './pages/dashboard/user-approval-center/user-approval-center.component';
 import { FilterListPipe } from './pipes/filter-list.pipe';
+import { LoginSyncComponent } from './pages/login/login-sync/login-sync.component';
+import { ResetPasswordComponent } from './pages/login/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,9 @@ import { FilterListPipe } from './pipes/filter-list.pipe';
     WorkstationComponent,
     UserDatasetComponent,
     UserApprovalCenterComponent,
-    FilterListPipe
+    FilterListPipe,
+    LoginSyncComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

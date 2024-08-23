@@ -62,26 +62,35 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this._subscriptions.push(
         this.auth.current_user.subscribe((user: any) => {
 
-          // console.log("User: ", user);
+          console.log("User: ", user);
           this.current_user = user;
 
-          if (location.hostname === "localhost" || location.hostname === "127.0.0.1") { this.loading = false; }
-          else {
-            const API = this.api.get_user().subscribe((response: any) => {
-              if (response) {
-                console.log(response)
-                this.auth.user_info.next(response);
-                this.user_workstations = response.stacks;
-                this.sdc_datasets = response.datasets;
-                this.set_user_as_approver();
+          const API = this.api.get_user().subscribe(
+            {
+              next: (response: any) => {
+                if (response) {
+                  console.log(response);
+                  this.auth.user_info.next(response);
+                  this.user_workstations = response.stacks;
+                  this.sdc_datasets = response.datasets;
+                  this.set_user_as_approver();
+                }
+                this.loading = false;
+                API.unsubscribe();
+              },
+              error: (error: any) => {
+                console.log(error);
+                location.href = location.origin + '/login/sync';
+                // this.auth.logout();
               }
-              this.loading = false;
-              API.unsubscribe();
-            });
-          }
+            }
+          );
+
+          /* if (location.hostname === "localhost" || location.hostname === "127.0.0.1") { this.loading = false; }
+          else { } */
         })
       )
-    });
+    }).catch(error => console.log(error));
   }
 
   ngAfterViewInit(): void {
