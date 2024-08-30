@@ -177,7 +177,7 @@ locals {
         TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
-        RECEIVER                      = local.receiver_email
+        RECEIVER_EMAIL                = local.receiver_email
         ALLOW_ORIGIN_URL              = local.allow_origin_url
       }
     }
