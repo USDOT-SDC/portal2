@@ -66,8 +66,8 @@
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngIf="datasets.length > 0">
-                            <ng-container *ngFor="let project of datasets">
+                        <ng-container *ngIf="sdc_datasets.length > 0">
+                            <ng-container *ngFor="let project of sdc_datasets">
                                 <option [value]="project.Name">{{project.Name}}</option>
                             </ng-container>
                         </ng-container>
@@ -200,8 +200,8 @@
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngIf="datasets.length > 0">
-                            <ng-container *ngFor="let project of datasets">
+                        <ng-container *ngIf="sdc_datasets.length > 0">
+                            <ng-container *ngFor="let project of sdc_datasets">
                                 <option [value]="project.Name">{{project.Name}}</option>
                             </ng-container>
                         </ng-container>

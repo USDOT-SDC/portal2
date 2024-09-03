@@ -12,7 +12,7 @@ export class SdcDatasetsComponent implements OnInit {
 
   @ViewChild('Modal_RequestDatasets') Modal_RequestDatasets: ModalComponent | any;
 
-  @Input() datasets: Array<any> = [];
+  @Input() sdc_datasets: Array<any> = [];
 
   public selected_dataset: any;
 

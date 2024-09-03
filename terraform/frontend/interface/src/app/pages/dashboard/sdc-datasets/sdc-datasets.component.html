@@ -19,8 +19,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngIf="datasets.length > 0; else NoDatasetsElem;">
-                        <ng-container *ngFor="let dataset of datasets">
+                    <ng-container *ngIf="sdc_datasets.length > 0; else NoDatasetsElem;">
+                        <ng-container *ngFor="let dataset of sdc_datasets">
                             <tr>
                                 <th style="min-width: 150px;" scope="row"> {{dataset.Name}} </th>
                                 <td style="min-width: 150px;"> {{dataset.Category}} </td>

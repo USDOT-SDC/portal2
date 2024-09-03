@@ -12,10 +12,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class DatasetsComponent implements OnInit, OnDestroy {
 
+  @Input() sdc_datasets: Array<any> = [];
+
   @ViewChild('Modal_UploadFiles') Modal_UploadFiles: ModalComponent | any;
   @ViewChild('Modal_RequestExportData') Modal_RequestExportData: ModalComponent | any;
-
-
   @ViewChild('file_uploader') file_uploader: FileUploadComponent | any;
 
 
@@ -24,12 +24,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public current_user: any;
   public current_user_upload_bucket: any;
   public current_user_upload_locations: any = [];
-
-  public user_datasets_algorithms: Array<any> = [];
-  public user_edge_databases: Array<any> = [];
-  public sdc_datasets: Array<any> = [];
-  public sdc_algorithms: Array<any> = [];
-
+  public user_datasets_algorithms: Array<any> = []; 
   public uploading_files: boolean = false;
   public file_upload_bucket: any;
   public file_upload_bucket_prefix: any;
@@ -47,8 +42,6 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       user_data_api.unsubscribe();
     })
   }
-
-
 
   public clear_search_filter(): void { this.file_upload_search_term = undefined; }
 
