@@ -14,7 +14,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   @ViewChild('Modal_RequestTrustedUserStatus') Modal_RequestTrustedUserStatus: ModalComponent | any;
   @ViewChild('Modal_RequestEdgeDatabases') Modal_RequestEdgeDatabases: ModalComponent | any;
 
-  @Input() datasets: Array<any> = [];
+  @Input() sdc_datasets: Array<any> = [];
 
   public is_loading: boolean = false;
 
@@ -43,7 +43,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   public select_dataset_project(event: any): void {
     this.selected_dataset_project = event.target.value;
-    const project = this.datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
+    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
 
     this.export_workflows = [];
     this.export_workflows_datasets = [];
@@ -151,7 +151,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   private send_export_edge_database_request(): Promise<any> {
 
     const user = this.auth.current_user.getValue();
-    const database = this.datasets.find(d => d.Name == this.selected_dataset_project);
+    const database = this.sdc_datasets.find(d => d.Name == this.selected_dataset_project);
 
     console.log({ user, database });
 
@@ -201,13 +201,22 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   private send_trusted_user_request(): Promise<any> {
-
-    const user = this.auth.current_user.getValue();
-
+    const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
-      const message = {} 
+      const message = {
+        UserID: user.username,
+        trustedRequest: {
+          trustedRequestStatus: "Submitted",
+          trustedRequestReason: this.request_justification,
+        },
+        selectedDataInfo: {
+          selectedDataSet: this.selected_dataset_project,
+          selectedDataProvider: this.selected_provider.name,
+          selectedDatatype: this.selected_provider_sub_dataset.name
+        }
+      }
+      console.log("send_trusted_user_request", message);
 
-      resolve(message);
       const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
         console.log(response);
         resolve(response);

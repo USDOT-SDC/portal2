@@ -66,8 +66,8 @@
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngIf="datasets.length > 0">
-                            <ng-container *ngFor="let project of datasets">
+                        <ng-container *ngIf="sdc_datasets.length > 0">
+                            <ng-container *ngFor="let project of sdc_datasets">
                                 <option [value]="project.Name">{{project.Name}}</option>
                             </ng-container>
                         </ng-container>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [(ngModel)]="request_policy_agreement">
+                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [disabled]="!selected_dataset_project" [(ngModel)]="request_policy_agreement">
                         <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
                     </div>
                 </div>
@@ -200,8 +200,8 @@
                     <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
                     <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
                         <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngIf="datasets.length > 0">
-                            <ng-container *ngFor="let project of datasets">
+                        <ng-container *ngIf="sdc_datasets.length > 0">
+                            <ng-container *ngFor="let project of sdc_datasets">
                                 <option [value]="project.Name">{{project.Name}}</option>
                             </ng-container>
                         </ng-container>
@@ -244,11 +244,8 @@
             <div class="card bg-light">
                 <div class="card-header">Acceptable Use Policy</div>
                 <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
-                    <ng-container *ngIf="selected_dataset_project; else NoDatasetProjectSelected">
-                        <code class="text-dark" style="text-align: justify;">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>                             
-                            <p>Eius sunt totam unde ipsa! Nobis officia, harum, laboriosam aliquid officiis odio accusantium voluptatem quisquam reprehenderit delectus velit, voluptates magnam. Nam, dolore! Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde fugit eveniet quia saepe odio illum consequatur, cupiditate ipsa. Quasi omnis porro cupiditate suscipit facere autem perferendis pariatur esse, error quia!</p>
-                        </code>
+                    <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
+                        <code class="text-dark" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
                     </ng-container>
                     <ng-template #NoDatasetProjectSelected>
                         <h5 class="text-muted text-center">Please select a Project or Dataset</h5>

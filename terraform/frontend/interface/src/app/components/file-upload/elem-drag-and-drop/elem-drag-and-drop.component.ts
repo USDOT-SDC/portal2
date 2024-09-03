@@ -23,7 +23,7 @@ export class ElemDragAndDropComponent implements OnInit {
     for (const item of files) {
       if (this.deny_file_types.includes(item.type)) { console.info(`Invalid File Type: ${item.type}`); return; }
 
-      var file = { file_name: item.name, file_size: item.size, file_type: item.type, file_thumb: null };
+      var file = { file_name: item.name, file_size: item.size, file_type: item.type, file_thumb: null, file: item };
 
       const reader = new FileReader();
       reader.onload = function (event: any) { file.file_thumb = event.target.result; };

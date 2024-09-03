@@ -1,4 +1,4 @@
-<div class="dropzone">
+<div class="dropzone" [ngClass]="{ 'p-1': files.length > 0 }">
 
     {{ "" // File Input Element }}
     <input type="file" #FileElemRef id="FileElemRef" [accept]="accept_file_types" [multiple]="true" (change)="add_files($event)">

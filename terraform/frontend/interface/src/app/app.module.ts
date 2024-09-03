@@ -33,6 +33,10 @@ import { SdcAlgorithmsComponent } from './pages/dashboard/sdc-algorithms/sdc-alg
 import { UserRequestCenterComponent } from './pages/dashboard/user-request-center/user-request-center.component';
 import { WorkstationComponent } from './components/workstation/workstation.component';
 import { UserDatasetComponent } from './components/user-dataset/user-dataset.component';
+import { UserApprovalCenterComponent } from './pages/dashboard/user-approval-center/user-approval-center.component';
+import { FilterListPipe } from './pipes/filter-list.pipe';
+import { LoginSyncComponent } from './pages/login/login-sync/login-sync.component';
+import { ResetPasswordComponent } from './pages/login/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +64,11 @@ import { UserDatasetComponent } from './components/user-dataset/user-dataset.com
     SdcAlgorithmsComponent,
     UserRequestCenterComponent,
     WorkstationComponent,
-    UserDatasetComponent
+    UserDatasetComponent,
+    UserApprovalCenterComponent,
+    FilterListPipe,
+    LoginSyncComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
