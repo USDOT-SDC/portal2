@@ -21,8 +21,8 @@
         <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="dataset.status == 'Approved' ? 'text-dark' : 'text-muted'"><b>{{ dataset.filename }}</b></label>
     </div>
     <div class="col-2">
-        <div class="d-flex align-items-center justify-content-center w-100">
-            <button class="btn btn-sm" [ngClass]="dataset.status == 'Denied' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Approved'">
+        <div class="d-flex align-items-center justify-content-center w-100"><!-- is_loading == true ||  -->
+            <button class="btn btn-sm" [ngClass]="dataset.status == 'Denied' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="dataset.status == 'Approved'" (click)="toggle_export_request()">
                 <i class="fa-solid fa-file-export"></i>
             </button>
         </div>

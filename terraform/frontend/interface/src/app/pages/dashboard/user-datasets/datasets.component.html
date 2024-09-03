@@ -117,3 +117,29 @@
 </app-modal>
 <!-- :: FILE UPLOAD MODALS :: -->
 <!-- :: FILE UPLOAD MODALS :: -->
+
+
+<!-- :: Request Export Data MODAL :: -->
+<!-- :: Request Export Data MODAL :: -->
+<app-modal #Modal_RequestExportData [size]="'md'">
+    <ng-container modal-header>
+        <div class="d-flex align-items-center justify-content-start p-2">
+            <h5 class="m-0"> Request to Export Data </h5>
+        </div>
+    </ng-container>
+    <ng-container modal-body>
+        <div class="p-2">
+
+            {{ selected_data_for_export | json }}
+
+        </div>
+    </ng-container>
+    <ng-container modal-footer>
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="modal_close_request_export_data()">Close</button>
+            <button class="btn btn-primary" (click)="submit_request_export_data()">Submit Request</button>
+        </div>
+    </ng-container>
+</app-modal>
+<!-- :: Request Export Data MODAL :: -->
+<!-- :: Request Export Data MODAL :: -->

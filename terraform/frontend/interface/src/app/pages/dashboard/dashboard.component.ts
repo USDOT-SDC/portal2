@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private auth: AuthService, private api: ApiService) { }
 
   public parseUserName(name: string): string {
-    if (name == undefined || name == "") return "User TBD";
+    if (name == undefined || name == "") return "Researcher";
     else { return `${name.split("\\").pop()}`; }
   }
 
@@ -62,32 +62,37 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this._subscriptions.push(
         this.auth.current_user.subscribe((user: any) => {
 
-          console.log("User: ", user);
-          this.current_user = user;
+          // If on localhost, Don't do API calls, they wont work 
+          if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+            console.log("%cWARNING: You are currently in development environment, backend connectivity is limited. For testing please go to stage or production", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
+            setTimeout(() => { this.loading = false; }, 1500)
+          } else {
 
-          const API = this.api.get_user().subscribe(
-            {
-              next: (response: any) => {
-                if (response) {
-                  console.log(response);
-                  this.auth.user_info.next(response);
-                  this.user_workstations = response.stacks;
-                  this.sdc_datasets = response.datasets;
-                  this.set_user_as_approver();
-                }
-                this.loading = false;
-                API.unsubscribe();
-              },
-              error: (error: any) => {
-                console.log(error);
-                location.href = location.origin + '/login/sync';
-                // this.auth.logout();
+            console.log("User: ", user);
+            this.current_user = user;
+
+            // console.log("verify_account_linked");
+            // const API = this.api.verify_account_linked().subscribe((response: any) => {
+            //   console.log("verify_account_linked", response)
+            //   this.loading = false;
+            //   API.unsubscribe();
+            // });
+
+            console.log("get_user_data_from_dynamodb");
+            const API = this.api.get_user().subscribe((response: any) => {
+              console.log(response);
+              this.loading = false;
+              if (response) {
+                this.auth.user_info.next(response);
+                this.user_workstations = response.stacks;
+                this.sdc_datasets = response.datasets;
+                this.set_user_as_approver();
               }
-            }
-          );
+              API.unsubscribe();
+            });
 
-          /* if (location.hostname === "localhost" || location.hostname === "127.0.0.1") { this.loading = false; }
-          else { } */
+
+          }
         })
       )
     }).catch(error => console.log(error));

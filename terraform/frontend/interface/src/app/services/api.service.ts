@@ -11,13 +11,9 @@ export class ApiService {
 
   private BASE_URI: string = `https://${environment.resource_urls.portal_api}`;
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  public get auth_header(): HttpHeaders { return new HttpHeaders({ 'authorization': `Bearer ${this.auth.current_user.getValue().token}` }); }
 
-  public get auth_header(): HttpHeaders {
-    const { token } = this.auth.current_user.getValue();
-    // { 'content-type': 'application/json', 'authorization': `Bearer ${token}` };
-    return new HttpHeaders({ 'authorization': `Bearer ${token}` })
-  }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   public get_user(): Observable<any> { return this.http.get(`${this.BASE_URI}/get_user_info`, { headers: this.auth_header }); }
 
@@ -43,9 +39,36 @@ export class ApiService {
 
   public send_email_request(sender: string, message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/send_email?sender=${sender}&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
 
-  public send_export_table_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/export_table&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
+  public send_export_table_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
-  public send_trusted_user_request(message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/request_export&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
+  public send_trusted_user_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/request_export`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
 
+  /* ================== :: LOGIN SYNC SERVICES :: ================== */
+  /* ================== :: LOGIN SYNC SERVICES :: ================== */
+
+  private ACCOUNT_LINK_URL: string = `https://portal.sdc-dev.dot.gov/account-link-${environment.stage}`;
+
+  // Verify if Account is Linked
+  public verify_account_linked(): Observable<any> {
+    const API_PATH: string = `${this.ACCOUNT_LINK_URL}/${environment.stage}-account-linked-private`;
+    return this.http.get(API_PATH, { headers: this.auth_header })
+  }
+
+  // Link an Account
+  public link_an_account(username: string, password: string): Observable<any> {
+    const API_PATH: string = `${this.ACCOUNT_LINK_URL}/${environment.stage}-link-account-private`;
+    const PAYLOAD: any = { username, password };
+    return this.http.post(API_PATH, PAYLOAD, { headers: this.auth_header })
+  }
+
+  // Reset a Users Temporary Password
+  public reset_temporary_password(username: string, password: string, new_password: string, new_password_confirmation: string,): Observable<any> {
+    const API_PATH: string = `${this.ACCOUNT_LINK_URL}/${environment.stage}-reset-temporary-password-private`;
+    const PAYLOAD: any = { username: username, currentPassword: password, newPassword: new_password, newPasswordConfirmation: new_password_confirmation, }
+    return this.http.post(API_PATH, PAYLOAD, { headers: this.auth_header })
+  }
+
+  /* ================== :: LOGIN SYNC SERVICES :: ================== */
+  /* ================== :: LOGIN SYNC SERVICES :: ================== */
 }

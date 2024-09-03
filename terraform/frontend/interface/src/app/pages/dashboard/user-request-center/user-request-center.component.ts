@@ -201,20 +201,22 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   private send_trusted_user_request(): Promise<any> {
-    const user = this.auth.current_user.getValue();
+    const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
       const message = {
-        UserID: user.UserID,
+        UserID: user.username,
         trustedRequest: {
-          trustedRequestStatus: "untrusted",
+          trustedRequestStatus: "Submitted",
           trustedRequestReason: this.request_justification,
         },
         selectedDataInfo: {
           selectedDataSet: this.selected_dataset_project,
-          selectedDataProvider: this.selected_provider,
-          selectedDatatype: this.selected_provider_sub_dataset
+          selectedDataProvider: this.selected_provider.name,
+          selectedDatatype: this.selected_provider_sub_dataset.name
         }
       }
+      console.log("send_trusted_user_request", message);
+
       const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
         console.log(response);
         resolve(response);

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -15,17 +16,18 @@ export class ResetPasswordComponent implements OnInit {
   public new_password: string | undefined;
   public confirm_password: string | undefined;
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   public submit_reset_password(): void {
-    const payload = { new_password: this.new_password, confirm_password: this.confirm_password }
+    this.is_loading = true;
+    const payload: any = { username: '', password: '', new_password: this.new_password, confirm_password: this.confirm_password }
     console.log({ payload });
-
-    /// API CALL.....
-    setTimeout(() => {
-      console.log({ response: "Dummy API call: Success" });
+    const API = this.api.reset_temporary_password(payload.username, payload.password, payload.new_password, payload.confirm_password).subscribe((response) => {
+      console.log({ response });
+      API.unsubscribe();
       this.reset();
-    }, 1000)
+    });
+
   }
 
   public reset() {

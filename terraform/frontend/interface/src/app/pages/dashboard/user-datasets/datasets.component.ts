@@ -13,8 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class DatasetsComponent implements OnInit, OnDestroy {
 
   @ViewChild('Modal_UploadFiles') Modal_UploadFiles: ModalComponent | any;
-  @ViewChild('Modal_RequestTrustedUser') Modal_RequestTrustedUser: ModalComponent | any;
-  @ViewChild('Modal_UploadFiles') Modal_RequestTableExport: ModalComponent | any;
+  @ViewChild('Modal_RequestExportData') Modal_RequestExportData: ModalComponent | any;
 
 
   @ViewChild('file_uploader') file_uploader: FileUploadComponent | any;
@@ -48,16 +47,6 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       user_data_api.unsubscribe();
     })
   }
-
-  // Modal Open - Request trusted User
-  public modal_open_request_trusted_user(): void { this.Modal_RequestTrustedUser.open(); }
-  // Modal Close - Request trusted User
-  public modal_close_request_trusted_user(): void { this.Modal_RequestTrustedUser.close(); }
-
-  // Modal Open - Request Table Export
-  public modal_open_request_table_export(): void { this.Modal_RequestTableExport.open(); }
-  // Modal Close - Request Table Export
-  public modal_close_request_table_export(): void { this.Modal_RequestTableExport.close(); }
 
 
 
@@ -122,11 +111,12 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     console.log(event);
     switch (event.action) {
       case 'selected': this.select_folder(event.data); break;
+      case 'export': this.toggle_request_export_data(event.data); break;
       default: break;
     }
   }
 
-  public select_folder(data: any) {
+  private select_folder(data: any) {
     console.log({ file_to_add: data, file_list: this.selected_files })
     const exists = this.selected_files.findIndex(f => f.filename == data.filename);
     if (exists == -1) {
@@ -140,6 +130,66 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     console.log({ file_list: this.selected_files });
   }
 
+  /**
+   * Export Data Modal Functions
+   */
+  public submitting_export_request: boolean = false;
+  public selected_data_for_export: any;
+
+  public data_for_export_project: any;
+  public data_for_export_provider: any;
+  public data_for_export_dataset: any;
+
+  public data_for_export_approval_form: any = {
+    name: undefined,
+    address: undefined,
+    city: undefined,
+    state: undefined,
+    zip: undefined,
+    // . . .
+  }
+
+  // Toggles open the Export Data Modal
+  private toggle_request_export_data(dataset: any): void {
+    this.selected_data_for_export = dataset;
+    this.Modal_RequestExportData.open();
+  }
+
+  // Modal Submit - Submit the Modal Form data to API
+  public submit_request_export_data(): void {
+    this.submitting_export_request = true;
+    const payload: any = {
+      project: {
+        name: this.data_for_export_project,
+        provider: this.data_for_export_provider,
+        dataset: this.data_for_export_dataset
+      },
+      approval_form: this.data_for_export_approval_form
+    };
+
+    console.log(payload);
+
+    // API call ....  
+    // API call ....  
+    setTimeout(() => {
+      this.submitting_export_request = false;
+      this.modal_close_request_export_data();
+    }, 1000)
+    // API call ....  
+    // API call ....  
+
+  };
+
+  // Modal Close - Request Export Data Modal
+  public modal_close_request_export_data(): void {
+    this.selected_data_for_export = undefined;
+    this.Modal_RequestExportData.close();
+  }
+
+
+  /**
+   * File Upload Modal Functions
+   */
   // Modal Open - File Upload
   public modal_open_file_upload(): void { this.Modal_UploadFiles.open(); }
 

@@ -24,6 +24,8 @@ export class UserDatasetComponent implements OnInit {
     this.emit_action.emit({ action: 'selected', data: this.dataset })
   }
 
+  public toggle_export_request(): void { this.emit_action.emit({ action: 'export', data: this.dataset }) }
+
   ngOnInit(): void {
     this.is_loading = true;
     const init_api: Subscription = this.api.get_s3_object_metadata(this.location, this.dataset.filename).subscribe((response: any) => {
