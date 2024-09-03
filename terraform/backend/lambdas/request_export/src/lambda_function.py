@@ -4,7 +4,7 @@ import boto3
 import logging
 import ast
 import simplejson as json
-from datetime import datetime
+import datetime
 import hashlib
 import time
 import os
