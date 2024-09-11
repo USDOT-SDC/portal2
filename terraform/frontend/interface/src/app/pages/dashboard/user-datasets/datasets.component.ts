@@ -134,15 +134,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public data_for_export_provider: any;
   public data_for_export_dataset: any;
 
-  public data_for_export_approval_form: any = {
-    name: undefined,
-    address: undefined,
-    city: undefined,
-    state: undefined,
-    zip: undefined,
-    // . . .
-  }
-
+  
   // Toggles open the Export Data Modal
   private toggle_request_export_data(dataset: any): void {
     this.selected_data_for_export = dataset;
@@ -150,30 +142,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     this.Modal_RequestExportData.open();
   }
 
-  // Modal Submit - Submit the Modal Form data to API
-  public submit_request_export_data(): void {
-    this.submitting_export_request = true;
-    const payload: any = {
-      project: {
-        name: this.data_for_export_project,
-        provider: this.data_for_export_provider,
-        dataset: this.data_for_export_dataset
-      },
-      approval_form: this.data_for_export_approval_form
-    };
-
-    console.log(payload);
-
-    // API call ....  
-    // API call ....  
-    setTimeout(() => {
-      this.submitting_export_request = false;
-      this.modal_close_request_export_data();
-    }, 1000)
-    // API call ....  
-    // API call ....  
-
-  };
+  
 
   // Modal Close - Request Export Data Modal
   public modal_close_request_export_data(): void {
@@ -254,6 +223,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public export_table_name: any;
   public export_table_additional_sources: any;
   public is_loading: boolean = false;
+  public data_for_export_approval_form : any;
 
   public select_dataset_project(event: any): void {
     this.selected_dataset_project = event.target.value;
@@ -325,8 +295,43 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     this.request_type = undefined;
     this.request_justification = undefined;
     this.request_policy_agreement = false;
-    this.S3Key = undefined;
+    this.selected_data_for_export = undefined;
+    this.data_for_export_approval_form = undefined;
   }
+
+
+  // public data_for_export_approval_form: any = {
+  //   name: undefined,
+  //   address: undefined,
+  //   city: undefined,
+  //   state: undefined,
+  //   zip: undefined,
+  //   // . . .
+  // }
+  // // Modal Submit - Submit the Modal Form data to API
+  // public submit_request_export_data(): void {
+  //   this.submitting_export_request = true;
+  //   const payload: any = {
+  //     project: {
+  //       name: this.data_for_export_project,
+  //       provider: this.data_for_export_provider,
+  //       dataset: this.data_for_export_dataset
+  //     },
+  //     approval_form: this.data_for_export_approval_form
+  //   };
+
+  //   console.log(payload);
+
+  //   // API call ....  
+  //   // API call ....  
+  //   setTimeout(() => {
+  //     this.submitting_export_request = false;
+  //     this.modal_close_request_export_data();
+  //   }, 1000)
+  //   // API call ....  
+  //   // API call ....  
+
+  // };
 
   public submit_request(): void {
 
@@ -344,13 +349,13 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       state: this.request_state,
       zipcode: this.request_zipcode,
       additional_data_sources: this.request_additional_data_sources,
-      S3Key: this.S3Key
+      S3Key: this.selected_data_for_export.filename
     };
     // payload.provider = this.selected_provider;
     payload.dataset =  this.selected_provider_sub_dataset;
     // payload.table_name = this.export_table_name;
     // payload.additional_sources = this.export_table_additional_sources;
-
+    this.data_for_export_approval_form = payload
     console.log("SUBMITTING REQUEST", payload);
     console.log("Submission Type == ", this.request_type)
 
@@ -368,6 +373,9 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       const message = {
         UserID: user.username,
         RequestReviewStatus:"Submitted",
+        S3Key: this.selected_data_for_export.filename,
+        TeamBucket: this.current_user_upload_bucket,
+        ApprovalForm: this.data_for_export_approval_form,
         // trustedRequest: {
         //   trustedRequestStatus: "Submitted",
         //   trustedRequestReason: this.request_justification,
