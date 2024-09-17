@@ -269,7 +269,7 @@ def lambda_handler(event, context):
                     'TeamBucket': params['TeamBucket'],
                     'ReqReceivedTimestamp': timemills,
                     'UserEmail': user_email,
-                    'ReqReceivedDate': datetime.now().strftime('%Y-%m-%d')
+                    'ReqReceivedDate': datetime.datetime.now().strftime('%Y-%m-%d')
                 }
             )
             availableDatasets = get_datasets()['datasets']['Items']

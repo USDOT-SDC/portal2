@@ -30,6 +30,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public file_upload_bucket_prefix: any;
   public selected_files: Array<any> = [];
   public file_upload_search_term: any;
+  private request_type: any;
 
   constructor(private auth: AuthService, private api: ApiService) { }
 
@@ -133,45 +134,15 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public data_for_export_provider: any;
   public data_for_export_dataset: any;
 
-  public data_for_export_approval_form: any = {
-    name: undefined,
-    address: undefined,
-    city: undefined,
-    state: undefined,
-    zip: undefined,
-    // . . .
-  }
-
+  
   // Toggles open the Export Data Modal
   private toggle_request_export_data(dataset: any): void {
     this.selected_data_for_export = dataset;
+    this.request_type = 'exportRequest';
     this.Modal_RequestExportData.open();
   }
 
-  // Modal Submit - Submit the Modal Form data to API
-  public submit_request_export_data(): void {
-    this.submitting_export_request = true;
-    const payload: any = {
-      project: {
-        name: this.data_for_export_project,
-        provider: this.data_for_export_provider,
-        dataset: this.data_for_export_dataset
-      },
-      approval_form: this.data_for_export_approval_form
-    };
-
-    console.log(payload);
-
-    // API call ....  
-    // API call ....  
-    setTimeout(() => {
-      this.submitting_export_request = false;
-      this.modal_close_request_export_data();
-    }, 1000)
-    // API call ....  
-    // API call ....  
-
-  };
+  
 
   // Modal Close - Request Export Data Modal
   public modal_close_request_export_data(): void {
@@ -229,6 +200,217 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     });
 
   }
+
+
+  // Export Request Module Functions
+
+
+  public selected_dataset_project: any;
+  public selected_provider: any;
+  public request_name: any;
+  public request_email: any;
+  public request_address: any;
+  public request_city: any;
+  public request_state: any;
+  public request_zipcode: any;
+  public request_additional_data_sources: any;
+  public selected_provider_sub_dataset: any;
+  public export_workflows: any[] = [];
+  public export_workflows_datasets: any[] = [];
+  public request_justification: any;
+  public request_policy_agreement: boolean = false;
+  public S3Key: any;
+  public export_table_name: any;
+  public export_table_additional_sources: any;
+  public is_loading: boolean = false;
+  public data_for_export_approval_form : any;
+
+  public select_dataset_project(event: any): void {
+    this.selected_dataset_project = event.target.value;
+    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
+
+    this.export_workflows = [];
+    this.export_workflows_datasets = [];
+    this.selected_provider = undefined;
+    this.selected_provider_sub_dataset = undefined;
+
+    for (let key in project.exportWorkflow) {
+      const pro_workflow = project.exportWorkflow[key];
+      for (let w_key in pro_workflow) {
+        const workflow = pro_workflow[w_key];
+        this.export_workflows.push({ name: w_key, ...workflow });
+        for (let d_key in workflow.datatypes) {
+          const datatype = workflow.datatypes[d_key];
+          this.export_workflows_datasets.push({ name: d_key, ...datatype });
+        }
+      }
+    }
+
+
+    console.log({
+      project,
+      export_workflows: this.export_workflows,
+      export_workflows_datatypes: this.export_workflows_datasets
+    });
+  }
+
+
+
+  public is_request_valid(): boolean {
+    const type = this.request_type;
+
+    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
+    if (this.request_name == undefined) return false;
+    if (this.request_email == undefined) return false;
+    if (this.request_address == undefined) return false;
+    if (this.request_city == undefined) return false;
+    if (this.request_state == undefined) return false;
+    if (this.request_zipcode == undefined) return false;
+    if (this.request_justification == undefined || this.request_justification.trim() == "") return false;
+    if (this.request_policy_agreement == false) return false;
+
+    if (type == 'edge-databases') {
+      if (this.export_table_name == undefined || this.export_table_name.trim() == "") return false;
+      // if (this.export_table_additional_sources == undefined) return false;
+    }
+
+    return true;
+  }
+
+  public reset_forms(): void {
+    this.request_name = undefined;
+    this.request_email = undefined;
+    this.request_address = undefined;
+    this.request_zipcode = undefined;
+    this.request_city = undefined;
+    this.request_state = undefined;
+    this.request_additional_data_sources = undefined;
+    this.export_table_name = undefined;
+    this.export_table_additional_sources = undefined;
+    this.export_workflows = [];
+    this.export_workflows_datasets = [];
+    this.selected_dataset_project = undefined;
+    this.selected_provider = undefined;
+    this.selected_provider_sub_dataset = undefined;
+    this.request_type = undefined;
+    this.request_justification = undefined;
+    this.request_policy_agreement = false;
+    this.selected_data_for_export = undefined;
+    this.data_for_export_approval_form = undefined;
+  }
+
+
+  // public data_for_export_approval_form: any = {
+  //   name: undefined,
+  //   address: undefined,
+  //   city: undefined,
+  //   state: undefined,
+  //   zip: undefined,
+  //   // . . .
+  // }
+  // // Modal Submit - Submit the Modal Form data to API
+  // public submit_request_export_data(): void {
+  //   this.submitting_export_request = true;
+  //   const payload: any = {
+  //     project: {
+  //       name: this.data_for_export_project,
+  //       provider: this.data_for_export_provider,
+  //       dataset: this.data_for_export_dataset
+  //     },
+  //     approval_form: this.data_for_export_approval_form
+  //   };
+
+  //   console.log(payload);
+
+  //   // API call ....  
+  //   // API call ....  
+  //   setTimeout(() => {
+  //     this.submitting_export_request = false;
+  //     this.modal_close_request_export_data();
+  //   }, 1000)
+  //   // API call ....  
+  //   // API call ....  
+
+  // };
+
+  public submit_request(): void {
+
+    this.is_loading = true;
+
+    var payload: any = {
+      request_type: this.request_type,
+      project: this.selected_dataset_project,
+      justification: this.request_justification,
+      policy_accepted: this.request_policy_agreement,
+      name: this.request_name,
+      email: this.request_email,
+      address: this.request_address,
+      city: this.request_city,
+      state: this.request_state,
+      zipcode: this.request_zipcode,
+      additional_data_sources: this.request_additional_data_sources,
+      S3Key: this.selected_data_for_export.filename
+    };
+    // payload.provider = this.selected_provider;
+    payload.dataset =  this.selected_provider_sub_dataset;
+    // payload.table_name = this.export_table_name;
+    // payload.additional_sources = this.export_table_additional_sources;
+    this.data_for_export_approval_form = payload
+    console.log("SUBMITTING REQUEST", payload);
+    console.log("Submission Type == ", this.request_type)
+
+
+    this.send_export_request().then((response: any) => {
+      console.log(response);
+      this.is_loading = false;
+      this.close_modal_export_request();
+    });
+  }
+
+  private send_export_request(): Promise<any> {
+    const user = this.auth.user_info.getValue();
+    return new Promise((resolve, reject) => {
+      const message = {
+        UserID: user.username,
+        RequestReviewStatus:"Submitted",
+        S3Key: this.selected_data_for_export.filename,
+        TeamBucket: this.current_user_upload_bucket,
+        ApprovalForm: this.data_for_export_approval_form,
+        // trustedRequest: {
+        //   trustedRequestStatus: "Submitted",
+        //   trustedRequestReason: this.request_justification,
+        // },
+        selectedDataInfo: {
+          selectedDataSet: this.selected_dataset_project,
+          selectedDataProvider: this.selected_provider.name,
+          selectedDatatype: this.selected_provider_sub_dataset.name
+        }
+      }
+      console.log("send_export_request", message);
+
+      const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
+        console.log(response);
+        resolve(response);
+        API.unsubscribe();
+      })
+    });
+  }
+
+  public close_modal_export_request(): void { this.Modal_RequestExportData.close(); this.reset_forms(); }
+
+
+  public select_dataset_provider_sub_dataset(event: any): void {
+    const dataset = this.export_workflows_datasets.find(d => d.name == event.target.value)
+    this.selected_provider_sub_dataset = dataset;
+    console.log(this.selected_provider_sub_dataset);
+  }
+
+  public select_dataset_provider(event: any): void {
+    const provider = this.export_workflows.find(w => w.name == event.target.value);
+    this.selected_provider = provider;
+    console.log(this.selected_provider);
+  }
+
 
   // Modal Close - File Upload
   public modal_close_file_upload(): void {
