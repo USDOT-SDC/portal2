@@ -20,11 +20,15 @@ export class LoginSyncComponent implements OnInit {
   public submit_login_sync(): void {
     this.is_loading = true;
     const payload: { username: any; password: any } = { username: this.username, password: this.password, };
-    const API = this.api.link_an_account(payload.username, payload.password).subscribe((response: any) => {
-      console.log({ response });
-      // Response is Good? Redirect to Dashboard or Login . . .
-      API.unsubscribe();
-      this.reset();
+    const API = this.api.link_an_account(payload.username, payload.password).subscribe({
+      next: (response: any) => {
+        console.log({ response });
+        // Response is Good? Redirect to Dashboard or Login . . .
+        API.unsubscribe();
+        this.reset();
+      },
+      error: (error: any) => { console.log("Its a trap!", error) },
+      complete: () => { }
     })
   }
 

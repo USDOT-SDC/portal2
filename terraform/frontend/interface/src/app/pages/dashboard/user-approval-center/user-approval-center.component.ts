@@ -60,6 +60,80 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     this.view_raw_data = false;
   }
 
+
+  /**
+   * Export Table Request Submission
+   */
+  public submit_export_table_request(approved: boolean, data: any) {
+    var payload: any = {
+      status: approved == true ? 'approved' : 'denied',
+      key1: '',
+      key2: '',
+      userEmail: '',
+      _metadata: data
+    };
+
+    console.log('submit_export_table_request', payload);
+
+    // API CALL
+    // const api = this.api.send_update_export_table_status(payload).subscribe((response: any) => {
+    //   console.log(response);
+    //   api.unsubscribe();
+    // });
+
+  }
+
+  /**
+   * Export File Request Submission
+   */
+  public submit_file_status_request(approved: boolean, data: any) {
+    var payload: any = {
+      status: approved == true ? 'approved' : 'denied',
+      key1: '',
+      key2: '',
+      datainfo: '',
+      S3Key: '',
+      TeamBucket: '',
+      userEmail: '',
+      _metadata: data
+    };
+
+    console.log('submit_file_status_request', payload);
+
+    // API CALL
+    // const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
+    //   console.log(response);
+    //   api.unsubscribe();
+    // });
+
+  }
+
+  /**
+   * Trusted User Status Request Submission
+   */
+  public submit_trusted_status_request(approved: boolean, data: any) {
+    var payload: any = {
+      status: approved == true ? 'approved' : 'denied',
+      key1: '',
+      key2: '',
+      datainfo: '',
+      S3Key: '',
+      TeamBucket: '',
+      userEmail: '',
+      _metadata: data
+    };
+
+    console.log('submit_trusted_status_request', payload);
+
+    // API CALL
+    // const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
+    //   console.log(response);
+    //   api.unsubscribe();
+    // });
+
+  }
+
+
   ngOnInit(): void {
     this._subscription.push(
       this.auth.user_info.subscribe((user) => {

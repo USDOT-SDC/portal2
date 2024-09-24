@@ -64,31 +64,30 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // If on localhost, Don't do API calls, they wont work 
           if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-            console.log("%cWARNING: You are currently in development environment, backend connectivity is limited. For testing please go to stage or production", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
+            console.log("%cWARNING: You are currently in the development environment on your local machine, backend connectivity is limited. For testing please go to development or production environment", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
             setTimeout(() => { this.loading = false; }, 1500)
-          } else {
+          }
+
+          // If in Dev or Prod
+          else {
 
             console.log("User: ", user);
             this.current_user = user;
 
-            // console.log("verify_account_linked");
-            // const API = this.api.verify_account_linked().subscribe((response: any) => {
-            //   console.log("verify_account_linked", response)
-            //   this.loading = false;
-            //   API.unsubscribe();
-            // });
-
             console.log("get_user_data_from_dynamodb");
-            const API = this.api.get_user().subscribe((response: any) => {
-              console.log(response);
-              this.loading = false;
+            const GET_USER_API = this.api.get_user().subscribe(async (response: any) => {
+
+              console.log("response: ", response);
+
               if (response) {
                 this.auth.user_info.next(response);
                 this.user_workstations = response.stacks;
                 this.sdc_datasets = response.datasets;
                 this.set_user_as_approver();
               }
-              API.unsubscribe();
+
+              this.loading = false;
+              GET_USER_API.unsubscribe();
             });
 
 
@@ -97,6 +96,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       )
     }).catch(error => console.log(error));
   }
+
+
+
+  private set_auth() { return new Promise(() => { }) }
 
   ngAfterViewInit(): void {
     // Initialize Bootstrap JS Tooltips
