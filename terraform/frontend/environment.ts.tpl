@@ -21,7 +21,7 @@ export const environment = {
           oauth: {
             domain: "ecs-dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com",
             scopes: ["email", "profile", "openid"],
-            redirectSignIn: [window.location.origin + "/dashboard"],
+            redirectSignIn: [window.location.origin + "/login/redirect"],
             redirectSignOut: [window.location.origin + '/index.html'],
             responseType: "token",
           }

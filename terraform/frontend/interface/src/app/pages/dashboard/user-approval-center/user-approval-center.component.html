@@ -9,7 +9,7 @@
         </div>
         <div class="collapse show" id="ExportFileRequests_Collapse">
 
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col-7">
                     <div class="input-group">
                         <span class="input-group-text">Search</span>
@@ -32,15 +32,15 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div> 
 
-            <hr>
+            <hr> -->
 
             <ng-container *ngIf="s3_requests.length > 0; else No_ExportFiles_ToShow">
                 <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of s3_requests">
-                            <div class="col-4">
+                            <div class="col-12 col-md-6 col-lg-4">
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between w-100">
@@ -54,7 +54,7 @@
                                                         <span class="badge text-bg-danger py-1">Rejected</span>
                                                     </ng-container>
                                                     <ng-container *ngSwitchDefault>
-                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus}} </span>
+                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus | titlecase }} </span>
                                                     </ng-container>
                                                 </ng-container>
                                             </p>
@@ -106,7 +106,7 @@
         </div>
         <div class="collapse" id="ExportTableRequests_Collapse">
 
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col-7">
                     <div class="input-group">
                         <span class="input-group-text">Search</span>
@@ -131,14 +131,14 @@
                 </div>
             </div>
 
-            <hr>
+            <hr> -->
 
             <ng-container *ngIf="table_export_requests.length > 0; else No_ExportTables_ToShow">
                 <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of table_export_requests">
                             <div class="col-4">
-                                <div class="card mb-4">
+                                <div class="col-12 col-md-6 col-lg-4">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between w-100">
                                             <p class="m-0"><i class="fa-solid fa-calendar-day me-2"></i>{{ timestamp_to_date(request.ReqReceivedTimestamp) | date: 'shortDate' }}</p>
@@ -151,7 +151,7 @@
                                                         <span class="badge text-bg-danger py-1">Rejected</span>
                                                     </ng-container>
                                                     <ng-container *ngSwitchDefault>
-                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus}} </span>
+                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus | titlecase }} </span>
                                                     </ng-container>
                                                 </ng-container>
 
@@ -203,7 +203,7 @@
         </div>
         <div class="collapse" id="TrustedUserRequests_Collapse">
 
-            <div class="row mt-3">
+            <!-- <div class="row mt-3">
                 <div class="col-7">
                     <div class="input-group">
                         <span class="input-group-text">Search</span>
@@ -228,13 +228,13 @@
                 </div>
             </div>
 
-            <hr>
+            <hr> -->
 
             <ng-container *ngIf="trusted_user_status_requests.length > 0; else No_TrustedUsers_ToShow">
                 <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of trusted_user_status_requests">
-                            <div class="col-4">
+                            <div class="col-12 col-md-6 col-lg-4">
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between w-100">

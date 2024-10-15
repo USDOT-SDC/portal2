@@ -16,16 +16,18 @@ export class LoginRedirectComponent implements OnInit {
     else {
       // Check Login Sync
 
-      this.auth.current_user.subscribe((user) => {
+      this.auth.current_user.subscribe((user: any) => {
         console.log(user);
-        if (user.token) {
-          this.api.verify_account_linked().subscribe((response: any | { accountLinked: boolean }) => {
-            console.log(response);
-            // If Pass, Redirect to Dashboard
-            if (response.accountLinked == true) location.href = 'dashboard';
-            // If Failed, Redirect to Login Sync Page
-            else location.href = 'login/sync';
-          })
+        if (user) {
+          if (user.token) {
+            this.api.verify_account_linked(user.token).subscribe((response: any | { accountLinked: boolean }) => {
+              console.log(response);
+              // If Pass, Redirect to Dashboard
+              if (response.accountLinked == true) location.href = 'dashboard';
+              // If Failed, Redirect to Login Sync Page
+              else location.href = 'login/sync';
+            })
+          }
         }
       })
 
