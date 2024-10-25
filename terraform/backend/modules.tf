@@ -259,3 +259,30 @@ module "ddb_crud" {
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }
+
+module "account_linked" {
+  module_name   = "API, Account Linked"
+  module_slug   = "api-account-linked"
+  source        = "./account_linked"
+  common        = var.common
+  rest_api      = aws_api_gateway_rest_api.portal
+  authorizer_id = aws_api_gateway_authorizer.portal.id
+}
+
+module "link_account" {
+  module_name   = "API, Link Account"
+  module_slug   = "api-link-account"
+  source        = "./link_account"
+  common        = var.common
+  rest_api      = aws_api_gateway_rest_api.portal
+  authorizer_id = aws_api_gateway_authorizer.portal.id
+}
+
+module "reset_temporary_password" {
+  module_name   = "API, Reset Temporary Password"
+  module_slug   = "api-reset-temporary-password"
+  source        = "./reset_temporary_password"
+  common        = var.common
+  rest_api      = aws_api_gateway_rest_api.portal
+  authorizer_id = aws_api_gateway_authorizer.portal.id
+}
