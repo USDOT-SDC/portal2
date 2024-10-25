@@ -28,7 +28,9 @@ if "%ERRORLEVEL%"=="2" goto no_init
 goto end
 
 :init
+pushd ..\terraform
 terraform init -backend-config "bucket=%bucket%" %options%
+popd ..\scripts
 goto end
 
 :no_init
