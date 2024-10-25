@@ -11,7 +11,7 @@ resource "aws_api_gateway_resource" "r" {
 resource "aws_api_gateway_method" "m" {
   rest_api_id   = var.rest_api.id
   resource_id   = aws_api_gateway_resource.r.id
-  http_method   = var.foo.http_method
+  http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = var.authorizer_id
 }

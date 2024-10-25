@@ -11,7 +11,7 @@ resource "aws_api_gateway_resource" "r" {
 resource "aws_api_gateway_method" "m" {
   rest_api_id   = var.rest_api.id
   resource_id   = aws_api_gateway_resource.r.id
-  http_method   = var.foo.http_method
+  http_method   = "GET"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = var.authorizer_id
 }
@@ -31,7 +31,7 @@ resource "aws_api_gateway_integration" "i" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   content_handling        = "CONVERT_TO_TEXT"
-  uri                     = aws_lambda_function.reset_temporary_password.invoke_arn
+  uri                     = aws_lambda_function.account_linked.invoke_arn
 
 }
 

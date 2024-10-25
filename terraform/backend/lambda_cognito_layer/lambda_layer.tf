@@ -41,7 +41,7 @@ data "archive_file" "deployment_package" {
 }
 
 resource "aws_s3_object" "deployment_package" {
-  bucket      = var.common.s3.terraform.bucket
+  bucket      = var.common.terraform_bucket.bucket
   key         = "portal/deployment_packages/lambda_cognito_layer.zip"
   source      = data.archive_file.deployment_package.output_path
   source_hash = data.archive_file.deployment_package.output_base64sha256
@@ -53,7 +53,7 @@ resource "aws_s3_object" "deployment_package" {
   }
 }
 
-resource "aws_lambda_layer_version" "foo" {
+resource "aws_lambda_layer_version" "lambda_cognito_layer" {
   layer_name        = local.layer_name
   description       = local.description
   s3_bucket         = aws_s3_object.deployment_package.bucket

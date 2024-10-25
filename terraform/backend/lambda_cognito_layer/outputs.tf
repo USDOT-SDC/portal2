@@ -1,5 +1,5 @@
 # use caution when making changes to outputs
 # outputs are in the tfstate and may be used by other configurations
-output "foo" {
-  value = aws_lambda_layer_version.foo
+output "lambda_cognito_layer" {
+  value = aws_lambda_layer_version.lambda_cognito_layer
 }
