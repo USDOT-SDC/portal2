@@ -13,6 +13,10 @@
 # Terraform Lambda deployment packages
 **/lambda_deployment_package.zip
 
+# Lambda deployment packages
+terraform/**/deployment
+terraform/**/deployment/*.zip
+
 # Frontend Interface build
 terraform/frontend/interface_build
 terraform/frontend/interface_build/**
