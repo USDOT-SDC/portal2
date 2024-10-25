@@ -1,7 +1,7 @@
 locals {
   layer_name        = "lambda_cognito_layer"
   description       = "Lambda layer that includes all the packages needed to link accounts in the web portal"
-  source_dir        = "${path.module}\\src"
+  source_dir        = "backend\\lambda_cognito_layer\\src"
   site_packages_dir = "${local.source_dir}\\python\\lib\\python3.12\\site-packages"
   exclude_venv      = fileset("${path.module}/src/", ".venv/**/*")
   exclude_pycache   = fileset("${path.module}/src/", "**/__pycache__/**/*")
