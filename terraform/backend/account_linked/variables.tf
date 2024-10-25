@@ -11,4 +11,7 @@ locals {
   common_tags = {
     "Module Slug" = "be-${var.module_slug}"
   }
+  environment_variables = {
+    AWS_REGION    = var.common.region
+  }
 }

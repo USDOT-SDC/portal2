@@ -1,8 +1,8 @@
 import json
-from lambda_cognito_layer import cognito_user_service, jwt_claims_processor_service
+import cognito_user_service, jwt_claims_processor_service
 
 
-def account_linked(event, context):
+def lambda_handler(event, context):
     result = jwt_claims_processor_service.get_verified_claims(event)
     if result['hasError']:
         return add_headers({ 'statusCode': result['statusCode'], 'body': json.dumps(result['body']) })

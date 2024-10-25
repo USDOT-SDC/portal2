@@ -1,6 +1,6 @@
 data "archive_file" "link_account" {
   type        = "zip"
-  source_file = "backend/link_account/src/lambda_function.py"
+  source_dir = "backend/link_account/src"
   output_path = "backend/link_account/lambda_deployment_package.zip"
 }
 

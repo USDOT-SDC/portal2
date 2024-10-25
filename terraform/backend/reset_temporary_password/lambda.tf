@@ -1,6 +1,6 @@
 data "archive_file" "reset_temporary_password" {
   type        = "zip"
-  source_file = "backend/reset_temporary_password/src/lambda_function.py"
+  source_dir = "backend/reset_temporary_password/src"
   output_path = "backend/reset_temporary_password/lambda_deployment_package.zip"
 }
 

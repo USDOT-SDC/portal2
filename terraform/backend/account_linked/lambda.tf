@@ -1,6 +1,6 @@
 data "archive_file" "account_linked" {
   type        = "zip"
-  source_file = "backend/account_linked/src/lambda_function.py"
+  source_dir = "backend/account_linked/src"
   output_path = "backend/account_linked/lambda_deployment_package.zip"
 }
 
@@ -13,9 +13,9 @@ resource "aws_lambda_function" "account_linked" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  # environment {
-  #   variables = var.foo.environment_variables
-  # }
+  environment {
+    variables = local.environment_variables
+  }
   depends_on = [data.archive_file.account_linked]
   tags       = local.common_tags
 }

@@ -1,8 +1,8 @@
 import json
-from lambda_cognito_layer import cognito_user_service, authentication_service, jwt_claims_processor_service
+import cognito_user_service, authentication_service, jwt_claims_processor_service
 
 
-def link_account(event, context):
+def lambda_handler(event, context):
     result = jwt_claims_processor_service.get_verified_claims(event)
     if result['hasError']:
         result['body']['userErrorMessage'] = 'Encountered an unknown error processing your request.'
