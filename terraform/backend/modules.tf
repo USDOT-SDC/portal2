@@ -265,6 +265,8 @@ module "account_linked" {
   module_slug   = "api-account-linked"
   source        = "./account_linked"
   common        = var.common
+  lambda_role   = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }
@@ -274,6 +276,8 @@ module "link_account" {
   module_slug   = "api-link-account"
   source        = "./link_account"
   common        = var.common
+  lambda_role   = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }
@@ -283,6 +287,15 @@ module "reset_temporary_password" {
   module_slug   = "api-reset-temporary-password"
   source        = "./reset_temporary_password"
   common        = var.common
+  lambda_role   = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
+}
+
+module "lambda_cognito_layer" {
+  module_name   = "Lambda Layer, lambda_cognito_layer"
+  module_slug   = "layer-lambda-cognito-layer"
+  source        = "./lambda_cognito_layer"
+  common        = var.common
 }

@@ -1,15 +1,15 @@
 data "archive_file" "link_account" {
   type        = "zip"
-  source_file = "backend/link_account/src/lambda_function.py"
+  source_dir = "backend/link_account/src"
   output_path = "backend/link_account/lambda_deployment_package.zip"
 }
 
 resource "aws_lambda_function" "link_account" {
   function_name    = "${var.common.app_slug}_link_account"
-  layers = [aws_lambda_layer_version.foo.arn]
+  layers = [var.lambda_cognito_layer.arn]
   filename         = data.archive_file.link_account.output_path
   source_code_hash = data.archive_file.link_account.output_base64sha256
-  role             = aws_iam_role.portal_lambdas
+  role             = var.lambda_role.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
@@ -28,5 +28,5 @@ resource "aws_lambda_permission" "link_account" {
 
   # The /*/*/* part allows invocation from any stage, method and resource path
   # within API Gateway REST API.
-  source_arn = "${var.rest_api.execution_arn}/*/*/${aws_api_gateway_resource.link_account.path_part}"
+  source_arn = "${var.rest_api.execution_arn}/*/*/${aws_api_gateway_resource.r.path_part}"
 }
