@@ -14,9 +14,9 @@ resource "aws_lambda_function" "account_linked" {
   runtime          = "python3.12"
   timeout          = 60
   environment {
-    variables = {
-      USER_POOL_ID = ""
-      }
+    # variables = {
+    #   USER_POOL_ID = ""
+    #   }
   }
   depends_on = [data.archive_file.account_linked]
   tags       = local.common_tags
