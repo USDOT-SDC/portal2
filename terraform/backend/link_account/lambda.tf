@@ -13,9 +13,12 @@ resource "aws_lambda_function" "link_account" {
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.12"
   timeout          = 60
-  # environment {
-  #   variables = var.foo.environment_variables
-  # }
+  environment {
+    variables = {
+      USER_POOL_ID = "us-east-1_sNIwupW53",
+      APP_CLIENT_IDS = "122lj1qh9e5qam3u29fpdt9ati,2kabun8v3psb5lknu4hghvo0nh,6s90hhstst6td8sdo1ntl3laet,7qoe2cb1jb3oc1oj0ari25h3sk"
+      }
+  }
   depends_on = [data.archive_file.link_account]
   tags       = local.common_tags
 }
