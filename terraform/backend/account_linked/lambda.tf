@@ -15,7 +15,7 @@ resource "aws_lambda_function" "account_linked" {
   timeout          = 60
   environment {
     variables = {
-      USER_POOL_ID = ""
+      USER_POOL_ID = "us-east-1_sNIwupW53"
       }
   }
   depends_on = [data.archive_file.account_linked]
