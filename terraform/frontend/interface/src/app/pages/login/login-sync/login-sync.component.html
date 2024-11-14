@@ -6,10 +6,10 @@
             <p> Please sign in using your internal Secure Data Commons credentials. Accounts only need to be linked once.</p>
             <hr>
             <div class="form">
-                <input class="form-control mb-3" type="text" placeholder="Username" [(ngModel)]="username">
+                <input class="form-control mb-3" type="text" placeholder="Username" [(ngModel)]="username" [ngClass]="{ 'is-invalid': is_invalid == true }">
 
                 <div class="input-group mb-3">
-                    <input class="form-control" [type]="show_password ? 'text' :  'password'" placeholder="Password" [(ngModel)]="password">
+                    <input class="form-control" [type]="show_password ? 'text' :  'password'" placeholder="Password" [(ngModel)]="password" [ngClass]="{ 'is-invalid': is_invalid == true }">
                     <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="show_password = !show_password">
                         <i class="fa-solid " [ngClass]="show_password ? 'fa-eye' : 'fa-eye-slash' "></i>
                     </button>
@@ -23,6 +23,11 @@
                     <ng-template #DefaultButtonState> Attempt Login Sync </ng-template>
 
                 </button>
+                <ng-container *ngIf="is_invalid == true">
+                    <hr>
+                    <p class="text-center">Username or Password is Incorrect. </p>
+                    <p class="text-center"><small>If you continue to have issues logging in, please contact your administrator.</small></p>
+                </ng-container>
             </div>
             <hr>
             <p> <strong>Don't have an account? </strong> <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none" rel="noopener noreferrer">Follow the instructions</a> on the Secure Data Commons portal to create one.</p>

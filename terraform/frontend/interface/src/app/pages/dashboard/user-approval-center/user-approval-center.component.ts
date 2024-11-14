@@ -60,31 +60,95 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     this.view_raw_data = false;
   }
 
+
+  /**
+   * Export Table Request Submission
+   */
+  public submit_export_table_request(approved: boolean, data: any) {
+    const user = this.auth.user_info.getValue();
+    // console.log('submit_export_table_request, incoming data: ', { data, user });
+    var payload: any = {
+      status: approved == true ? 'Approved' : 'Rejected',
+      key1: data.S3KeyHash,
+      key2: data.RequestedBy_Epoch,
+      userEmail: user.email
+    };
+    // console.log('submit_export_table_request', payload);
+    const api = this.api.send_update_export_table_status(payload).subscribe((response: any) => {
+      // console.log(response);
+      this.get_approvals(user);
+      api.unsubscribe();
+    });
+
+  }
+
+  /**
+   * Export File Request Submission
+   */
+  public submit_file_status_request(approved: boolean, data: any) {
+    const user = this.auth.user_info.getValue();
+    // console.log('submit_file_status_request, incoming data: ', { data, user });
+    var payload: any = {
+      status: approved == true ? 'Approved' : 'Rejected',
+      key1: data.S3KeyHash,
+      key2: data.RequestedBy_Epoch,
+      datainfo: data['Dataset-DataProvider-Datatype'],
+      S3Key: data.S3Key,
+      TeamBucket: data.TeamBucket,
+      userEmail: user.email
+    };
+    // console.log('submit_file_status_request', payload);
+    const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
+      // console.log(response);
+      this.get_approvals(user);
+      api.unsubscribe();
+    });
+  }
+
+  /**
+   * Trusted User Status Request Submission
+   */
+  public submit_trusted_status_request(approved: boolean, data: any) {
+    const user = this.auth.user_info.getValue();
+    // console.log('submit_trusted_status_request, incoming data: ', { data, user });
+    var payload: any = {
+      status: approved == true ? 'Approved' : 'Rejected',
+      key1: data.S3KeyHash,
+      key2: data.RequestedBy_Epoch,
+      datainfo: data['Dataset-DataProvider-Datatype'],
+      S3Key: data.S3Key,
+      TeamBucket: data.TeamBucket,
+      userEmail: user.email
+    };
+    // console.log('submit_trusted_status_request', payload);
+    const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
+      // console.log(response);
+      this.get_approvals(user);
+      api.unsubscribe();
+    });
+  }
+
+  public get_approvals(user: any) {
+    const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
+      // console.log(response);
+      if (response.exportRequests) {
+        const { exportRequests, trustedRequests, autoExportRequests } = response;
+        this.table_export_requests = exportRequests.tableRequests.sort(this.sort_requests);
+        this.s3_requests = exportRequests.s3Requests.sort(this.sort_requests);
+        if (trustedRequests.length > 0) {
+          this.trusted_user_status_requests = [];
+          trustedRequests.forEach((array: any) => { this.trusted_user_status_requests.push(...array) });
+        }
+        // console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
+      }
+      API.unsubscribe();
+    });
+  }
+
   ngOnInit(): void {
     this._subscription.push(
       this.auth.user_info.subscribe((user) => {
-        if (user) {
-          const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
-            console.log(response);
-
-            if (response.exportRequests) {
-              const { exportRequests, trustedRequests, autoExportRequests } = response;
-
-              this.table_export_requests = exportRequests.tableRequests.sort(this.sort_requests);
-              this.s3_requests = exportRequests.s3Requests.sort(this.sort_requests);
-
-              if (trustedRequests.length > 0) {
-                this.trusted_user_status_requests = [];
-                trustedRequests.forEach((array: any) => { this.trusted_user_status_requests.push(...array) });
-              }
-
-              console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
-
-            }
-
-            API.unsubscribe();
-          });
-        }
+        if (user) { this.get_approvals(user); }
       })
     )
   }

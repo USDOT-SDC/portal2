@@ -37,6 +37,7 @@ import { UserApprovalCenterComponent } from './pages/dashboard/user-approval-cen
 import { FilterListPipe } from './pipes/filter-list.pipe';
 import { LoginSyncComponent } from './pages/login/login-sync/login-sync.component';
 import { ResetPasswordComponent } from './pages/login/reset-password/reset-password.component';
+import { LoginRedirectComponent } from './pages/login/login-redirect/login-redirect.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ResetPasswordComponent } from './pages/login/reset-password/reset-passw
     UserApprovalCenterComponent,
     FilterListPipe,
     LoginSyncComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    LoginRedirectComponent
   ],
   imports: [
     BrowserModule,

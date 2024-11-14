@@ -11,6 +11,7 @@ export class LoginSyncComponent implements OnInit {
 
   public show_password: boolean = false;
   public is_loading: boolean = false;
+  public is_invalid: boolean = false;
 
   public username: string | undefined;
   public password: string | undefined;
@@ -19,13 +20,29 @@ export class LoginSyncComponent implements OnInit {
 
   public submit_login_sync(): void {
     this.is_loading = true;
-    const payload: { username: any; password: any } = { username: this.username, password: this.password, };
-    const API = this.api.link_an_account(payload.username, payload.password).subscribe((response: any) => {
-      console.log({ response });
-      // Response is Good? Redirect to Dashboard or Login . . .
-      API.unsubscribe();
+
+    setTimeout(() => {
       this.reset();
-    })
+      location.href = '/dashboard';
+    }, 2000)
+
+    /* const payload: { username: any; password: any } = { username: this.username, password: this.password, };
+       const API = this.api.link_an_account(payload.username, payload.password).subscribe({
+      next: (response: any) => {
+        console.log({ response });
+        // Response is Good? Redirect to Dashboard or Login . . .
+        API.unsubscribe();
+        this.reset();
+      },
+      error: (error: any) => {
+        if (error) if (error.userErrorMessage) {
+          this.is_invalid = true;
+          this.is_loading = false;
+          console.log("Error:", error.userErrorMessage)
+          }
+      },
+      complete: () => { }
+    }) */
   }
 
   public reset() {

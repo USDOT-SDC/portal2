@@ -40,16 +40,14 @@
                         <i class="fa-solid fa-up-right-and-down-left-from-center me-2"></i>Resize Workstation
                     </button>
                 </li>
-                <li>
-                    <!-- (click)="open_modal_schedule_workstation_modal()"       -->
+                <!-- <li>
                     <button class="dropdown-item" type="button" [disabled]="workstation.loading == true" (click)="emit_action('schedule', { instance_id: workstation.instance_id })">
                         <i class="fa-solid fa-calendar-week me-2"></i>Schedule Up-Time
                     </button>
-                </li>
+                </li> -->
                 <li>
-                    <!-- (click)="open_modal_add_to_workstation_storage_modal()" -->
-                    <button class="dropdown-item" type="button" [disabled]="workstation.loading == true" (click)="emit_action('storage', { instance_id: workstation.instance_id })">
-                        <i class="fa-solid fa-hard-drive me-2"></i>Add Storage
+                    <button class="dropdown-item" type="button" [disabled]="workstation.loading == true || true" (click)="emit_action('storage', { instance_id: workstation.instance_id })">
+                        <i class="fa-solid fa-hard-drive me-2"></i>Add Storage (Coming Soon)
                     </button>
                 </li>
             </ul>
