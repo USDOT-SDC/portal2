@@ -6,7 +6,7 @@ goto normal_start
 
 :print_help
 echo Parameter one is environment (dev ^| prod)
-echo Parameter two sets an altarnate AWS profile (e.g., default)
+echo Parameter two sets an alternate AWS profile (e.g., default)
 echo Example: tfinit dev
 echo Example: tfinit prod
 echo Example: tfinit dev default
@@ -17,24 +17,28 @@ cls
 set env=%1
 if "%2"=="" set AWS_PROFILE=%env%
 if not "%2"=="" set AWS_PROFILE=%2
+echo Your active AWS profile is: %AWS_PROFILE%
 set bucket=%env%.sdc.dot.gov.platform.terraform
 if "%env%"=="dev" (set options=-upgrade -reconfigure) else (set options=-reconfigure)
-echo Would you like to initiaze Terraform?
-echo AWS_PROFILE=%AWS_PROFILE%
-echo terraform init -backend-config "bucket=%bucket%" %options%
-CHOICE /C YC /M "Press Y for Yes, or C to Cancel."
-if "%ERRORLEVEL%"=="1" goto init
-if "%ERRORLEVEL%"=="2" goto no_init
+set command=terraform init -backend-config "bucket=%bucket%" %options%
+echo.
+echo %command%
+echo.
+echo Would you like to execute the above command to initialize Terraform?
+echo Press Y for Yes, or C to Cancel.
+CHOICE /N /C YC /T 15 /D C
+if "%ERRORLEVEL%"=="1" goto execute
+if "%ERRORLEVEL%"=="2" goto no_execute
 goto end
 
-:init
+:execute
 pushd ..\terraform
-terraform init -backend-config "bucket=%bucket%" %options%
+%command%
 popd ..\scripts
 goto end
 
-:no_init
-echo terraform init canceled
+:no_execute
+echo Initialization of Terraform has been canceled.
 goto end
 
 :end
