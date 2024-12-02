@@ -65,15 +65,15 @@ export class ApiService {
 
   // Verify if Account is Linked
   public verify_account_linked(token: any): Observable<any> {
-    return this.http.get(`${this.BASE_URI}/account-linked-private`, { headers: new HttpHeaders({ 'Authorization': token }) })
+    return this.http.get(`${this.BASE_URI}/account_linked`, { headers: new HttpHeaders({ 'Authorization': token }) })
   }
   // Link an Account
-  public link_an_account(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.BASE_URI}/link-account-private`, { username, password }, { headers: this.login_sync_headers })
+  public link_an_account(username: string, password: string): Observable<any> { 
+    return this.http.post(`${this.BASE_URI}/link_account`, { username, password }, { headers: this.login_sync_headers })
   }
   // Reset a Users Temporary Password
   public reset_temporary_password(username: string, password: string, new_password: string, new_password_confirmation: string): Observable<any> {
-    return this.http.post(`${this.BASE_URI}/reset-temporary-password-private`, { username: username, currentPassword: password, newPassword: new_password, newPasswordConfirmation: new_password_confirmation, }, { headers: this.login_sync_headers })
+    return this.http.post(`${this.BASE_URI}/reset_temporary_password`, { username: username, currentPassword: password, newPassword: new_password, newPasswordConfirmation: new_password_confirmation, }, { headers: this.login_sync_headers })
   }
   /* ================== :: LOGIN SYNC SERVICES :: ================== */
   /* ================== :: =================== :: ================== */

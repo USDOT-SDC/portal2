@@ -26,7 +26,7 @@ export class LoginSyncComponent implements OnInit {
       location.href = '/dashboard';
     }, 2000)
 
-    /* const payload: { username: any; password: any } = { username: this.username, password: this.password, };
+    const payload: { username: any; password: any } = { username: this.username, password: this.password, };
        const API = this.api.link_an_account(payload.username, payload.password).subscribe({
       next: (response: any) => {
         console.log({ response });
@@ -42,7 +42,7 @@ export class LoginSyncComponent implements OnInit {
           }
       },
       complete: () => { }
-    }) */
+    })
   }
 
   public reset() {
