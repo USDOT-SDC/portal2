@@ -259,3 +259,50 @@ module "ddb_crud" {
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }
+
+module "account_linked" {
+  module_name          = "API, Account Linked"
+  module_slug          = "api-account-linked"
+  source               = "./account_linked"
+  common               = var.common
+  lambda_role          = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
+  rest_api             = aws_api_gateway_rest_api.portal
+  authorizer_id        = aws_api_gateway_authorizer.portal.id
+}
+
+module "link_account" {
+  module_name          = "API, Link Account"
+  module_slug          = "api-link-account"
+  source               = "./link_account"
+  common               = var.common
+  lambda_role          = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
+  rest_api             = aws_api_gateway_rest_api.portal
+  authorizer_id        = aws_api_gateway_authorizer.portal.id
+}
+
+module "reset_temporary_password" {
+  module_name          = "API, Reset Temporary Password"
+  module_slug          = "api-reset-temporary-password"
+  source               = "./reset_temporary_password"
+  common               = var.common
+  lambda_role          = aws_iam_role.portal_lambdas
+  lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
+  rest_api             = aws_api_gateway_rest_api.portal
+  authorizer_id        = aws_api_gateway_authorizer.portal.id
+  env_vars = {
+    USER_POOL_ID              = "us-east-1_sNIwupW53",
+    APP_CLIENT_IDS            = "122lj1qh9e5qam3u29fpdt9ati,2kabun8v3psb5lknu4hghvo0nh,6s90hhstst6td8sdo1ntl3laet,7qoe2cb1jb3oc1oj0ari25h3sk"
+    CERTIFICATE_BUCKET        = "us-east-1_sNIwupW53"
+    DOWNLOAD_CUSTOM_LDAP_CERT = "false"
+    LDAP_SEARCH_BASE          = "DC=dev,DC=sdc,DC=dot,DC=gov"
+  }
+}
+
+module "lambda_cognito_layer" {
+  module_name = "Lambda Layer, lambda_cognito_layer"
+  module_slug = "layer-lambda-cognito-layer"
+  source      = "./lambda_cognito_layer"
+  common      = var.common
+}

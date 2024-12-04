@@ -13,6 +13,11 @@
 # Terraform Lambda deployment packages
 **/lambda_deployment_package.zip
 
+# Lambda deployment packages
+terraform/backend/**/deployment/*.zip
+terraform/backend/**/src/python/lib/*/site-packages/*
+!terraform/backend/**/src/python/lib/*/site-packages/.gitkeep
+
 # Frontend Interface build
 terraform/frontend/interface_build
 terraform/frontend/interface_build/**
@@ -256,7 +261,7 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-lib/
+**/frontend/**/lib/
 lib64/
 parts/
 sdist/

@@ -1,6 +1,6 @@
 data "archive_file" "f" {
   type        = "zip"
-  source_file = "backend/lambdas/${var.resource_slug}/src/lambda_function.py"
+  source_dir = "backend/lambdas/${var.resource_slug}/src/"
   output_path = "backend/lambdas/${var.resource_slug}/lambda_deployment_package.zip"
 }
 
