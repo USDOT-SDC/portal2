@@ -114,26 +114,40 @@ resource "aws_api_gateway_method_response" "health_any_200" {
 }
 
 # === REST API Deployment ===
+# build the deployment_hash_maps used to trigger redeployments
+locals {
+  # api_gateway_deployment_list = module.api["hello_world"].deployment_hash
+  modules_deployment_hash_map = { for k, v in local.api_resources : k => module.api[k].deployment_hash }
+  other_deployment_hash_map = {
+    account_linked           = module.account_linked.deployment_hash
+    ddb_crud                 = module.ddb_crud.deployment_hash
+    link_account             = module.link_account.deployment_hash
+    reset_temporary_password = module.reset_temporary_password.deployment_hash
+    health = sha1(
+      jsonencode(
+        {
+          r  = aws_api_gateway_resource.health,
+          m  = aws_api_gateway_method.health_any,
+          i  = aws_api_gateway_integration.health_any_mock,
+          ir = aws_api_gateway_integration_response.health_any_200,
+          mr = aws_api_gateway_method_response.health_any_200,
+        }
+      )
+    )
+  }
+  api_gateway_deployment_hash_map = merge(
+    local.modules_deployment_hash_map,
+    local.other_deployment_hash_map
+  )
+}
 # To properly capture all REST API configuration in a deployment, 
 # this resource must have triggers on all prior Terraform resources 
 # that manage resources/paths, methods, integrations, etc.
 resource "aws_api_gateway_deployment" "portal" {
   rest_api_id = aws_api_gateway_rest_api.portal.id
   triggers = {
-    redeployment=sha1(timestamp())
-    # redeployment = sha1(
-    #   jsonencode(
-    #     [
-    #       aws_api_gateway_resource.health,
-    #       aws_api_gateway_method.health_any,
-    #       aws_api_gateway_integration.health_any_mock,
-    #       aws_api_gateway_integration_response.health_any_200,
-    #       aws_api_gateway_method_response.health_any_200,
-    #       module.api,
-    #       module.ddb_crud,
-    #     ]
-    #   )
-    # )
+    redeployment = sha1(jsonencode(local.api_gateway_deployment_hash_map))
+    # redeployment = sha1(timestamp())
   }
   lifecycle {
     create_before_destroy = true

@@ -14,3 +14,7 @@ output "s3" {
     portal = { bucket = aws_s3_bucket.portal.bucket }
   }
 }
+
+output "api_gateway_deployment_hash_map" {
+  value = local.api_gateway_deployment_hash_map
+}

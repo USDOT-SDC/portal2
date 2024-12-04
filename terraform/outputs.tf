@@ -12,6 +12,7 @@ output "backend" {
     s3 = {
       portal = module.be.s3.portal
     }
+    api_gateway_deployment_hash_map = module.be.api_gateway_deployment_hash_map
   }
 }
 

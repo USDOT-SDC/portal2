@@ -5,6 +5,7 @@ variable "rest_api" {}
 variable "authorizer_id" {}
 variable "lambda_role" {}
 variable "lambda_cognito_layer" {}
+variable "environment_variables" {}
 
 locals {
   path_part = "link_account"

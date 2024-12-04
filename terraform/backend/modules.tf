@@ -280,6 +280,12 @@ module "link_account" {
   lambda_cognito_layer = module.lambda_cognito_layer.lambda_cognito_layer
   rest_api             = aws_api_gateway_rest_api.portal
   authorizer_id        = aws_api_gateway_authorizer.portal.id
+  environment_variables = {
+    USER_POOL_ID              = "us-east-1_sNIwupW53",
+    APP_CLIENT_IDS            = "122lj1qh9e5qam3u29fpdt9ati,2kabun8v3psb5lknu4hghvo0nh,6s90hhstst6td8sdo1ntl3laet,7qoe2cb1jb3oc1oj0ari25h3sk"
+    CERTIFICATE_BUCKET        = "dev.sdc.dot.gov.platform.secrets"
+    DOWNLOAD_CUSTOM_LDAP_CERT = "true"
+  }
 }
 
 module "reset_temporary_password" {
