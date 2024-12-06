@@ -4,7 +4,7 @@ if "%1"=="--help" goto print_help
 goto normal_start
 
 :print_help
-echo Terraform must be initiazed (tfinit.cmd) before running tfplan.cmd
+echo Terraform must be initialized (tfinit.cmd) before running tfplan.cmd
 goto end
 
 :normal_start
