@@ -1,0 +1,148 @@
+resource "aws_cognito_user_pool" "this" {
+  name = var.user_pool_name
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+
+    recovery_mechanism {
+      name     = "verified_phone_number"
+      priority = 2
+    }
+  }
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+  }
+
+  auto_verified_attributes = ["email"]
+
+  device_configuration {
+    challenge_required_on_new_device      = true
+    device_only_remembered_on_user_prompt = true
+  }
+
+  email_configuration {
+    email_sending_account = "COGNITO_DEFAULT"
+    # email_sending_account  = "DEVELOPER"
+    # configuration_set      = ""
+    # from_email_address     = ""
+    # reply_to_email_address = ""
+    # source_arn             = ""
+  }
+
+  mfa_configuration = var.mfa_enabled ? "ON" : "OFF"
+
+  password_policy {
+    minimum_length                   = 12
+    password_history_size            = 12
+    require_lowercase                = true
+    require_numbers                  = true
+    require_symbols                  = true
+    require_uppercase                = true
+    temporary_password_validity_days = 3
+  }
+
+  sms_authentication_message = var.sms_authentication_message
+
+  software_token_mfa_configuration {
+    enabled = true
+  }
+
+  user_pool_add_ons {
+    advanced_security_mode = "ENFORCED"
+  }
+
+  username_configuration {
+    case_sensitive = false
+  }
+
+  verification_message_template {
+    # default_email_option = "CONFIRM_WITH_CODE"
+    default_email_option  = "CONFIRM_WITH_LINK"
+    email_message         = var.verification_message_template.email_message
+    email_message_by_link = var.verification_message_template.email_message_by_link
+    email_subject         = var.verification_message_template.email_subject
+    email_subject_by_link = var.verification_message_template.email_subject_by_link
+    sms_message           = var.verification_message_template.sms_message
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_cognito_user_pool_client" "this" {
+  name         = "${var.user_pool_name}-client"
+  user_pool_id = aws_cognito_user_pool.this.id
+
+  access_token_validity = 1 # default unit is hours
+
+  allowed_oauth_flows_user_pool_client = true
+
+  allowed_oauth_flows = [
+    "code",
+    "implicit",
+    "client_credentials",
+  ]
+
+  allowed_oauth_scopes = [
+    "phone",
+    "email",
+    "openid",
+    "profile",
+    "aws.cognito.signin.user.admin",
+  ]
+
+  auth_session_validity = 10 # in minutes
+
+  callback_urls = [
+    "http://localhost:4200/dashboard",
+    "http://localhost:4200/login/redirect",
+    "https://sub1.sdc-dev.dot.gov/dashboard",
+    "https://sub1.sdc-dev.dot.gov/login/redirect",
+    "https://portal.sdc-dev.dot.gov/dashboard",
+    "https://portal.sdc-dev.dot.gov/login/redirect",
+  ]
+
+  # default_redirect_uri = ""
+
+  enable_token_revocation = true
+
+  explicit_auth_flows = [
+    "ADMIN_NO_SRP_AUTH",
+    "CUSTOM_AUTH_FLOW_ONLY",
+    "USER_PASSWORD_AUTH",
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_CUSTOM_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+  ]
+
+  generate_secret = false
+
+  id_token_validity = 2 # default unit is hours
+
+  logout_urls = [
+    "http://localhost:4200/index.html",
+    "https://sub1.sdc-dev.dot.gov/index.html",
+    "https://portal.sdc-dev.dot.gov/index.html",
+  ]
+
+  refresh_token_validity = 2 # default unit is days
+
+  supported_identity_providers = ["COGNITO"]
+}
+
+resource "aws_cognito_user_pool_domain" "this" {
+  domain       = "${var.user_pool_name}-domain"
+  user_pool_id = aws_cognito_user_pool.this.id
+}
+
+
+resource "aws_cognito_user_pool_domain" "main" {
+  domain          = "${var.user_pool_name}-domain"
+  certificate_arn = var.common.certificates.external.arn
+  user_pool_id    = aws_cognito_user_pool.this.id
+}
