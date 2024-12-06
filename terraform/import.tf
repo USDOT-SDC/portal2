@@ -73,7 +73,39 @@
 #   id = "hdvvw7yfy4/8k6c5b/ANY/200"
 # }
 
+# === Old Cognito ===
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_user_pool.old
+#   id = "us-east-1_sNIwupW53"
+# }
 
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_user_pool_client.old_login_gov
+#   id = "us-east-1_sNIwupW53/122lj1qh9e5qam3u29fpdt9ati"
+# }
 
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_user_pool_client.old_active_directory
+#   id = "us-east-1_sNIwupW53/6s90hhstst6td8sdo1ntl3laet"
+# }
 
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_user_pool_client.old_sdc_dot
+#   id = "us-east-1_sNIwupW53/7qoe2cb1jb3oc1oj0ari25h3sk"
+# }
+
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_identity_provider.old_dot_ad
+#   id = "us-east-1_sNIwupW53:dev-dot-ad"
+# }
+
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_identity_provider.old_login_gov
+#   id = "us-east-1_sNIwupW53:dev-pvt-login-gov-lambda-proxy"
+# }
+
+# import {
+#   to = module.be.module.cognito_old.aws_cognito_identity_provider.old_usdot_adfs
+#   id = "us-east-1_sNIwupW53:USDOT-ADFS"
+# }
 
