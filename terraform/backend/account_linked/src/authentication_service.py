@@ -54,7 +54,7 @@ def ldap_bind(username, password, parameters, raise_exceptions=False):
     else:
         server = Server(host, port=636, use_ssl=True, get_info=ALL, connect_timeout=5)
     # NOTE: use below for debugging only... port 389 does not use TLS!
-    #server = Server(host, port=389, use_ssl=False, get_info=ALL, connect_timeout=5)
+    server = Server(host, port=389, use_ssl=False, get_info=ALL, connect_timeout=5)
     connection = Connection(server, user="SDC\\" + username, password=password, receive_timeout=5, raise_exceptions=raise_exceptions)
     connection.open()
     connection.bind()
