@@ -83,7 +83,7 @@ resource "aws_cognito_user_pool_client" "this" {
   allowed_oauth_flows = [
     "code",
     "implicit",
-    "client_credentials",
+    # "client_credentials",
   ]
 
   allowed_oauth_scopes = [
@@ -111,13 +111,13 @@ resource "aws_cognito_user_pool_client" "this" {
 
   explicit_auth_flows = [
     "ADMIN_NO_SRP_AUTH",
-    "CUSTOM_AUTH_FLOW_ONLY",
+    # "CUSTOM_AUTH_FLOW_ONLY",
     "USER_PASSWORD_AUTH",
-    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
-    "ALLOW_CUSTOM_AUTH",
-    "ALLOW_USER_PASSWORD_AUTH",
-    "ALLOW_USER_SRP_AUTH",
-    "ALLOW_REFRESH_TOKEN_AUTH",
+    # "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    # "ALLOW_CUSTOM_AUTH",
+    # "ALLOW_USER_PASSWORD_AUTH",
+    # "ALLOW_USER_SRP_AUTH",
+    # "ALLOW_REFRESH_TOKEN_AUTH",
   ]
 
   generate_secret = false
@@ -136,13 +136,13 @@ resource "aws_cognito_user_pool_client" "this" {
 }
 
 resource "aws_cognito_user_pool_domain" "this" {
-  domain       = "${var.user_pool_name}-domain"
-  user_pool_id = aws_cognito_user_pool.this.id
-}
-
-
-resource "aws_cognito_user_pool_domain" "main" {
   domain          = "${var.user_pool_name}-domain"
-  certificate_arn = var.common.certificates.external.arn
+  # certificate_arn = var.common.certificates.external.arn
   user_pool_id    = aws_cognito_user_pool.this.id
 }
+
+# resource "aws_cognito_user_pool_domain" "this" {
+#   domain          = "${var.user_pool_name}-domain"
+#   certificate_arn = var.common.certificates.external.arn
+#   user_pool_id    = aws_cognito_user_pool.this.id
+# }
