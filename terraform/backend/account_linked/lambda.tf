@@ -1,7 +1,11 @@
 data "archive_file" "account_linked" {
   type        = "zip"
-  source_dir = "backend/account_linked/src"
+  source_dir  = "backend/account_linked/src"
   output_path = "backend/account_linked/lambda_deployment_package.zip"
+}
+
+locals {
+  subnet_ids = var.common.environment == "dev" ? [var.common.vpc.subnet_six.id] : [var.common.vpc.subnet_four.id]
 }
 
 resource "aws_lambda_function" "account_linked" {
@@ -15,6 +19,10 @@ resource "aws_lambda_function" "account_linked" {
   timeout          = 60
   environment {
     variables = var.environment_variables
+  }
+  vpc_config {
+    subnet_ids         = local.subnet_ids
+    security_group_ids = [var.common.vpc.default_security_group.id]
   }
   depends_on = [data.archive_file.account_linked]
   tags       = local.common_tags
