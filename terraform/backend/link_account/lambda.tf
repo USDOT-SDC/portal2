@@ -4,6 +4,10 @@ data "archive_file" "link_account" {
   output_path = "backend/link_account/lambda_deployment_package.zip"
 }
 
+locals {
+  subnet_ids = var.common.environment == "dev" ? [var.common.vpc.subnet_six.id] : [var.common.vpc.subnet_four.id]
+}
+
 resource "aws_lambda_function" "link_account" {
   function_name    = "${var.common.app_slug}_link_account"
   layers = [var.lambda_cognito_layer.arn]
@@ -15,6 +19,10 @@ resource "aws_lambda_function" "link_account" {
   timeout          = 60
   environment {
     variables = var.environment_variables
+  }
+  vpc_config {
+    subnet_ids         = local.subnet_ids
+    security_group_ids = [var.common.vpc.default_security_group.id]
   }
   depends_on = [data.archive_file.link_account]
   tags       = local.common_tags
