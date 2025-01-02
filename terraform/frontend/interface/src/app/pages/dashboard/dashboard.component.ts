@@ -63,13 +63,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.auth.current_user.subscribe((user: any) => {
 
           // If on localhost, Don't do API calls, they wont work 
-          if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-            console.log("%cWARNING: You are currently in the development environment on your local machine, backend connectivity is limited. For testing please go to development or production environment", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
-            setTimeout(() => { this.loading = false; }, 1500)
-          }
+          // if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+          //   console.log("%cWARNING: You are currently in the development environment on your local machine, backend connectivity is limited. For testing please go to development or production environment", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
+          //   setTimeout(() => { this.loading = false; }, 1500)
+          // }
 
           // If in Dev or Prod
-          else {
+          // else {
 
             console.log("User: ", user);
             this.current_user = user;
@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             });
 
 
-          }
+          // }
         })
       )
     }).catch(error => console.log(error));
