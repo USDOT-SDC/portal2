@@ -12,8 +12,8 @@ export class LoginRedirectComponent implements OnInit {
   constructor(private auth: AuthService, private api: ApiService) { }
 
   ngOnInit(): void {
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") location.href = 'dashboard';
-    else {
+    // if (location.hostname === "localhost" || location.hostname === "127.0.0.1") location.href = 'dashboard';
+    // else {
       // Check Login Sync
 
       this.auth.current_user.subscribe((user: any) => {
@@ -32,7 +32,7 @@ export class LoginRedirectComponent implements OnInit {
       })
 
 
-    }
+    // }
 
   }
 

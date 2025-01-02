@@ -1,6 +1,7 @@
 # API Resources
 locals {
-  allow_origin_url = "https://${aws_route53_record.sub1.name}" # update to aws_route53_record.portal.name when ready to cut over
+  allow_origin_url = "*"
+  # allow_origin_url = "https://${aws_route53_record.sub1.name}" # update to aws_route53_record.portal.name when ready to cut over
   api_resources = {
     data_dictionary = {
       http_method = "GET"
