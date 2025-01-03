@@ -11,5 +11,6 @@ export class AppComponent {
   title = 'interface';
   stage: string = environment.stage;
   version: string = environment.build;
+  buildDateTime = environment.buildDateTime;
 
 }
