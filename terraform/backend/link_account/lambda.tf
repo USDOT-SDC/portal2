@@ -1,6 +1,6 @@
 data "archive_file" "link_account" {
   type        = "zip"
-  source_dir = "backend/link_account/src"
+  source_dir  = "backend/link_account/src"
   output_path = "backend/link_account/lambda_deployment_package.zip"
 }
 
@@ -10,7 +10,7 @@ locals {
 
 resource "aws_lambda_function" "link_account" {
   function_name    = "${var.common.app_slug}_link_account"
-  layers = [var.lambda_cognito_layer.arn]
+  layers           = [var.lambda_cognito_layer.arn]
   filename         = data.archive_file.link_account.output_path
   source_code_hash = data.archive_file.link_account.output_base64sha256
   role             = var.lambda_role.arn
