@@ -2,6 +2,7 @@ export const environment = {
   production: ${production},
   stage: '${stage}',
   build: '${build}',
+  buildDateTime: '${build_datetime}',
   resource_urls: {
     portal: '${portal_url}',
     portal_api: '${portal_api_url}',
