@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -16,19 +17,23 @@ export class LoginSyncComponent implements OnInit {
   public username: string | undefined;
   public password: string | undefined;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private auth: AuthService) { }
 
   public submit_login_sync(): void {
+    console.log('login-sync - Start submit_login_sync()');
     this.is_loading = true;
 
     setTimeout(() => {
+      console.log('login-sync - start setTimeout');
       this.reset();
-      location.href = '/dashboard';
+      this.auth.logoutAfterSyncandRedirectToLogin();
     }, 2000)
+    
 
     const payload: { username: any; password: any } = { username: this.username, password: this.password, };
        const API = this.api.link_an_account(payload.username, payload.password).subscribe({
       next: (response: any) => {
+        console.log('login-sync - observer next');
         console.log({ response });
         // Response is Good? Redirect to Dashboard or Login . . .
         API.unsubscribe();
@@ -41,7 +46,9 @@ export class LoginSyncComponent implements OnInit {
           console.log("Error:", error.userErrorMessage)
           }
       },
-      complete: () => { }
+      complete: () => {
+        console.log("login-sync - observer complete");
+       }
     })
   }
 
