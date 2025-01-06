@@ -47,4 +47,15 @@ export class AuthService {
     }
   }
 
+  public async logoutAfterSyncandRedirectToLogin(): Promise<void> {
+    try {
+      await signOut();
+      console.log('LogoutAfterSyncandRedirectToLogin');
+      console.log('window.location: ', window.location);
+      window.location.href = '/login';
+      } catch (error) {
+      console.log('error signing out user after loginsync: ', error);
+    }
+  }
+
 }
