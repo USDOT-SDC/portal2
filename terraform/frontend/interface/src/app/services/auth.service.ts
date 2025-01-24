@@ -32,7 +32,7 @@ export class AuthService {
     try {
       const logged_in = await this.isLoggedIn();
       if (logged_in) location.href = '/dashboard';
-      else await signInWithRedirect({ provider: { custom: "Cognito user pool directory" } });
+      else await signInWithRedirect({ provider: { custom: "COGNITO" } });
     } catch (error) {
       console.log('error logging in: ', error);
     }
