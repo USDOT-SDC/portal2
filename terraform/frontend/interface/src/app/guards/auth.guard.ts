@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 import { Observable } from 'rxjs';
 
-const AMPLIFY_CONFIG: any = environment.cognito;
+const AMPLIFY_CONFIG: any = environment.amplify_config;
 Amplify.configure(AMPLIFY_CONFIG);
 
 
