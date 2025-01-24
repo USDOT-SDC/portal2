@@ -18,7 +18,7 @@ resource "aws_cognito_user_pool" "this" {
     invite_message_template {
       email_subject = "Your Secure Data Commons' temporary password"
       email_message = "Your Secure Data Commons' username is {username} and temporary password is {####}."
-      sms_message = "Your Secure Data Commons' username is {username} and temporary password is {####}"
+      sms_message   = "Your Secure Data Commons' username is {username} and temporary password is {####}"
     }
   }
 
@@ -31,7 +31,7 @@ resource "aws_cognito_user_pool" "this" {
 
   email_configuration {
     # email_sending_account = "COGNITO_DEFAULT"
-    email_sending_account  = "DEVELOPER"
+    email_sending_account = "DEVELOPER"
     # configuration_set      = ""
     from_email_address     = data.aws_sesv2_email_identity.sdc_support.email_identity
     reply_to_email_address = data.aws_sesv2_email_identity.sdc_support.email_identity
@@ -92,14 +92,12 @@ resource "aws_cognito_user_pool_client" "this" {
   ]
 
   allowed_oauth_scopes = [
-    "phone",
     "email",
     "openid",
     "profile",
-    "aws.cognito.signin.user.admin",
   ]
 
-  auth_session_validity = 10 # in minutes
+  auth_session_validity = 3 # in minutes
 
   callback_urls = [
     "http://localhost:4200/dashboard",
@@ -117,19 +115,19 @@ resource "aws_cognito_user_pool_client" "this" {
   enable_token_revocation = true
 
   explicit_auth_flows = [
-    "ADMIN_NO_SRP_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_CUSTOM_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    # "ADMIN_NO_SRP_AUTH",
     # "CUSTOM_AUTH_FLOW_ONLY",
-    "USER_PASSWORD_AUTH",
+    # "USER_PASSWORD_AUTH",
     # "ALLOW_ADMIN_USER_PASSWORD_AUTH",
-    # "ALLOW_CUSTOM_AUTH",
     # "ALLOW_USER_PASSWORD_AUTH",
-    # "ALLOW_USER_SRP_AUTH",
-    # "ALLOW_REFRESH_TOKEN_AUTH",
   ]
 
   generate_secret = false
 
-  id_token_validity = 2 # default unit is hours
+  id_token_validity = 1 # default unit is hours
 
   logout_urls = [
     "http://localhost:4200/index.html",
@@ -137,9 +135,30 @@ resource "aws_cognito_user_pool_client" "this" {
     "https://portal.sdc-dev.dot.gov/index.html",
   ]
 
-  refresh_token_validity = 2 # default unit is days
+  refresh_token_validity = 30 # default unit is days
 
-  supported_identity_providers = ["COGNITO"]
+  supported_identity_providers = ["COGNITO", "DOT-PIV"]
+  depends_on                   = [aws_cognito_identity_provider.dot_piv]
+}
+
+locals {
+  idp_dot_piv_metadata = "${abspath(path.root)}/../../portal2-secrets/backend/cognito/idp_dot_piv_metadata.xml"
+}
+
+resource "aws_cognito_identity_provider" "dot_piv" {
+  user_pool_id  = aws_cognito_user_pool.this.id
+  provider_name = "DOT-PIV"
+  provider_type = "SAML"
+  attribute_mapping = {
+    "email" = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+  }
+  idp_identifiers = []
+  provider_details = {
+    "IDPSignout"            = "false"
+    "MetadataFile"          = file(local.idp_dot_piv_metadata)
+    "SLORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
+    "SSORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
+  }
 }
 
 resource "aws_cognito_user_pool_domain" "this" {
@@ -147,12 +166,6 @@ resource "aws_cognito_user_pool_domain" "this" {
   # certificate_arn = var.common.certificates.external.arn
   user_pool_id = aws_cognito_user_pool.this.id
 }
-
-# resource "aws_cognito_user_pool_domain" "this" {
-#   domain          = "${var.user_pool_name}-domain"
-#   certificate_arn = var.common.certificates.external.arn
-#   user_pool_id    = aws_cognito_user_pool.this.id
-# }
 
 data "aws_sesv2_email_identity" "sdc_support" {
   email_identity = "sdc-support@dot.gov"
