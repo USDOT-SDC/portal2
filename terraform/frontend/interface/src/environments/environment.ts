@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   stage: 'dev',
   build: '0.0.1',
-  buildDateTime: '2025-01-24 02:59 UTC',
+  buildDateTime: '2025-01-24 22:03 UTC',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
@@ -20,7 +20,7 @@ export const environment = {
         loginWith: {
           oauth: {
             domain: "usdot-sdc-dev.auth.us-east-1.amazoncognito.com",
-            scopes: ["aws.cognito.signin.user.admin","email","openid","phone","profile"],
+            scopes: ["email","openid","profile"],
             redirectSignIn: [window.location.origin + "/login/redirect"],
             redirectSignOut: [window.location.origin + '/index.html'],
             responseType: "token",
@@ -28,5 +28,6 @@ export const environment = {
         }
       }
     }
-  }
+  },
+
 };

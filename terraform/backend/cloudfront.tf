@@ -55,12 +55,11 @@ resource "aws_cloudfront_origin_access_control" "portal" {
   signing_protocol                  = "sigv4"
 }
 
-resource "terraform_data" "cloudfront_distribution_cache_invalidation" {
-  triggers_replace = {
-    run_id = timestamp()
-  }
-
-  provisioner "local-exec" {
-    command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.portal.id} --paths /*"
-  }
-}
+# resource "terraform_data" "cloudfront_distribution_cache_invalidation" {
+#   triggers_replace = {
+#     run_id = timestamp()
+#   }
+#   provisioner "local-exec" {
+#     command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.portal.id} --paths /*"
+#   }
+# }
