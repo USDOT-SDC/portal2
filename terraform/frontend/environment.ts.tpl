@@ -12,7 +12,7 @@ export const environment = {
     sub2: '${sub2_url}',
   },
 
-  cognito: {
+  amplify_config: {
     Auth: {
       Cognito: {
         userPoolId: "${user_pool_id}",
@@ -28,5 +28,6 @@ export const environment = {
         }
       }
     }
-  }
+  },
+
 };

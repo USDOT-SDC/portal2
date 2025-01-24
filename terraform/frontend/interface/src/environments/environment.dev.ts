@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   stage: 'dev',
   build: '0.0.1',
-  buildDateTime: '2025-01-24 02:46 UTC',
+  buildDateTime: '2025-01-24 02:59 UTC',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
@@ -12,7 +12,7 @@ export const environment = {
     sub2: 'sub2.sdc-dev.dot.gov/v1',
   },
 
-  cognito: {
+  amplify_config: {
     Auth: {
       Cognito: {
         userPoolId: "us-east-1_XrR5IDCuP",
