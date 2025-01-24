@@ -21,5 +21,6 @@ module "fe" {
     s3 = {
       portal = module.be.s3.portal
     }
+    cognito = module.be.cognito
   }
 }
