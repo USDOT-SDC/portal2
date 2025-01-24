@@ -18,3 +18,7 @@ output "s3" {
 output "api_gateway_deployment_hash_map" {
   value = local.api_gateway_deployment_hash_map
 }
+
+output "cognito" {
+  value = module.cognito.cognito
+}

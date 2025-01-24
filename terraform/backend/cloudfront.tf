@@ -6,17 +6,17 @@ resource "aws_cloudfront_distribution" "portal" {
   enabled = true
   comment = "Portal 2"
   aliases = ["sub1.${var.fqdn}"]
+
+  # AWS Managed Caching Policy (CachingDisabled)
   default_cache_behavior {
+    # Using the CachingDisabled managed policy ID:
+    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id       = local.s3_origin_id
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    compress               = true
+    target_origin_id       = local.s3_origin_id
   }
+
   http_version        = "http2and3"
   default_root_object = "index.html"
   custom_error_response {
@@ -53,4 +53,14 @@ resource "aws_cloudfront_origin_access_control" "portal" {
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "no-override"
   signing_protocol                  = "sigv4"
+}
+
+resource "terraform_data" "cloudfront_distribution_cache_invalidation" {
+  triggers_replace = {
+    run_id = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.portal.id} --paths /*"
+  }
 }
