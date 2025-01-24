@@ -4,7 +4,7 @@ import { signInWithRedirect, getCurrentUser, fetchAuthSession, signOut } from "a
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const AMPLIFY_CONFIG: any = environment.cognito;
+const AMPLIFY_CONFIG: any = environment.amplify_config;
 
 Amplify.configure(AMPLIFY_CONFIG);
 
@@ -32,7 +32,7 @@ export class AuthService {
     try {
       const logged_in = await this.isLoggedIn();
       if (logged_in) location.href = '/dashboard';
-      else await signInWithRedirect({ provider: { custom: "dev-dot-ad" } });
+      else await signInWithRedirect({ provider: { custom: "Cognito user pool directory" } });
     } catch (error) {
       console.log('error logging in: ', error);
     }
