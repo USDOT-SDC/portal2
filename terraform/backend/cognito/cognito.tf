@@ -14,7 +14,12 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   admin_create_user_config {
-    allow_admin_create_user_only = false
+    allow_admin_create_user_only = true
+    invite_message_template {
+      email_subject = "Your Secure Data Commons' temporary password"
+      email_message = "Your Secure Data Commons' username is {username} and temporary password is {####}."
+      sms_message = "Your Secure Data Commons' username is {username} and temporary password is {####}"
+    }
   }
 
   auto_verified_attributes = ["email"]
@@ -25,12 +30,12 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   email_configuration {
-    email_sending_account = "COGNITO_DEFAULT"
-    # email_sending_account  = "DEVELOPER"
+    # email_sending_account = "COGNITO_DEFAULT"
+    email_sending_account  = "DEVELOPER"
     # configuration_set      = ""
-    # from_email_address     = ""
-    # reply_to_email_address = ""
-    # source_arn             = ""
+    from_email_address     = data.aws_sesv2_email_identity.sdc_support.email_identity
+    reply_to_email_address = data.aws_sesv2_email_identity.sdc_support.email_identity
+    source_arn             = data.aws_sesv2_email_identity.sdc_support.arn
   }
 
   mfa_configuration = var.mfa_enabled ? "ON" : "OFF"
@@ -73,7 +78,7 @@ resource "aws_cognito_user_pool" "this" {
 }
 
 resource "aws_cognito_user_pool_client" "this" {
-  name         = "${var.user_pool_name}-client"
+  name         = var.user_pool_name
   user_pool_id = aws_cognito_user_pool.this.id
 
   access_token_validity = 1 # default unit is hours
@@ -99,6 +104,8 @@ resource "aws_cognito_user_pool_client" "this" {
   callback_urls = [
     "http://localhost:4200/dashboard",
     "http://localhost:4200/login/redirect",
+    "http://localhost:5000",
+    "http://localhost:5000/authorize",
     "https://sub1.sdc-dev.dot.gov/dashboard",
     "https://sub1.sdc-dev.dot.gov/login/redirect",
     "https://portal.sdc-dev.dot.gov/dashboard",
@@ -136,9 +143,9 @@ resource "aws_cognito_user_pool_client" "this" {
 }
 
 resource "aws_cognito_user_pool_domain" "this" {
-  domain          = "${var.user_pool_name}-domain"
+  domain = "usdot-sdc-${var.common.environment}"
   # certificate_arn = var.common.certificates.external.arn
-  user_pool_id    = aws_cognito_user_pool.this.id
+  user_pool_id = aws_cognito_user_pool.this.id
 }
 
 # resource "aws_cognito_user_pool_domain" "this" {
@@ -146,3 +153,7 @@ resource "aws_cognito_user_pool_domain" "this" {
 #   certificate_arn = var.common.certificates.external.arn
 #   user_pool_id    = aws_cognito_user_pool.this.id
 # }
+
+data "aws_sesv2_email_identity" "sdc_support" {
+  email_identity = "sdc-support@dot.gov"
+}

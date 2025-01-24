@@ -252,23 +252,23 @@ module "api" {
   authorizer_id = aws_api_gateway_authorizer.portal.id
 }
 
-# module "cognito" {
-#   module_name                  = "Cognito"
-#   module_slug                  = "cognito"
-#   source                       = "./cognito"
-#   common                       = var.common
-#   user_pool_name               = "portal-user-pool"
-#   mfa_enabled                  = true
-#   sms_authentication_message   = "Your authentication code is {####}."
-#   email_authentication_message = "Your authentication code is {####}."
-#   verification_message_template = {
-#     email_message         = "Your verification code is {####}."
-#     email_message_by_link = "{##Click Here##} to verify."
-#     email_subject         = "Verify your email"
-#     email_subject_by_link = "Verify your email"
-#     sms_message           = "Your verification code is {####}."
-#   }
-# }
+module "cognito" {
+  module_name                  = "Cognito"
+  module_slug                  = "cognito"
+  source                       = "./cognito"
+  common                       = var.common
+  user_pool_name               = "portal"
+  mfa_enabled                  = true
+  sms_authentication_message   = "Your authentication code is {####}."
+  email_authentication_message = "Your authentication code is {####}."
+  verification_message_template = {
+    email_message         = "Your verification code is {####}."
+    email_message_by_link = "{##Click Here##} to verify."
+    email_subject         = "Verify your email"
+    email_subject_by_link = "Verify your email"
+    sms_message           = "Your verification code is {####}."
+  }
+}
 
 # module "cognito_old" {
 #   source = "./cognito_old"
