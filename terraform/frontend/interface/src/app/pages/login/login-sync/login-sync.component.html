@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-body">
             <h2>One Time Sign In</h2>
-            <p> Please sign in using your internal Secure Data Commons credentials. Accounts only need to be linked once.</p>
+            <p style="text-align:left"> Please sign in using your internal Secure Data Commons credentials. Accounts only need to be linked once.</p>
             <hr>
             <div class="form">
                 <input class="form-control mb-3" type="text" placeholder="Username" [(ngModel)]="username" [ngClass]="{ 'is-invalid': is_invalid == true }">
@@ -30,9 +30,8 @@
                 </ng-container>
             </div>
             <hr>
-            <p> <strong>Don't have an account? </strong> <a href="https://portal.securedatacommons.com/register" target="_blank" style="text-decoration: none" rel="noopener noreferrer">Follow the instructions</a> on the Secure Data Commons portal to create one.</p>
-
-            <p>If you do not remember your Secure Data Commons credentials, please contact the <a href="mailto:sdc-support@dot.gov" style="text-decoration: none">Support Team.</a></p>
+            <p style="text-align:left"><strong>Need an account? </strong> Contact <a href="mailto:sdc-support@dot.gov" style="text-decoration: none">sdc-support@dot.gov</a> to discuss your DOT research project and get started.</p>
+            <p style="text-align:left">If you do not remember your Secure Data Commons credentials, please contact the <a href="mailto:sdc-support@dot.gov" style="text-decoration: none">Support Team.</a></p>
 
         </div>
     </div>
