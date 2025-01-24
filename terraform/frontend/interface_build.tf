@@ -15,16 +15,20 @@ locals {
 data "template_file" "environment_ts" {
   template = file(local.environment_ts_tpl_path)
   vars = {
-    production     = local.tpl_vars.production
-    stage          = local.tpl_vars.stage
-    build          = local.tpl_vars.build
-    build_datetime = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
-    portal_url     = var.backend.resource_urls.portal
-    portal_api_url = var.backend.resource_urls.portal_api
-    guacamole_url  = var.backend.resource_urls.guacamole
-    sftp_url       = var.backend.resource_urls.sftp
-    sub1_url       = var.backend.resource_urls.sub1
-    sub2_url       = var.backend.resource_urls.sub2
+    production              = local.tpl_vars.production
+    stage                   = local.tpl_vars.stage
+    build                   = local.tpl_vars.build
+    build_datetime          = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
+    portal_url              = var.backend.resource_urls.portal
+    portal_api_url          = var.backend.resource_urls.portal_api
+    guacamole_url           = var.backend.resource_urls.guacamole
+    sftp_url                = var.backend.resource_urls.sftp
+    sub1_url                = var.backend.resource_urls.sub1
+    sub2_url                = var.backend.resource_urls.sub2
+    user_pool_id            = var.backend.cognito.user_pool.id
+    user_pool_domain        = var.backend.cognito.user_pool.domain
+    user_pool_client_id     = var.backend.cognito.user_pool.client.id
+    user_pool_client_scopes = jsonencode(var.backend.cognito.user_pool.client.allowed_oauth_scopes)
   }
 }
 
@@ -42,8 +46,8 @@ resource "local_file" "environment_ts_local" {
 }
 
 module "interface_build" {
-  source     = "hashicorp/dir/template"
-  base_dir   = local.build_path
+  source   = "hashicorp/dir/template"
+  base_dir = local.build_path
 }
 
 resource "aws_s3_object" "interface_build" {
