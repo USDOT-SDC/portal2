@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   stage: 'dev',
   build: '0.0.1',
-  buildDateTime: '2025-01-24 22:03 UTC',
+  buildDateTime: '2025-01-27 19:31 UTC',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
@@ -12,22 +12,13 @@ export const environment = {
     sub2: 'sub2.sdc-dev.dot.gov/v1',
   },
 
-  amplify_config: {
-    Auth: {
-      Cognito: {
-        userPoolId: "us-east-1_XrR5IDCuP",
-        userPoolClientId: "4binc5ifp081iu97i0dhb10q68",
-        loginWith: {
-          oauth: {
-            domain: "usdot-sdc-dev.auth.us-east-1.amazoncognito.com",
-            scopes: ["email","openid","profile"],
-            redirectSignIn: [window.location.origin + "/login/redirect"],
-            redirectSignOut: [window.location.origin + '/index.html'],
-            responseType: "token",
-          }
-        }
-      }
-    }
+  auth_config: {
+        authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP',
+        redirectUrl: 'http://' + window.location.origin + '/dashboard',
+        clientId: '4binc5ifp081iu97i0dhb10q68',
+        scope: ["email","openid","profile"],
+        responseType: 'code'
   },
 
+  logout_url: 'https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=http://' + window.location.origin + '/index.html'
 };
