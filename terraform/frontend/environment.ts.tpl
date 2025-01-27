@@ -12,22 +12,13 @@ export const environment = {
     sub2: '${sub2_url}',
   },
 
-  amplify_config: {
-    Auth: {
-      Cognito: {
-        userPoolId: "${user_pool_id}",
-        userPoolClientId: "${user_pool_client_id}",
-        loginWith: {
-          oauth: {
-            domain: "${user_pool_domain}",
-            scopes: ${user_pool_client_scopes},
-            redirectSignIn: [window.location.origin + "/login/redirect"],
-            redirectSignOut: [window.location.origin + '/index.html'],
-            responseType: "token",
-          }
-        }
-      }
-    }
+  auth_config: {
+        authority: 'https://cognito-idp.us-east-1.amazonaws.com/${user_pool_id}',
+        redirectUrl: 'http://' + window.location.origin + '/dashboard',
+        clientId: '${user_pool_client_id}',
+        scope: ${user_pool_client_scopes},
+        responseType: 'code'
   },
 
+  logout_url: 'https://${user_pool_domain}/logout?client_id=${user_pool_client_id}&logout_uri=http://' + window.location.origin + '/index.html'
 };

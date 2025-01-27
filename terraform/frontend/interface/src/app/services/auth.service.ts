@@ -4,7 +4,7 @@ import { signInWithRedirect, getCurrentUser, fetchAuthSession, signOut } from "a
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const AMPLIFY_CONFIG: any = environment.amplify_config;
+const AMPLIFY_CONFIG: any = environment.auth_config;
 
 Amplify.configure(AMPLIFY_CONFIG);
 
