@@ -18,7 +18,7 @@ data "template_file" "environment_ts" {
     production              = local.tpl_vars.production
     stage                   = local.tpl_vars.stage
     build                   = local.tpl_vars.build
-    build_datetime          = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
+    # build_datetime          = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
     portal_url              = var.backend.resource_urls.portal
     portal_api_url          = var.backend.resource_urls.portal_api
     guacamole_url           = var.backend.resource_urls.guacamole
