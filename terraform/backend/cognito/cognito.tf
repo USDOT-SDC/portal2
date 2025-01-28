@@ -159,6 +159,9 @@ resource "aws_cognito_identity_provider" "dot_piv" {
     "SLORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
     "SSORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
   }
+  lifecycle {
+    ignore_changes = [ provider_details["ActiveEncryptionCertificate"] ]
+  }
 }
 
 resource "aws_cognito_user_pool_domain" "this" {
