@@ -23,15 +23,15 @@ export class LoginSyncComponent implements OnInit {
     console.log('login-sync - Start submit_login_sync()');
     this.is_loading = true;
 
-    setTimeout(() => {
+    /* setTimeout(() => {
       console.log('login-sync - start setTimeout');
       this.reset();
       this.auth.logoutAfterSyncandRedirectToLogin();
-    }, 2000)
-    
+    }, 2000) */
+
 
     const payload: { username: any; password: any } = { username: this.username, password: this.password, };
-       const API = this.api.link_an_account(payload.username, payload.password).subscribe({
+    const API = this.api.link_an_account(payload.username, payload.password).subscribe({
       next: (response: any) => {
         console.log('login-sync - observer next');
         console.log({ response });
@@ -44,11 +44,11 @@ export class LoginSyncComponent implements OnInit {
           this.is_invalid = true;
           this.is_loading = false;
           console.log("Error:", error.userErrorMessage)
-          }
+        }
       },
       complete: () => {
         console.log("login-sync - observer complete");
-       }
+      }
     })
   }
 

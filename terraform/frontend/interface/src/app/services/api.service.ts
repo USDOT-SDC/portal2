@@ -9,7 +9,13 @@ export class ApiService {
 
   private BASE_URI: string = `https://${environment.resource_urls.portal_api}`;
 
-  public get auth_header(): HttpHeaders { return new HttpHeaders({ 'authorization': `Bearer ${this.auth.current_user.getValue().token}` }); }
+  public get auth_header(): HttpHeaders {
+    const CurrentUserData = this.auth.current_user.getValue()
+    // console.log("[auth_header]: ", CurrentUserData)
+    const newHeader = new HttpHeaders({ 'Authorization': `Bearer ${CurrentUserData?.id_token}` })
+    // console.log("[auth_header]: ", newHeader.keys(), newHeader.get('Authorization'))
+    return newHeader;
+  }
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
@@ -68,7 +74,7 @@ export class ApiService {
     return this.http.get(`${this.BASE_URI}/account_linked`, { headers: new HttpHeaders({ 'Authorization': token }) })
   }
   // Link an Account
-  public link_an_account(username: string, password: string): Observable<any> { 
+  public link_an_account(username: string, password: string): Observable<any> {
     return this.http.post(`${this.BASE_URI}/link_account`, { username, password }, { headers: this.login_sync_headers })
   }
   // Reset a Users Temporary Password

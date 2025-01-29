@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { map, Subscription, take } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -23,14 +24,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscriptions: Array<Subscription> = [];
 
-  constructor(private auth: AuthService, private api: ApiService) { }
+  constructor(private auth: AuthService, private api: ApiService, private OICD_Auth: OidcSecurityService) { }
 
   public parseUserName(name: string): string {
     if (name == undefined || name == "") return "Researcher";
     else { return `${name.split("\\").pop()}`; }
   }
 
-  private set_user_as_approver() {
+  private set_user_as_approver(): void {
     const datasets: Array<any> = this.sdc_datasets;
     var approver_list: Array<string> = [];
     datasets.forEach((dataset: any) => {
@@ -56,50 +57,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+
     this.auth.isLoggedIn().then(() => {
-      // Get User from Cognito
-
       this._subscriptions.push(
-        this.auth.current_user.subscribe((user: any) => {
 
-          // If on localhost, Don't do API calls, they wont work 
-          // if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-          //   console.log("%cWARNING: You are currently in the development environment on your local machine, backend connectivity is limited. For testing please go to development or production environment", "font-weight: bold; font-size: 16px; color: red; background-color: yellow; padding: 5px;");
-          //   setTimeout(() => { this.loading = false; }, 1500)
-          // }
+        // New User Get Method
+        this.OICD_Auth.getAuthenticationResult().subscribe((user_data) => {
+          if (user_data) {
+            this.auth.current_user.next(user_data)
+            this.current_user = this.auth.current_user.getValue();
+            this.auth.isAuthenticated.next(true);
+            const GetUserAPI = this.api.get_user().subscribe((response: any) => {
+              console.log("GetUserAPI: ", { response });
+              GetUserAPI.unsubscribe();
+            })
+          } else { location.href = "/"; }
+        }),
 
-          // If in Dev or Prod
-          // else {
-
-            console.log("User: ", user);
-            this.current_user = user;
-
-            console.log("get_user_data_from_dynamodb");
-            const GET_USER_API = this.api.get_user().subscribe(async (response: any) => {
-
-              console.log("response: ", response);
-
-              if (response) {
-                this.auth.user_info.next(response);
-                this.user_workstations = response.stacks;
-                this.sdc_datasets = response.datasets;
-                this.set_user_as_approver();
-              }
-
-              this.loading = false;
-              GET_USER_API.unsubscribe();
-            });
-
-
-          // }
-        })
       )
     }).catch(error => console.log(error));
   }
-
-
-
-  private set_auth() { return new Promise(() => { }) }
 
   ngAfterViewInit(): void {
     // Initialize Bootstrap JS Tooltips
@@ -107,7 +84,5 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
   }
 
-  ngOnDestroy(): void {
-    this._subscriptions.forEach(s => s.unsubscribe())
-  }
+  ngOnDestroy(): void { this._subscriptions.forEach(s => s.unsubscribe()) }
 }

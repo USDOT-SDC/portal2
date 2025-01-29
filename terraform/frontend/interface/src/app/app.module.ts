@@ -38,6 +38,7 @@ import { FilterListPipe } from './pipes/filter-list.pipe';
 import { LoginSyncComponent } from './pages/login/login-sync/login-sync.component';
 import { ResetPasswordComponent } from './pages/login/reset-password/reset-password.component';
 import { LoginRedirectComponent } from './pages/login/login-redirect/login-redirect.component';
+import { AuthConfigModule } from './auth/auth-config.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { LoginRedirectComponent } from './pages/login/login-redirect/login-redir
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthConfigModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,61 +1,49 @@
 import { Injectable } from '@angular/core';
-import { Amplify } from "aws-amplify";
-import { signInWithRedirect, getCurrentUser, fetchAuthSession, signOut } from "aws-amplify/auth";
-import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { BehaviorSubject, map, take } from 'rxjs';
 
-const AMPLIFY_CONFIG: any = environment.auth_config;
-
-Amplify.configure(AMPLIFY_CONFIG);
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
+  public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  // Current User houses Cognito Auth data (accessToken, idToken, and UserData)
   public current_user: BehaviorSubject<any> = new BehaviorSubject(undefined);
+
+  // User Info is Data Coming from DynamoDB Table
   public user_info: BehaviorSubject<any> = new BehaviorSubject(undefined);
+
   public user_uploaded_data: BehaviorSubject<any> = new BehaviorSubject(undefined);
 
-  constructor() { }
+  constructor(private OICD_Auth: OidcSecurityService, private router: Router) { }
+
+  public async login(): Promise<void> {
+    try {
+      const logged_in = await this.isLoggedIn();
+      if (logged_in == true) this.router.navigate(["dashboard"])
+      else this.OICD_Auth.authorize();
+    } catch (error) { console.log('error logging in: ', error); }
+  }
 
   public async isLoggedIn(): Promise<boolean> {
     try {
-      const { username, userId } = await getCurrentUser();
-      const { tokens } = await fetchAuthSession();
-      this.current_user.next({ username, userId, token: tokens?.idToken?.toString() });
-      return true;
+      const isAuthenticated: boolean = this.isAuthenticated.getValue();
+      this.isAuthenticated.next(isAuthenticated)
+      return isAuthenticated; // true or false
     } catch (err) {
       return false;
     }
   }
 
-  public async login(): Promise<void> {
-    try {
-      const logged_in = await this.isLoggedIn();
-      if (logged_in) location.href = '/dashboard';
-      else await signInWithRedirect({ provider: { custom: "COGNITO" } });
-    } catch (error) {
-      console.log('error logging in: ', error);
-    }
-  }
-
   public async logout(): Promise<void> {
-    try {
-      await signOut();
-      this.current_user.next(undefined);
-    } catch (error) {
-      console.log('error logging out: ', error);
-    }
-  }
-
-  public async logoutAfterSyncandRedirectToLogin(): Promise<void> {
-    try {
-      await signOut();
-      console.log('LogoutAfterSyncandRedirectToLogin');
-      console.log('window.location: ', window.location);
-      window.location.href = '/login';
-      } catch (error) {
-      console.log('error signing out user after loginsync: ', error);
-    }
+    if (window.sessionStorage) window.sessionStorage.clear();
+    this.isAuthenticated.next(false);
+    this.current_user.next(undefined);
+    this.user_info.next(undefined);
+    this.user_uploaded_data.next(undefined);
+    window.location.href = "https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=http://localhost:4200/index.html";
   }
 
 }

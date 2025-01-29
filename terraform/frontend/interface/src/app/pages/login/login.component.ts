@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -8,32 +10,32 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-
-  private BASE_URL: string = 'https://ecs-dev-sdc-dot-webportal.auth.us-east-1.amazoncognito.com/oauth2/authorize'
-  private URI_PARAMS: string = `?redirect_uri=${location.origin}/dashboard&response_type=token`;
+  private _subscriptions: Array<Subscription> = []
 
   public signing_in: boolean = false;
+  public user_data: any;
+  public is_logged_in: boolean = false;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private OICD_Auth: OidcSecurityService) { }
 
-  public login(dot: boolean) {
-
-    this.signing_in = true;
-
-    if (dot == true) {
-      console.log("Logging in: COGNITO");
-      this.auth.login();
-      this.signing_in = false;
-    } else {
-      console.log("Logging in: LOGIN.GOV");
-      location.href = `${this.BASE_URL}${this.URI_PARAMS}&client_id=122lj1qh9e5qam3u29fpdt9ati`;
-      this.signing_in = false;
-    }
-
-  }
+  public login(): void { this.auth.login(); }
 
   ngOnInit(): void {
-    this.auth.isLoggedIn();
+
+    this.auth.isLoggedIn().then((response: any) => { this.is_logged_in = response; });
+
+    this._subscriptions.push(
+
+      this.OICD_Auth.userData$.subscribe((user) => {
+        this.user_data = user;
+      }),
+
+      this.OICD_Auth.isAuthenticated$.subscribe(({ isAuthenticated }) => {
+        console.warn('authenticated: ', isAuthenticated);
+        this.is_logged_in = isAuthenticated;
+      }),
+
+    )
   }
 
 }
