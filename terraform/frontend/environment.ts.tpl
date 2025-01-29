@@ -2,7 +2,7 @@ export const environment = {
   production: ${production},
   stage: '${stage}',
   build: '${build}',
-  buildDateTime: '2025-01-27 22:00 EST',
+  buildDateTime: '2025-01-28 21:00 EST',
   resource_urls: {
     portal: '${portal_url}',
     portal_api: '${portal_api_url}',
@@ -14,11 +14,11 @@ export const environment = {
 
   auth_config: {
         authority: 'https://cognito-idp.us-east-1.amazonaws.com/${user_pool_id}',
-        redirectUrl: 'http://' + window.location.origin + '/dashboard',
+        redirectUrl: window.location.origin + '/login/redirect',
         clientId: '${user_pool_client_id}',
-        scope: ${user_pool_client_scopes},
+        scope: '${user_pool_client_scopes}',
         responseType: 'code'
   },
 
-  logout_url: 'https://${user_pool_domain}/logout?client_id=${user_pool_client_id}&logout_uri=http://' + window.location.origin + '/index.html'
+  logout_url: 'https://${user_pool_domain}/logout?client_id=${user_pool_client_id}&logout_uri=' + window.location.origin + '/index.html'
 };
