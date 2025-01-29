@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   stage: 'dev',
   build: '0.0.1',
-  buildDateTime: '2025-01-27 22:00 EST',
+  buildDateTime: '2025-01-28 21:00 EST',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
@@ -14,11 +14,11 @@ export const environment = {
 
   auth_config: {
         authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP',
-        redirectUrl: 'http://' + window.location.origin + '/dashboard',
+        redirectUrl: window.location.origin + '/login/redirect',
         clientId: '4binc5ifp081iu97i0dhb10q68',
-        scope: ["email","openid","profile"],
+        scope: 'email openid profile',
         responseType: 'code'
   },
 
-  logout_url: 'https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=http://' + window.location.origin + '/index.html'
+  logout_url: 'https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=' + window.location.origin + '/index.html'
 };
