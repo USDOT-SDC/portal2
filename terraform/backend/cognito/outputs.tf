@@ -1,6 +1,7 @@
 output "cognito" {
   value = {
     user_pool = {
+      arn    = aws_cognito_user_pool.this.arn
       id     = aws_cognito_user_pool.this.id
       domain = "${aws_cognito_user_pool_domain.this.domain}.auth.${var.common.region}.amazoncognito.com"
       client = {
