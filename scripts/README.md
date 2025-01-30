@@ -3,7 +3,33 @@
 ## Environment Setup
 1. Follow instructions in the repo's [Environment Setup](/plans/setup.md)
 1. Install Node.js
-1. Run: `npm install -g @angular/cli`
+1. Run: `npm install -g @angular/core@18.2 @angular/cli@18.2`
+
+## Tool Stack Versions
+1. Run: `ng version`  
+  Result should be:
+    ```
+    Angular CLI: 18.2.14
+    Node: 22.13.1
+    Package Manager: npm 10.9.2
+    OS: win32 x64
+
+    Angular: 18.2.13
+    ... animations, common, compiler, compiler-cli, core, forms
+    ... platform-browser, platform-browser-dynamic, router
+
+    Package                         Version
+    ---------------------------------------------------------
+    @angular-devkit/architect       0.1802.14
+    @angular-devkit/build-angular   18.2.14
+    @angular-devkit/core            18.2.14
+    @angular-devkit/schematics      18.2.14
+    @angular/cli                    18.2.14
+    @schematics/angular             18.2.14
+    rxjs                            7.5.7
+    typescript                      5.5.4
+    zone.js                         0.14.10
+    ```
 
 ## 1 tfinit
 The `1-tfinit.cmd` script sets the active AWS profile (`set AWS_PROFILE=%env%`) and initializes Terraform (`terraform init`).  

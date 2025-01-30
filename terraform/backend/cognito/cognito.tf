@@ -137,7 +137,8 @@ resource "aws_cognito_user_pool_client" "this" {
 
   refresh_token_validity = 30 # default unit is days
 
-  supported_identity_providers = ["COGNITO", "DOT-PIV"]
+  supported_identity_providers = ["COGNITO"]
+  # supported_identity_providers = ["COGNITO", "DOT-PIV"]
   depends_on                   = [aws_cognito_identity_provider.dot_piv]
 }
 
