@@ -16,7 +16,7 @@ export const environment = {
         authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP',
     redirectUrl: window.location.origin + '/login/redirect',
         clientId: '4binc5ifp081iu97i0dhb10q68',
-        scope: ["email","openid","profile"],
+        scope: "email openid profile",
         responseType: 'code'
   },
 
