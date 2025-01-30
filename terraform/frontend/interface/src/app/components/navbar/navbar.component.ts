@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -6,11 +8,13 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.less']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+
+  private _subscriptions: Array<Subscription> = [];
 
   public isLoggedIn: boolean = false;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private OICD_Auth: OidcSecurityService) { }
 
   public logOut() {
     this.auth.logout()
@@ -19,11 +23,13 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Navbar - this.auth.isLoggedIn() start');    
-    this.auth.isLoggedIn()
-      .then((bool) => { this.isLoggedIn = bool; })
-      .catch(() => { this.isLoggedIn = false; });
-    console.log('Navbar - this.isLoggedIn value: ', this.isLoggedIn);
+    // console.log('Navbar - this.OICD_Auth.isAuthenticated() start');
+    this._subscriptions.push(
+      this.OICD_Auth.isAuthenticated().subscribe((is_authed: boolean) => { this.auth.isAuthenticated.next(is_authed) }),
+      this.auth.isAuthenticated.subscribe((response: boolean) => { this.isLoggedIn = response; })
+    )
+    // console.log('Navbar - this.OICD_Auth.isAuthenticated() value: ', this.isLoggedIn);
   }
 
+  ngOnDestroy(): void { this._subscriptions.forEach((s) => s.unsubscribe()) }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/services/api.service';
+import { Router } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -9,30 +10,18 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginRedirectComponent implements OnInit {
 
-  constructor(private auth: AuthService, private api: ApiService) { }
+  constructor(private router: Router, private OICD_Auth: OidcSecurityService, private auth: AuthService) { }
 
   ngOnInit(): void {
-    // if (location.hostname === "localhost" || location.hostname === "127.0.0.1") location.href = 'dashboard';
-    // else {
-      // Check Login Sync
-
-      this.auth.current_user.subscribe((user: any) => {
-        console.log(user);
-        if (user) {
-          if (user.token) {
-            this.api.verify_account_linked(user.token).subscribe((response: any | { accountLinked: boolean }) => {
-              console.log(response);
-              // If Pass, Redirect to Dashboard
-              if (response.accountLinked == true) location.href = 'dashboard';
-              // If Failed, Redirect to Login Sync Page
-              else location.href = 'login/sync';
-            })
-          }
-        }
-      })
-
-
-    // }
+    this.OICD_Auth.checkAuth(location.href).subscribe((data: any) => {
+      // console.log({ checkAuth: data })
+      if (data.isAuthenticated) {
+        this.auth.current_user.next(data);
+        this.auth.isAuthenticated.next(data.isAuthenticated);
+        this.router.navigate(['dashboard'])
+      }
+      // else /* NOT LOGGED IN, REDIRECT BACK TO LOGIN */
+    });
 
   }
 

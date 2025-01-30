@@ -1,31 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Amplify } from "aws-amplify";
-import { signInWithRedirect, getCurrentUser, signOut } from "aws-amplify/auth";
-import { environment } from 'src/environments/environment';
-
-import { Observable } from 'rxjs';
-
-const AMPLIFY_CONFIG: any = environment.auth_config;
-Amplify.configure(AMPLIFY_CONFIG);
-
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Observable, map, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private OICD_Auth: OidcSecurityService) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const logged_in = getCurrentUser().then(() => {
-      return true
-    }).catch(() => {
-      this.router.navigate(['/'])
-      return false
-    });
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
+    return this.OICD_Auth.isAuthenticated$.pipe(take(1), map(({ isAuthenticated }) => {
+      // allow navigation if authenticated
+      if (isAuthenticated) { return true; }
+      // redirect if not authenticated
+      return this.router.parseUrl('/');
+    }));
 
-    return logged_in;
   }
 
 }
