@@ -13,11 +13,11 @@ export const environment = {
   },
 
   auth_config: {
-        authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP',
+    authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP',
     redirectUrl: window.location.origin + '/login/redirect',
-        clientId: '4binc5ifp081iu97i0dhb10q68',
-        scope: ["email","openid","profile"],
-        responseType: 'code'
+    clientId: '4binc5ifp081iu97i0dhb10q68',
+    scope: ["email", "openid", "profile"],
+    responseType: 'code'
   },
 
   logout_url: 'https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=' + window.location.origin + '/index.html'
