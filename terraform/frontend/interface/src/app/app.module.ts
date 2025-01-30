@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 
@@ -40,47 +40,37 @@ import { ResetPasswordComponent } from './pages/login/reset-password/reset-passw
 import { LoginRedirectComponent } from './pages/login/login-redirect/login-redirect.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    FooterComponent,
-    ModalComponent,
-
-    HomeComponent,
-    AboutComponent,
-    AboutDatasetsComponent,
-    LoginComponent,
-    FaqComponent,
-
-    DashboardComponent,
-    DashboardFaqComponent,
-    WorkstationsComponent,
-    DatasetsComponent,
-
-    ErrorComponent,
-    FileUploadComponent,
-    ElemDragAndDropComponent,
-    ElemFileListComponent,
-    SdcDatasetsComponent,
-    SdcAlgorithmsComponent,
-    UserRequestCenterComponent,
-    WorkstationComponent,
-    UserDatasetComponent,
-    UserApprovalCenterComponent,
-    FilterListPipe,
-    LoginSyncComponent,
-    ResetPasswordComponent,
-    LoginRedirectComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    AuthConfigModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        NavbarComponent,
+        FooterComponent,
+        ModalComponent,
+        HomeComponent,
+        AboutComponent,
+        AboutDatasetsComponent,
+        LoginComponent,
+        FaqComponent,
+        DashboardComponent,
+        DashboardFaqComponent,
+        WorkstationsComponent,
+        DatasetsComponent,
+        ErrorComponent,
+        FileUploadComponent,
+        ElemDragAndDropComponent,
+        ElemFileListComponent,
+        SdcDatasetsComponent,
+        SdcAlgorithmsComponent,
+        UserRequestCenterComponent,
+        WorkstationComponent,
+        UserDatasetComponent,
+        UserApprovalCenterComponent,
+        FilterListPipe,
+        LoginSyncComponent,
+        ResetPasswordComponent,
+        LoginRedirectComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        AuthConfigModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
