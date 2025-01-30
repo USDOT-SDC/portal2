@@ -14,7 +14,7 @@ goto end
 cls
 set env=%1
 pushd ..\terraform\frontend\interface
-call npm audit fix
+@REM call npm audit fix
 call npm install
 if "%env%"=="dev" (set ng_build_config=development) else (set ng_build_config=production)
 call ng build --configuration %ng_build_config%
