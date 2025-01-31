@@ -69,6 +69,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.auth.isAuthenticated.next(true);
             const GetUserAPI = this.api.get_user().subscribe((response: any) => {
               console.log("GetUserAPI: ", { response });
+              if (response) {
+                this.auth.user_info.next(response);
+                this.user_workstations = response.stacks;
+                this.sdc_datasets = response.datasets;
+                this.set_user_as_approver();
+                this.loading = false;
+              }
               GetUserAPI.unsubscribe();
             })
           } else { location.href = "/"; }
