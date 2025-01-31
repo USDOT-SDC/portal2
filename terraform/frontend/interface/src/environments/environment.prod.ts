@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   stage: 'prod',
   build: '0.0.1',
   buildDateTime: '2025-01-28 21:00 EST',
