@@ -12,17 +12,18 @@ locals {
     terraform_bucket            = data.terraform_remote_state.infrastructure.outputs.s3.terraform
     backup_bucket               = data.terraform_remote_state.infrastructure.outputs.s3.backup
     instance_maintenance_bucket = data.terraform_remote_state.infrastructure.outputs.s3.instance_maintenance
+    disk_alert_linux_script     = data.terraform_remote_state.infrastructure.outputs.disk_alert_linux_script
     certificates                = data.terraform_remote_state.infrastructure.outputs.certificates
     app_slug                    = "portal2"
     secrets_path                = "../../portal2-secrets"
     config_version              = var.config_version
   }
   default_tags = {
-    Repository       = "portal2"
-    Project          = "Platform"
-    Team             = "Platform"
-    Owner            = "Support Team"
-    config_version   = var.config_version
+    Repository     = "portal2"
+    Project        = "Platform"
+    Team           = "Platform"
+    Owner          = "Support Team"
+    config_version = var.config_version
   }
 }
 
