@@ -341,3 +341,12 @@ module "lambda_cognito_layer" {
   source      = "./lambda_cognito_layer"
   common      = var.common
 }
+
+module "guacamole" {
+  module_name  = "Server, Guacamole"
+  module_slug  = "guacamole"
+  source       = "./guacamole"
+  common       = var.common
+  certificates = var.certificates
+  cognito      = module.cognito.cognito
+}
