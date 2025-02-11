@@ -31,8 +31,8 @@ dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarc
 dnf config-manager --set-enabled codeready-builder-for-rhel-8-rhui-rpms
 /usr/bin/crb enable
 dnf install epel-release -y
-dnf update -y
 dnf install -y mc
+dnf update -y
 echo_to_log "Updating packages: Done!"
 
 echo_to_log "Setup dnf automatic:..."
@@ -49,8 +49,8 @@ echo_to_log "Setup dnf automatic: Done!"
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-21-openjdk
-JAVA_HOME=/usr/lib/jvm/jre-openjdk
+dnf install -y java-21-openjdk-devel
+JAVA_HOME=/usr/lib/jvm/java
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
@@ -76,14 +76,14 @@ Group=tomcat
 
 Environment="JAVA_HOME=$JAVA_HOME"
 Environment="JAVA_OPTS=-Xms512m -Xmx512m"
-Environment="CATALINA_HOME=/opt/tomcat/apache-tomcat-${tomcat_version}"
-Environment="CATALINA_BASE=/opt/tomcat/apache-tomcat-${tomcat_version}"
-PIDFile="/opt/tomcat/apache-tomcat-${tomcat_version}/temp/tomcat.pid"
-Environment="CATALINA_PID=/opt/tomcat/apache-tomcat-${tomcat_version}/temp/tomcat.pid"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_BASE=/opt/tomcat"
+PIDFile="/opt/tomcat/temp/tomcat.pid"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
 Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
-ExecStart=/opt/tomcat/apache-tomcat-${tomcat_version}/bin/startup.sh
-ExecStop=/opt/tomcat/apache-tomcat-${tomcat_version}/bin/shutdown.sh
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
 
 UMask=0007
 
@@ -125,8 +125,8 @@ service tomcat stop
 echo_to_log "Stopping tomcat: Done!"
 
 echo_to_log "Setup Guacamole Webapp:..."
-unzip /opt/tomcat/apache-tomcat-${tomcat_version}/webapps/guacamole.war -d /opt/tomcat/apache-tomcat-${tomcat_version}/webapps/guacamole/
-yes | rm /opt/tomcat/apache-tomcat-${tomcat_version}/webapps/guacamole.war
+unzip /opt/tomcat/webapps/guacamole.war -d /opt/tomcat/webapps/guacamole/
+yes | rm /opt/tomcat/webapps/guacamole.war
 chown -R tomcat:tomcat /opt/tomcat
 chcon -R system_u:object_r:usr_t:s0 /opt/tomcat
 echo_to_log "Setup Guacamole Webapp: Done!"
@@ -163,9 +163,9 @@ echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configu
 chmod -R 755 /etc/guacamole
 chown -R tomcat:tomcat /etc/guacamole
 chcon -R system_u:object_r:usr_t:s0 /etc/guacamole
-chmod -R 755 /opt/tomcat/apache-tomcat-${tomcat_version}/webapps
-chown -R tomcat:tomcat /opt/tomcat/apache-tomcat-${tomcat_version}/webapps
-chcon -R system_u:object_r:usr_t:s0 /opt/tomcat/apache-tomcat-${tomcat_version}/webapps
+chmod -R 755 /opt/tomcat/webapps
+chown -R tomcat:tomcat /opt/tomcat/webapps
+chcon -R system_u:object_r:usr_t:s0 /opt/tomcat/webapps
 setsebool -P httpd_can_network_connect 1
 setsebool -P tomcat_can_network_connect_db 1
 
