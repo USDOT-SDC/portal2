@@ -16,7 +16,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public loading: boolean = false;
 
   public current_user: any;
+ 
   public user_is_approver: boolean = false;
+  public user_name: any;
 
   public user_workstations: any = [];
   public user_datasets: any = [];
@@ -64,13 +66,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         // New User Get Method
         this.OICD_Auth.getAuthenticationResult().subscribe((user_data) => {
           if (user_data) {
-            this.auth.current_user.next(user_data)
+            this.auth.current_user.next(user_data);
             this.current_user = this.auth.current_user.getValue();
             this.auth.isAuthenticated.next(true);
             const GetUserAPI = this.api.get_user().subscribe((response: any) => {
               console.log("GetUserAPI: ", { response });
               if (response) {
                 this.auth.user_info.next(response);
+                this.user_name = response.name;
                 this.user_workstations = response.stacks;
                 this.sdc_datasets = response.datasets;
                 this.set_user_as_approver();

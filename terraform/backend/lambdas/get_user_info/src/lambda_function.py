@@ -91,6 +91,7 @@ def lambda_handler(event, context):
         user_info["stacks"] = ast.literal_eval(json.dumps(response_table["Item"]["stacks"]))
         user_info["team_slug"] = response_table["Item"]["teamName"]
         user_info["upload_locations"] = response_table["Item"]["upload_locations"]
+        user_info["name"] = response_table["Item"]["name"]
     except Exception:
         print(Exception)
 
