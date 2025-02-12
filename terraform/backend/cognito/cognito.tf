@@ -94,6 +94,7 @@ resource "aws_cognito_user_pool_client" "this" {
   allowed_oauth_scopes = [
     "email",
     "openid",
+    "phone",
     "profile",
   ]
 
@@ -108,6 +109,7 @@ resource "aws_cognito_user_pool_client" "this" {
     "https://sub1.sdc-dev.dot.gov/login/redirect",
     "https://portal.sdc-dev.dot.gov/dashboard",
     "https://portal.sdc-dev.dot.gov/login/redirect",
+    "https://guacamole.sdc-dev.dot.gov/guacamole",
   ]
 
   # default_redirect_uri = ""
@@ -131,8 +133,10 @@ resource "aws_cognito_user_pool_client" "this" {
 
   logout_urls = [
     "http://localhost:4200/index.html",
+    "http://localhost:5000/index.html",
     "https://sub1.sdc-dev.dot.gov/index.html",
     "https://portal.sdc-dev.dot.gov/index.html",
+    "https://guacamole.sdc-dev.dot.gov/guacamole"
   ]
 
   refresh_token_validity = 30 # default unit is days
