@@ -4,7 +4,9 @@ exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 # Echo to a custom log file since STDOUT is not captured
 ECHO_FILE=/tmp/user-data-echo.log
 echo_to_log() {
-    echo "$(date) - === === === === $1 === === === ==="
+    echo "================================================================================"
+    echo "    $1"
+    echo "================================================================================"
     echo "$(date) - $1" >>$ECHO_FILE
 }
 
@@ -26,52 +28,54 @@ echo_to_log "Setting hostname to guacamole-$ip3-$ip4.${environment}.sdc.dot.gov:
 
 # === Installs ===
 echo_to_log "Installing EPEL:..."
+# disable the subscription manager that we don't have a subscription for
+sed -i '/enabled=/c\enabled=0' /etc/yum/pluginconf.d/subscription-manager.conf
+
 rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 dnf config-manager --set-enabled codeready-builder-for-rhel-8-rhui-rpms
-crb enable
 dnf install epel-release -y
 echo_to_log "Installing EPEL: Done!"
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-21-openjdk-devel
-JAVA_HOME=/usr/lib/jvm/java
+dnf install -y java-21-openjdk-devel >/dev/null
+export JAVA_HOME=/usr/lib/jvm/java
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
+export TOMCAT_HOME=/opt/tomcat
+mkdir -p $TOMCAT_HOME
 aws s3 cp s3://${terraform_bucket}/${tomcat_key} /opt/apache-tomcat-${tomcat_version}.tar.gz
-cd /opt
-tar -xvzf apache-tomcat-${tomcat_version}.tar.gz
-mv apache-tomcat-${tomcat_version} /opt/tomcat
+tar -xvzf /opt/apache-tomcat-${tomcat_version}.tar.gz --directory /opt >/dev/null
+mv /opt/apache-tomcat-${tomcat_version} $TOMCAT_HOME
 groupadd tomcat
-useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
-chown -R tomcat:tomcat /opt/tomcat
-chmod o+x /opt/tomcat/bin
+useradd -s /bin/false -g tomcat -d $TOMCAT_HOME tomcat
+chown -R tomcat:tomcat $TOMCAT_HOME
+chmod o+x $TOMCAT_HOME/bin
 echo_to_log "Installing Tomcat: Done!"
 
 echo_to_log "Configure Tomcat Service:..."
 cat <<EOF >/etc/systemd/system/tomcat.service
 [Unit]
-Description=Tomcat 10 Server
+Description=Tomcat ${tomcat_version} Server
 After=syslog.target network.target
 
 [Service]
 Type=forking
-
 User=tomcat
 Group=tomcat
 
 Environment="JAVA_HOME=$JAVA_HOME"
-Environment="JAVA_OPTS=-Xms512m -Xmx512m"
-Environment="CATALINA_HOME=/opt/tomcat"
-Environment="CATALINA_BASE=/opt/tomcat"
-PIDFile="/opt/tomcat/temp/tomcat.pid"
-Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+Environment="JAVA_OPTS=-Xms512m -Xmx512m -Djava.awt.headless=true"
+Environment="CATALINA_HOME=$TOMCAT_HOME"
+Environment="CATALINA_BASE=$TOMCAT_HOME"
+PIDFile="$TOMCAT_HOME/temp/tomcat.pid"
+Environment="CATALINA_PID=$TOMCAT_HOME/temp/tomcat.pid"
 Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
-ExecStart=/opt/tomcat/bin/startup.sh
-ExecStop=/opt/tomcat/bin/shutdown.sh
+ExecStart=$TOMCAT_HOME/bin/startup.sh
+ExecStop=$TOMCAT_HOME/bin/shutdown.sh
 
 UMask=0007
 
@@ -86,23 +90,24 @@ cat /etc/systemd/system/tomcat.service
 echo === === === === tomcat.service === === === ===
 systemctl daemon-reload
 systemctl start tomcat
+systemctl status tomcat
 echo_to_log "Configure Tomcat Service: Done!"
 
 # === Install Guacamole and Prerequisites===
 echo_to_log "Deploying Guacamole Client:..."
 systemctl stop tomcat
-aws s3 cp s3://${terraform_bucket}/${guac_war_key} /opt/tomcat/webapps/guacamole.war
-unzip /opt/tomcat/webapps/guacamole.war -d /opt/tomcat/webapps/guacamole/
-yes | rm /opt/tomcat/webapps/guacamole.war
-chown -R tomcat:tomcat /opt/tomcat
-chcon -R system_u:object_r:usr_t:s0 /opt/tomcat
+aws s3 cp s3://${terraform_bucket}/${guac_war_key} $TOMCAT_HOME/webapps/guacamole.war
+unzip $TOMCAT_HOME/webapps/guacamole.war -d $TOMCAT_HOME/webapps/guacamole/ >/dev/null
+yes | rm $TOMCAT_HOME/webapps/guacamole.war
+chown -R tomcat:tomcat $TOMCAT_HOME
+chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME
 echo_to_log "Deploying Guacamole Client: Done!"
 
 echo_to_log "Creating Guacamole Client property file:..."
-GUACAMOLE_HOME=/etc/guacamole
+export GUACAMOLE_HOME=/opt/guacamole
 mkdir -p $GUACAMOLE_HOME
 cat <<EOF >$GUACAMOLE_HOME/guacamole.properties
-guacd-hostname: 127.0.0.1
+guacd-hostname: localhost
 guacd-port: 4822
 guacd-ssl: false
 
@@ -126,18 +131,18 @@ cat $GUACAMOLE_HOME/guacamole.properties
 echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
 
-echo_to_log "Installing MariaDB Client:..."
+# echo_to_log "Installing MariaDB Client:..."
 # run the following for help
 # curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --help
-curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --os-type=rhel
-dnf install MariaDB-shared -y
-dnf install MariaDB-client -y
-echo_to_log "Installing MariaDB Client: Done!"
+# curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --os-type=rhel --os-version=8
+# dnf install MariaDB-shared -y
+# dnf install MariaDB-client -y
+# echo_to_log "Installing MariaDB Client: Done!"
 
 echo_to_log "Guacamole Server and prerequisites:..."
-dnf install guacd -y
+dnf install guacd-${guac_version} -y
 dnf install libguac-client-rdp -y
-dnf install libguac-client-vnc -y
+# dnf install libguac-client-vnc -y
 dnf install xfreerdp -y
 echo_to_log "Guacamole Server and prerequisites: Done!"
 
@@ -147,15 +152,17 @@ mkdir -p $GUACAMOLE_HOME/lib
 
 GUACAMOLE_AUTH_JDBC_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-${guac_version}
 aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_key} $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
-tar -xvzf $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
-# yes | rm $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
+tar -xvzf $GUACAMOLE_AUTH_JDBC_PATH.tar.gz --directory $GUACAMOLE_HOME/extensions >/dev/null
 cp $GUACAMOLE_AUTH_JDBC_PATH/mysql/guacamole-auth-jdbc-mysql-${guac_version}.jar $GUACAMOLE_HOME/extensions/
+yes | rm -rf $GUACAMOLE_AUTH_JDBC_PATH
+yes | rm $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
 
 GUACAMOLE_AUTH_SSO_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-sso-${guac_version}
 aws s3 cp s3://${terraform_bucket}/${guac_auth_sso_key} $GUACAMOLE_AUTH_SSO_PATH.tar.gz
-tar -xvzf $GUACAMOLE_AUTH_SSO_PATH.tar.gz
-# yes | rm $GUACAMOLE_AUTH_SSO_PATH.tar.gz
-cp $GUACAMOLE_AUTH_SSO_PATH/mysql/guacamole-auth-sso-openid-${guac_version}.jar $GUACAMOLE_HOME/extensions/
+tar -xvzf $GUACAMOLE_AUTH_SSO_PATH.tar.gz --directory $GUACAMOLE_HOME/extensions >/dev/null
+cp $GUACAMOLE_AUTH_SSO_PATH/openid/guacamole-auth-sso-openid-${guac_version}.jar $GUACAMOLE_HOME/extensions/
+yes | rm -rf $GUACAMOLE_AUTH_SSO_PATH
+yes | rm $GUACAMOLE_AUTH_SSO_PATH.tar.gz
 
 MARIADB_JAVA_CLIENT_PATH=$GUACAMOLE_HOME/lib/mariadb-java-client-${mariadb_client_version}
 aws s3 cp s3://${terraform_bucket}/${mariadb_client_key} $MARIADB_JAVA_CLIENT_PATH.jar
@@ -164,7 +171,6 @@ echo_to_log "Installing Guacamole extensions and MariaDB Java Client: Done!"
 echo_to_log "Creating guacd conf file:..."
 cat <<EOF >$GUACAMOLE_HOME/guacd.conf
 [daemon]
-pid_file = /var/run/guacd.pid
 log_level = debug
 
 [server]
@@ -180,20 +186,23 @@ echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configu
 chmod -R 755 $GUACAMOLE_HOME
 chown -R tomcat:tomcat $GUACAMOLE_HOME
 chcon -R system_u:object_r:usr_t:s0 $GUACAMOLE_HOME
-chmod -R 755 /opt/tomcat/webapps
-chown -R tomcat:tomcat /opt/tomcat/webapps
-chcon -R system_u:object_r:usr_t:s0 /opt/tomcat/webapps
+chmod -R 755 $TOMCAT_HOME/webapps
+chown -R tomcat:tomcat $TOMCAT_HOME/webapps
+chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME/webapps
 setsebool -P httpd_can_network_connect 1
 setsebool -P tomcat_can_network_connect_db 1
 echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configuring SElinux permissions: Done!"
 
 echo_to_log "Starting tomcat and guacd:..."
+systemctl daemon-reload
 systemctl start tomcat
 systemctl enable tomcat
 systemctl start guacd
 systemctl enable guacd
 sleep 10
 systemctl restart tomcat
+systemctl status tomcat
+systemctl status guacd
 echo_to_log "Starting tomcat and guacd: Done!"
 
 # === Install Utilities and Other Housekeeping ===
