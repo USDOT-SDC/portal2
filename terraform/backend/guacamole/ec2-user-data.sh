@@ -48,7 +48,10 @@ export TOMCAT_HOME=/opt/tomcat
 mkdir -p $TOMCAT_HOME
 aws s3 cp s3://${terraform_bucket}/${tomcat_key} /opt/apache-tomcat-${tomcat_version}.tar.gz
 tar -xvzf /opt/apache-tomcat-${tomcat_version}.tar.gz --directory /opt >/dev/null
-mv /opt/apache-tomcat-${tomcat_version} $TOMCAT_HOME
+cp -r /opt/apache-tomcat-${tomcat_version}/* $TOMCAT_HOME/
+yes | rm -rf /opt/apache-tomcat-${tomcat_version}
+yes | rm /opt/apache-tomcat-${tomcat_version}.tar.gz
+
 groupadd tomcat
 useradd -s /bin/false -g tomcat -d $TOMCAT_HOME tomcat
 chown -R tomcat:tomcat $TOMCAT_HOME
@@ -201,8 +204,7 @@ systemctl start guacd
 systemctl enable guacd
 sleep 10
 systemctl restart tomcat
-systemctl status tomcat
-systemctl status guacd
+systemctl status -l tomcat guacd
 echo_to_log "Starting tomcat and guacd: Done!"
 
 # === Install Utilities and Other Housekeeping ===
