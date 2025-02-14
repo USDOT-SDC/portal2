@@ -36,15 +36,17 @@ dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarc
 dnf config-manager --set-enabled codeready-builder-for-rhel-8-rhui-rpms
 dnf install epel-release -y
 echo_to_log "Installing EPEL: Done!"
+export JAVA_HOME=/usr/lib/jvm/java
+export TOMCAT_HOME=/opt/tomcat
+export GUACAMOLE_HOME=/opt/guacamole
+
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
 dnf install -y java-21-openjdk-devel >/dev/null
-export JAVA_HOME=/usr/lib/jvm/java
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
-export TOMCAT_HOME=/opt/tomcat
 mkdir -p $TOMCAT_HOME
 aws s3 cp s3://${terraform_bucket}/${tomcat_key} /opt/apache-tomcat-${tomcat_version}.tar.gz
 tar -xvzf /opt/apache-tomcat-${tomcat_version}.tar.gz --directory /opt >/dev/null
@@ -70,10 +72,10 @@ User=tomcat
 Group=tomcat
 
 Environment="JAVA_HOME=$JAVA_HOME"
+Environment="GUACAMOLE_HOME=$GUACAMOLE_HOME"
 Environment="JAVA_OPTS=-Xms512m -Xmx512m -Djava.awt.headless=true"
 Environment="CATALINA_HOME=$TOMCAT_HOME"
 Environment="CATALINA_BASE=$TOMCAT_HOME"
-PIDFile="$TOMCAT_HOME/temp/tomcat.pid"
 Environment="CATALINA_PID=$TOMCAT_HOME/temp/tomcat.pid"
 Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
@@ -107,7 +109,6 @@ chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME
 echo_to_log "Deploying Guacamole Client: Done!"
 
 echo_to_log "Creating Guacamole Client property file:..."
-export GUACAMOLE_HOME=/opt/guacamole
 mkdir -p $GUACAMOLE_HOME
 cat <<EOF >$GUACAMOLE_HOME/guacamole.properties
 guacd-hostname: localhost
@@ -133,6 +134,20 @@ echo === === === === guacamole.properties === === === ===
 cat $GUACAMOLE_HOME/guacamole.properties
 echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
+
+echo_to_log "Creating Guacamole Client context file:..."
+# Converts Servlet 4.0 to Servlet 5.0 applications
+cat <<EOF >$TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
+<Context>
+   <Loader jakartaConverter="TOMCAT" />
+</Context>
+EOF
+echo === === === === guacamole.xml === === === ===
+cat $TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
+echo === === === === guacamole.xml === === === ===
+echo_to_log "Creating Guacamole Client context file: Done!"
+
+
 
 # echo_to_log "Installing MariaDB Client:..."
 # run the following for help
