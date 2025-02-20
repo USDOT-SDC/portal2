@@ -115,37 +115,38 @@ guacd-hostname: localhost
 guacd-port: 4822
 guacd-ssl: false
 
-mysql-hostname: ${mariadb_endpoint}
+extension-priority: openid
+openid-authorization-endpoint: https://${cognito_pool_domain}/oauth2/authorize
+openid-jwks-endpoint: https://${cognito_pool_endpoint}/.well-known/jwks.json
+openid-issuer: https://${cognito_pool_endpoint}
+openid-client-id: ${cognito_pool_client_id}
+openid-redirect-uri: https://guacamole.${fqdn}/guacamole
+openid-scope: openid email phone profile
+
+mysql-hostname: ${mariadb_address}
 mysql-database: guacamole_db
 mysql-username: guacamole_user
 mysql-password: ${mariadb_password}
 mysql-port: 3306
-mysql-driver: mariadb
+mysql-driver: mysql
 mysql-ssl-mode: disabled
-
-openid-authorization-endpoint: "https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/oauth2/authorize"
-openid-jwks-endpoint: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP/.well-known/jwks.json"
-openid-issuer: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XrR5IDCuP"
-openid-client-id: 4binc5ifp081iu97i0dhb10q68
-openid-redirect-uri: "https://guacamole.sdc-dev.dot.gov/guacamole"
-openid-scope: "openid email phone profile"
 EOF
 echo === === === === guacamole.properties === === === ===
 cat $GUACAMOLE_HOME/guacamole.properties
 echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
 
-echo_to_log "Creating Guacamole Client context file:..."
-# Converts Servlet 4.0 to Servlet 5.0 applications
-cat <<EOF >$TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-<Context>
-   <Loader jakartaConverter="TOMCAT" />
-</Context>
-EOF
-echo === === === === guacamole.xml === === === ===
-cat $TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-echo === === === === guacamole.xml === === === ===
-echo_to_log "Creating Guacamole Client context file: Done!"
+# echo_to_log "Creating Guacamole Client context file:..."
+# # Converts Servlet 4.0 to Servlet 5.0 applications
+# cat <<EOF >$TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
+# <Context>
+#    <Loader jakartaConverter="TOMCAT" />
+# </Context>
+# EOF
+# echo === === === === guacamole.xml === === === ===
+# cat $TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
+# echo === === === === guacamole.xml === === === ===
+# echo_to_log "Creating Guacamole Client context file: Done!"
 
 
 
@@ -164,7 +165,7 @@ dnf install libguac-client-rdp -y
 dnf install xfreerdp -y
 echo_to_log "Guacamole Server and prerequisites: Done!"
 
-echo_to_log "Installing Guacamole extensions and MariaDB Java Client:..."
+echo_to_log "Installing Guacamole extensions and MySQL Connector:..."
 mkdir -p $GUACAMOLE_HOME/extensions
 mkdir -p $GUACAMOLE_HOME/lib
 
@@ -182,18 +183,18 @@ cp $GUACAMOLE_AUTH_SSO_PATH/openid/guacamole-auth-sso-openid-${guac_version}.jar
 yes | rm -rf $GUACAMOLE_AUTH_SSO_PATH
 yes | rm $GUACAMOLE_AUTH_SSO_PATH.tar.gz
 
-MARIADB_JAVA_CLIENT_PATH=$GUACAMOLE_HOME/lib/mariadb-java-client-${mariadb_client_version}
-aws s3 cp s3://${terraform_bucket}/${mariadb_client_key} $MARIADB_JAVA_CLIENT_PATH.jar
-echo_to_log "Installing Guacamole extensions and MariaDB Java Client: Done!"
+MYSQL_CONNECTOR_PATH=$GUACAMOLE_HOME/lib/mysql-connector-j-${mysql_connector_version}
+aws s3 cp s3://${terraform_bucket}/${mysql_connector_key} $MYSQL_CONNECTOR_PATH.jar
+echo_to_log "Installing Guacamole extensions and MySQL Connector: Done!"
 
 echo_to_log "Creating guacd conf file:..."
 cat <<EOF >$GUACAMOLE_HOME/guacd.conf
-[daemon]
-log_level = debug
-
 [server]
 bind_host = localhost
 bind_port = 4822
+
+[daemon]
+log_level = debug
 EOF
 echo === === === === guacd.conf === === === ===
 cat $GUACAMOLE_HOME/guacd.conf

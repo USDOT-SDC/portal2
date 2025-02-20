@@ -52,6 +52,12 @@ resource "aws_cognito_user_pool" "this" {
 
   sms_authentication_message = var.sms_authentication_message
 
+  sms_configuration {
+    external_id    = local.external_id
+    sns_caller_arn = aws_iam_role.this.arn
+    sns_region     = var.common.region
+  }
+
   software_token_mfa_configuration {
     enabled = true
   }
