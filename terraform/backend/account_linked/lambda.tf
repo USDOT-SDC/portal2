@@ -15,7 +15,7 @@ resource "aws_lambda_function" "account_linked" {
   source_code_hash = data.archive_file.account_linked.output_base64sha256
   role             = var.lambda_role.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.12"
+  runtime          = "python3.13"
   timeout          = 60
   environment {
     variables = var.environment_variables

@@ -2,7 +2,7 @@ locals {
   layer_name        = "lambda_cognito_layer"
   description       = "Lambda layer that includes all the packages needed to link accounts in the web portal"
   source_dir        = "backend\\lambda_cognito_layer\\src"
-  site_packages_dir = "${local.source_dir}\\python\\lib\\python3.12\\site-packages"
+  site_packages_dir = "${local.source_dir}\\python\\lib\\python3.13\\site-packages"
   exclude_venv      = fileset("${path.module}/src/", ".venv/**/*")
   exclude_pycache   = fileset("${path.module}/src/", "**/__pycache__/**/*")
   exclude_dist_info = fileset("${path.module}/src/", "**/*.dist-info/**/*")
@@ -64,6 +64,6 @@ resource "aws_lambda_layer_version" "lambda_cognito_layer" {
   s3_bucket                = aws_s3_object.deployment_package.bucket
   s3_key                   = aws_s3_object.deployment_package.key
   s3_object_version        = aws_s3_object.deployment_package.version_id
-  compatible_runtimes      = ["python3.12"]
+  compatible_runtimes      = ["python3.13"]
   compatible_architectures = ["x86_64"]
 }
