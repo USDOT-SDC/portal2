@@ -11,14 +11,12 @@ data "template_file" "user_data" {
     fqdn                   = var.fqdn
     environment            = var.common.environment
     terraform_bucket       = var.common.terraform_bucket.bucket
-    # tomcat_version           = "10.1.35"
-    # tomcat_key               = aws_s3_object.files["apache-tomcat-10.1.35.tar.gz"].key
     tomcat_version           = "9.0.100"
     tomcat_key               = aws_s3_object.files["apache-tomcat-9.0.100.tar.gz"].key
     guac_version             = "1.5.5"
     guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
-    guac_auth_jdbc_key       = aws_s3_object.files["guacamole-auth-jdbc-1.5.5.tar.gz"].key
-    guac_auth_sso_key        = aws_s3_object.files["guacamole-auth-sso-1.5.5.tar.gz"].key
+    guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key
+    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-1.5.5.jar"].key
     mysql_connector_version  = "9.2.0"
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
@@ -42,8 +40,8 @@ resource "aws_s3_object" "user_data" {
 # == Guacamole == 
 #    (https://guacamole.apache.org/releases/ -> {version})
 # guacamole-{version}.war
-# guacamole-auth-jdbc-{version}.tar.gz
-# guacamole-auth-sso-{version}.tar.gz
+# guacamole-auth-header-{version}.jar
+# guacamole-auth-jdbc-mysql-{version}.jar
 # == MySQL Connector/J == 
 #    (https://dev.mysql.com/downloads/connector/j/ Select[Platform Independent] .jar is inside the archive)
 # mysql-connector-j-{version}.jar

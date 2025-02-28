@@ -111,7 +111,7 @@ resource "aws_instance" "guacamole" {
   ]
   subnet_id                   = var.common.vpc.subnet_four.id
   user_data                   = data.template_file.user_data.rendered
-  # user_data_replace_on_change = true
+  user_data_replace_on_change = true
   lifecycle {
     # prevent_destroy = true
     ignore_changes = [

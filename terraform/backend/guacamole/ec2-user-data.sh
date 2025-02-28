@@ -115,7 +115,7 @@ guacd-hostname: localhost
 guacd-port: 4822
 guacd-ssl: false
 
-extension-priority: openid
+extension-priority: header
 openid-authorization-endpoint: https://${cognito_pool_domain}/oauth2/authorize
 openid-jwks-endpoint: https://${cognito_pool_endpoint}/.well-known/jwks.json
 openid-issuer: https://${cognito_pool_endpoint}
@@ -148,8 +148,6 @@ echo_to_log "Creating Guacamole Client property file: Done!"
 # echo === === === === guacamole.xml === === === ===
 # echo_to_log "Creating Guacamole Client context file: Done!"
 
-
-
 # echo_to_log "Installing MariaDB Client:..."
 # run the following for help
 # curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --help
@@ -169,19 +167,11 @@ echo_to_log "Installing Guacamole extensions and MySQL Connector:..."
 mkdir -p $GUACAMOLE_HOME/extensions
 mkdir -p $GUACAMOLE_HOME/lib
 
-GUACAMOLE_AUTH_JDBC_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-${guac_version}
-aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_key} $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
-tar -xvzf $GUACAMOLE_AUTH_JDBC_PATH.tar.gz --directory $GUACAMOLE_HOME/extensions >/dev/null
-cp $GUACAMOLE_AUTH_JDBC_PATH/mysql/guacamole-auth-jdbc-mysql-${guac_version}.jar $GUACAMOLE_HOME/extensions/
-yes | rm -rf $GUACAMOLE_AUTH_JDBC_PATH
-yes | rm $GUACAMOLE_AUTH_JDBC_PATH.tar.gz
+GUACAMOLE_AUTH_JDBC_MYSQL_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-mysql-${guac_version}.jar
+aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_mysql_key} $GUACAMOLE_AUTH_JDBC_MYSQL_PATH
 
-GUACAMOLE_AUTH_SSO_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-sso-${guac_version}
-aws s3 cp s3://${terraform_bucket}/${guac_auth_sso_key} $GUACAMOLE_AUTH_SSO_PATH.tar.gz
-tar -xvzf $GUACAMOLE_AUTH_SSO_PATH.tar.gz --directory $GUACAMOLE_HOME/extensions >/dev/null
-cp $GUACAMOLE_AUTH_SSO_PATH/openid/guacamole-auth-sso-openid-${guac_version}.jar $GUACAMOLE_HOME/extensions/
-yes | rm -rf $GUACAMOLE_AUTH_SSO_PATH
-yes | rm $GUACAMOLE_AUTH_SSO_PATH.tar.gz
+GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-${guac_version}.jar
+aws s3 cp s3://${terraform_bucket}/${guac_auth_header_key} $GUACAMOLE_AUTH_HEADER_PATH
 
 MYSQL_CONNECTOR_PATH=$GUACAMOLE_HOME/lib/mysql-connector-j-${mysql_connector_version}
 aws s3 cp s3://${terraform_bucket}/${mysql_connector_key} $MYSQL_CONNECTOR_PATH.jar
@@ -270,6 +260,9 @@ firewall-offline-cmd --zone=public --add-port=52311/udp
 sleep 2 # Add a 2-second delay
 systemctl start firewalld
 firewall-cmd --reload
+echo === === === === firewalld config === === === ===
+firewall-cmd --list-all
+echo === === === === firewalld config === === === ===
 echo_to_log "Configuring Firewall: Done!"
 
 # === Run a Full System Update ===
