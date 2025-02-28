@@ -246,7 +246,7 @@ module "api" {
   common        = var.common
   resource_slug = each.key
   foo           = each.value
-  runtime       = "python3.12"
+  runtime       = "python3.13"
   lambda_role   = aws_iam_role.portal_lambdas
   rest_api      = aws_api_gateway_rest_api.portal
   authorizer_id = aws_api_gateway_authorizer.portal.id
@@ -340,4 +340,14 @@ module "lambda_cognito_layer" {
   module_slug = "layer-lambda-cognito-layer"
   source      = "./lambda_cognito_layer"
   common      = var.common
+}
+
+module "guacamole" {
+  module_name  = "Server, Guacamole"
+  module_slug  = "guacamole"
+  source       = "./guacamole"
+  common       = var.common
+  certificates = var.certificates
+  cognito      = module.cognito.cognito
+  fqdn         = var.fqdn
 }

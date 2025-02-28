@@ -16,7 +16,7 @@ resource "aws_route53_record" "guacamole" {
   ttl             = 300
   type            = "CNAME"
   zone_id         = data.aws_route53_zone.public.zone_id
-  records         = [local.guacamole_elb]
+  records         = [module.guacamole.lb.dns_name]
 }
 
 # === Portal API Address Record ===

@@ -10,7 +10,7 @@ resource "aws_lambda_function" "ddb_crud" {
   source_code_hash = data.archive_file.ddb_crud.output_base64sha256
   role             = aws_iam_role.ddb_crud_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.12"
+  runtime          = "python3.13"
   timeout          = 60
   # environment {
   #   variables = var.foo.environment_variables

@@ -4,7 +4,7 @@ variable "common" {}
 # variable "rest_api" {}
 # variable "authorizer_id" {}
 locals {
-  path_part = "ddb_crud"
+  external_id = "DesperateZebraFlops" # just a random string
   common_tags = {
     "Module Slug" = "be-${var.module_slug}"
   }

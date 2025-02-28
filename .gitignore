@@ -22,6 +22,9 @@ terraform/backend/**/src/python/lib/*/site-packages/*
 terraform/frontend/interface_build
 terraform/frontend/interface_build/**
 
+# Guacamole Files
+terraform/backend/guacamole/source-files/*
+!terraform/backend/guacamole/source-files/README.md
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,python,windows,terraform,visualstudiocode,node,angular
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,python,windows,terraform,visualstudiocode,node,angular
