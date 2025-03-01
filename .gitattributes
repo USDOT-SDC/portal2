@@ -10,3 +10,4 @@
 *.tar binary
 *.jar binary
 *.zip binary
+*.war binary
