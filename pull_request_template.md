@@ -4,8 +4,8 @@
 <!--  -->
 |                              |            |
 |------------------------------|------------|
-| __Proposed Release Version__ | 0.0.0      |
-| __Proposed Release Date__    | 2024-00-00 |
+| __Proposed Release Version__ | 1.0.0      |
+| __Proposed Release Date__    | 2025-00-00 |
 | __Release Type__             | Fast Track |
 | __Risk Type__                | Low        |
 | __Expected Downtime__        | None       |
