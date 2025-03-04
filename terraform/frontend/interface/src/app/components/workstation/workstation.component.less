@@ -1,0 +1,76 @@
+div.workstation {
+    display: inline-block;
+    width: 190px;
+    padding: 0.75rem;
+    border: solid 1px #cecece;
+    background-color: white;
+    border-radius: 6px;
+    transition: all ease-in-out 250ms;
+
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+
+    div.icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1.2 / 1;
+        border: solid 1px #cecece;
+        border-radius: 6px;
+
+
+        span.fa-stack {
+            width: 150px;
+
+            i.fa-brands {
+                font-size: 20px;
+                top: -5px;
+            }
+
+            i.fa-solid {}
+        }
+    }
+
+    div.info {
+        padding-top: 8px;
+
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        p.text-truncate {
+            max-width: calc(205px - 0.75rem);
+        }
+
+        div.details {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+    }
+
+    div.actions {
+        border-top: solid 1px #cecece;
+        margin-top: 6px;
+        padding-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        button {
+            flex-grow: 1;
+            font-size: small;
+        }
+
+        button:first-of-type {
+            flex-shrink: 1;
+        }
+
+        button:last-of-type {
+            flex-shrink: 1;
+        }
+
+    }
+}

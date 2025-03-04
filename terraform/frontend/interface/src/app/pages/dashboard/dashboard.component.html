@@ -1,0 +1,52 @@
+<ng-container *ngIf="loading">
+    <div class="loader">
+        <i class="fa-solid fa-circle-notch fa-5x fa-spin"></i>
+        <h6 class="text-center m-0">Initializing Dashboard...</h6>
+    </div>
+</ng-container>
+<div class="container">
+    <div class="wrapper">
+
+        <div class="sidebar">
+            <h4 class="mb-4"> Welcome Back, <br><span class="texts-secondary">{{parseUserName(this.user_name) | titlecase }}</span>! </h4>
+            <hr>
+            <div class="nav flex-column nav-pills text-start me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link text-center mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Resources</button>
+                <button class="nav-link text-center mb-2" id="v-pills-resources-tab" data-bs-toggle="pill" data-bs-target="#v-pills-resources" type="button" role="tab" aria-controls="v-pills-resources" aria-selected="false">SDC Resources</button>
+                <button class="nav-link text-center mb-2" id="v-pills-requests-tab" data-bs-toggle="pill" data-bs-target="#v-pills-requests" type="button" role="tab" aria-controls="v-pills-requests" aria-selected="false">Request Center</button>
+                <ng-container *ngIf="user_is_approver == true">
+                    <button class="nav-link text-center mb-2" id="v-pills-approvals-tab" data-bs-toggle="pill" data-bs-target="#v-pills-approvals" type="button" role="tab" aria-controls="v-pills-approvals" aria-selected="false">Approval Center</button>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div class="tab-content" id="v-pills-tabContent">
+
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                    <div class="mb-4">
+                        <app-workstations [workstations]="user_workstations" [loading]="loading"></app-workstations>
+                    </div>
+                    <div class="mb-4">
+                        <app-datasets [sdc_datasets]="sdc_datasets"></app-datasets>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-resources" role="tabpanel" aria-labelledby="v-pills-resources-tab" tabindex="0">
+                    <div class="mb-4">
+                        <app-sdc-datasets [sdc_datasets]="sdc_datasets"></app-sdc-datasets>
+                    </div> 
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-requests" role="tabpanel" aria-labelledby="v-pills-requests-tab" tabindex="0">
+                    <app-user-request-center [sdc_datasets]="sdc_datasets"></app-user-request-center>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-approvals" role="tabpanel" aria-labelledby="v-pills-requests-tab" tabindex="0">
+                    <app-user-approval-center></app-user-approval-center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

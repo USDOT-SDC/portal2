@@ -1,0 +1,362 @@
+<ul class="list-group">
+    <li class="list-group-item p-3">
+        <div class="position-relative">
+            <a class="stretched-link" data-bs-toggle="collapse" href="#ExportFileRequests_Collapse" role="button" aria-expanded="false" aria-controls="ExportFileRequests_Collapse"> </a>
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Export File Requests <span class="ms-3 badge text-bg-secondary" *ngIf="s3_requests.length > 0">{{s3_requests.length}} Requests</span></h5>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+        <div class="collapse show" id="ExportFileRequests_Collapse">
+
+            <!-- <div class="row mt-3">
+                <div class="col-7">
+                    <div class="input-group">
+                        <span class="input-group-text">Search</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Search By -</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search Requests...">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="input-group">
+                        <span class="input-group-text">Sort By</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Sort By -</option>
+                        </select>
+                        <select id="ExportFileRequestsSortType" class="form-select">
+                            <option value="undefined" selected>- Sort Type -</option>
+                            <option value="Ascending">Ascending (0-9/A-Z)</option>
+                            <option value="Descending">Descending (Z-A/9-0)</option>
+                        </select>
+                    </div>
+                </div>
+            </div> 
+
+            <hr> -->
+
+            <ng-container *ngIf="s3_requests.length > 0; else No_ExportFiles_ToShow">
+                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="row">
+                        <ng-container *ngFor="let request of s3_requests">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <p class="m-0"><i class="fa-solid fa-calendar-day me-2"></i>{{ timestamp_to_date(request.ReqReceivedTimestamp) | date: 'shortDate' }}</p>
+                                            <p class="m-0">
+                                                <ng-container [ngSwitch]="request.RequestReviewStatus">
+                                                    <ng-container *ngSwitchCase="'Approved'">
+                                                        <span class="badge text-bg-success py-1">Approved</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'Rejected'">
+                                                        <span class="badge text-bg-danger py-1">Rejected</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus | titlecase }} </span>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </p>
+                                        </div>
+                                        <hr class="my-2">
+                                        <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
+                                        <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
+                                        <p class="m-0"><b>File Name:</b> {{ request.S3Key }}</p>
+                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
+                                            <b>Justification:</b>&nbsp;
+                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer p-2">
+                                        <div class="d-flex align-items-center justify-content-between gap-2">
+                                            <button class="btn btn-outline-info btn-sm flex-grow-1" (click)="toggle_view_request_details(request)"><i class="fa-solid fa-circle-info me-2"></i>More&nbsp;Details</button>
+                                            <div class="d-flex gap-2" *ngIf="request.RequestReviewStatus == 'Submitted'">
+                                                <button class="btn btn-success btn-sm" (click)="submit_file_status_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
+                                                <button class="btn btn-danger btn-sm" (click)="submit_file_status_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #No_ExportFiles_ToShow>
+                <div class="card">
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Export File Requests</h5>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+
+        </div>
+    </li>
+    <li class="list-group-item p-3">
+        <div class="position-relative">
+            <a class="stretched-link" data-bs-toggle="collapse" href="#ExportTableRequests_Collapse" role="button" aria-expanded="false" aria-controls="ExportTableRequests_Collapse"> </a>
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Export Table Requests <span class="ms-3 badge text-bg-secondary" *ngIf="table_export_requests.length > 0">{{table_export_requests.length}} Requests</span></h5>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+        <div class="collapse" id="ExportTableRequests_Collapse">
+
+            <!-- <div class="row mt-3">
+                <div class="col-7">
+                    <div class="input-group">
+                        <span class="input-group-text">Search</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Search By -</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search Requests...">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="input-group">
+                        <span class="input-group-text">Sort By</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Sort By -</option>
+                        </select>
+                        <select id="ExportFileRequestsSortType" class="form-select">
+                            <option value="undefined" selected>- Sort Type -</option>
+                            <option value="Ascending">Ascending (0-9/A-Z)</option>
+                            <option value="Descending">Descending (Z-A/9-0)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr> -->
+
+            <ng-container *ngIf="table_export_requests.length > 0; else No_ExportTables_ToShow">
+                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="row">
+                        <ng-container *ngFor="let request of table_export_requests">
+                            <div class="col-4">
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <p class="m-0"><i class="fa-solid fa-calendar-day me-2"></i>{{ timestamp_to_date(request.ReqReceivedTimestamp) | date: 'shortDate' }}</p>
+                                            <p class="m-0">
+                                                <ng-container [ngSwitch]="request.RequestReviewStatus">
+                                                    <ng-container *ngSwitchCase="'Approved'">
+                                                        <span class="badge text-bg-success py-1">Approved</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'Rejected'">
+                                                        <span class="badge text-bg-danger py-1">Rejected</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus | titlecase }} </span>
+                                                    </ng-container>
+                                                </ng-container>
+
+                                            </p>
+                                        </div>
+                                        <hr class="my-2">
+                                        <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
+                                        <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
+                                        <p class="m-0"><b>Email:</b> {{ request.UserEmail }}</p>
+                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
+                                            <b>Justification:</b>&nbsp;
+                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer p-2">
+                                        <div class="d-flex align-items-center justify-content-between gap-2">
+                                            <button class="btn btn-outline-info btn-sm flex-grow-1" (click)="toggle_view_request_details(request)"><i class="fa-solid fa-circle-info me-2"></i>More&nbsp;Details</button>
+                                            <div class="d-flex gap-2" *ngIf="request.RequestReviewStatus == 'Submitted'">
+                                                <button class="btn btn-success btn-sm" (click)="submit_export_table_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
+                                                <button class="btn btn-danger btn-sm" (click)="submit_export_table_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #No_ExportTables_ToShow>
+                <div class="card">
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Export Table Requests</h5>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </li>
+    <li class="list-group-item p-3">
+        <div class="position-relative">
+            <a class="stretched-link" data-bs-toggle="collapse" href="#TrustedUserRequests_Collapse" role="button" aria-expanded="false" aria-controls="TrustedUserRequests_Collapse"> </a>
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="m-0">Trusted User Requests <span class="ms-3 badge text-bg-secondary" *ngIf="trusted_user_status_requests.length > 0">{{trusted_user_status_requests.length}} Requests</span></h5>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+        <div class="collapse" id="TrustedUserRequests_Collapse">
+
+            <!-- <div class="row mt-3">
+                <div class="col-7">
+                    <div class="input-group">
+                        <span class="input-group-text">Search</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Search By -</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search Requests...">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="input-group">
+                        <span class="input-group-text">Sort By</span>
+                        <select id="ExportFileRequestsSortBy" class="form-select">
+                            <option value="undefined" selected>- Sort By -</option>
+                        </select>
+                        <select id="ExportFileRequestsSortType" class="form-select">
+                            <option value="undefined" selected>- Sort Type -</option>
+                            <option value="Ascending">Ascending (0-9/A-Z)</option>
+                            <option value="Descending">Descending (Z-A/9-0)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr> -->
+
+            <ng-container *ngIf="trusted_user_status_requests.length > 0; else No_TrustedUsers_ToShow">
+                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="row">
+                        <ng-container *ngFor="let request of trusted_user_status_requests">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <p class="m-0"><i class="fa-solid fa-calendar-day me-2"></i>{{ timestamp_to_date(request.ReqReceivedTimestamp) | date: 'shortDate' }}</p>
+                                            <p class="m-0"> <span class="badge text-bg-secondary py-1"> Submitted </span> </p>
+                                        </div>
+                                        <hr class="my-2">
+                                        <p class="m-0"><b>User:</b> {{ request.UserID }}</p>
+                                        <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
+                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.TrustedJustification">
+                                            <b>Justification:</b>&nbsp;
+                                            <span [ngClass]="{'text-muted': !request.TrustedJustification}">{{request.TrustedJustification || " - - " }}</span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer p-2">
+                                        <div class="d-flex align-items-center justify-content-between gap-2">
+                                            <button class="btn btn-outline-info btn-sm flex-grow-1" (click)="toggle_view_request_details(request)"><i class="fa-solid fa-circle-info me-2"></i>More&nbsp;Details</button>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-success btn-sm" (click)="submit_trusted_status_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
+                                                <button class="btn btn-danger btn-sm" (click)="submit_trusted_status_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-template #No_TrustedUsers_ToShow>
+                <div class="card">
+                    <div class="card-body bg-light">
+                        <div class="d-flex align-items-center justify-content-center p-4">
+                            <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </li>
+</ul>
+
+
+<app-modal #Modal_RequestDetails [size]="'md'">
+    <ng-container modal-header>
+        <div class="d-flex align-items-center justify-content-between w-100 p-2">
+            <h5 class="m-0"> Request Details </h5>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" [(ngModel)]="view_raw_data">
+                <label class="form-check-label" for="flexSwitchCheckDefault">View Raw JSON</label>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container modal-body>
+        <div class="p-2" *ngIf="selected_request">
+            <ng-container *ngIf="view_raw_data == true; else DisplayDefaultDataForm">
+                <div class="card card-body">
+                    <code class="text-dark"><pre>{{ selected_request | json }}</pre></code>
+                </div>
+            </ng-container>
+            <ng-template #DisplayDefaultDataForm>
+                <h5><small>Submission Details</small></h5>
+                <div class="card card-body bg-light">
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <p class="mb-0"><small> <b>Name</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <p class="mb-0"><small> <b>Email Address</b> </small><br>{{selected_request.UserEmail}}</p>
+                        </div>
+                        <div class="col-6 mb-2" *ngIf="selected_request.TeamBucket">
+                            <p class="mb-0"><small> <b>Team</b> </small><br>{{selected_request.TeamBucket}}</p>
+                        </div>
+                        <div class="col-6 mb-2" *ngIf="selected_request.S3Key">
+                            <p class="mb-0"><small> <b>File Name</b> </small><br> {{selected_request.S3Key}}</p>
+                        </div>
+                        <div class="col-6 mb-2" *ngIf="selected_request.TrustedStatus">
+                            <p class="mb-0"><small> <b>Request Type</b> </small><br> {{ selected_request.TrustedStatus }} </p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h5><small>Request Details</small></h5>
+                <div class="card card-body bg-light">
+                    <div class="row">
+                        <ng-container *ngIf="selected_request.ApprovalForm">
+                            <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Derived Dataset</b></small><br> {{selected_request.ApprovalForm.derivedDataSetname}}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Provider</b></small><br>{{selected_request.ApprovalForm.dataprovider}}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Dataset</b></small><br> {{selected_request.ApprovalForm.datasetName}}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Data Sources</b></small><br> {{selected_request.ApprovalForm.datasources}}</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Specific sub-datasets or Data Types</b></small><br> {{selected_request.ApprovalForm.datatype}}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.ApprovalForm.justifyExport || " - - " }}</p>
+                            </div>
+
+                        </ng-container>
+                        <ng-container *ngIf="selected_request.TrustedStatus">
+                            <div class="col-12">
+                                <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.TrustedJustification || " - - " }}</p>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </ng-container>
+    <ng-container modal-footer>
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <button class="btn btn-secondary" (click)="close_request_details_modal()">Close</button>
+        </div>
+    </ng-container>
+</app-modal>

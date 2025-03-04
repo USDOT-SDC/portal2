@@ -1,0 +1,15 @@
+meta {
+  name: Get Instance Status
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1/instance_status?instance_id=i-0ea40269f4a0e68e0
+  body: none
+  auth: inherit
+}
+
+query {
+  instance_id: i-0ea40269f4a0e68e0
+}

@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "name": "Bruno",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "https://hdvvw7yfy4.execute-api.us-east-1.amazonaws.com/v1"
+  }
+}

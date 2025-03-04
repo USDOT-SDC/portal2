@@ -1,0 +1,38 @@
+<section class="container" id="sdc-login-page">
+    <div class="row">
+        <div id="login-section" class="col-5 px-5">
+            <h4>Sign In</h4>
+            <p>If you do not have a Department of Transportation email address, you will be redirected to Login.gov.</p>
+            <p>You will be prompted to create a Login.gov account if you do not already have one.</p>
+            <hr>
+
+
+
+            <div class="d-flex flex-column gap-3">
+
+                {{ "" // BUTTON: Main Login - DOT.GOV SSO }}
+                <button class="btn btn-primary btn-lg" (click)="login()" [disabled]="signing_in == true">
+                    <ng-container *ngIf="signing_in == true; else DefaultSignInButton">
+                        <i class="fa-solid fa-circle-notch fa-spin me-2"></i> Redirecting Login...
+                    </ng-container>
+                    <ng-template #DefaultSignInButton>
+                        <i class="fa-solid fa-right-to-bracket me-2"></i> Login to SDC
+                    </ng-template>
+                </button>
+
+            </div>
+
+        </div>
+        <div id="register-section" class="col-7 px-5">
+            <h4>Sign up to the SDC</h4>
+            <p>Please visit the link below to request access, fill out the required details in the web form and click <b>Send</b>.</p>
+
+            <p>Once approved we will communicate the instructions for accessing the platform via our Service Desk.</p>
+            <p><a class="btn btn-outline-secondary" target="_blank" href="https://securedatacommons.atlassian.net/servicedesk/customer/portal/2/group/7"><i class="fa-solid fa-up-right-from-square me-2"></i> Access Request Form </a></p>
+            <br>
+
+            <p>If you are providing data to the SDC please fill out the Data Provider Agreement.</p>
+            <p><a class="btn btn-outline-secondary" target="_blank" href="https://securedatacommons.atlassian.net/servicedesk/customer/portal/7/group/15/create/66"><i class="fa-solid fa-up-right-from-square me-2"></i> Data Provider Agreement </a></p>
+        </div>
+    </div>
+</section>

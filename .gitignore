@@ -1,13 +1,30 @@
 ### repo specific ignores ###
 # Terraform plans
-**/tfplan*
+**/tfplans
+**/tfplans/*
+
+# Terraform tfvars files
+*.tfvars
+!/terraform/env_vars/*
 
 # Terraform local config files
 **/terraform/**/*.conf
 
-# Terraform Lambda module builds
-terraform/builds
+# Terraform Lambda deployment packages
+**/lambda_deployment_package.zip
 
+# Lambda deployment packages
+terraform/backend/**/deployment/*.zip
+terraform/backend/**/src/python/lib/*/site-packages/*
+!terraform/backend/**/src/python/lib/*/site-packages/.gitkeep
+
+# Frontend Interface build
+terraform/frontend/interface_build
+terraform/frontend/interface_build/**
+
+# Guacamole Files
+terraform/backend/guacamole/source-files/*
+!terraform/backend/guacamole/source-files/README.md
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,python,windows,terraform,visualstudiocode,node,angular
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,python,windows,terraform,visualstudiocode,node,angular
@@ -247,7 +264,7 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-lib/
+**/frontend/**/lib/
 lib64/
 parts/
 sdist/
@@ -415,7 +432,7 @@ crash.*.log
 # password, private keys, and other secrets. These should not be part of version
 # control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
-*.tfvars
+# *.tfvars
 *.tfvars.json
 
 # Ignore override files as they are usually used to override resources locally and so

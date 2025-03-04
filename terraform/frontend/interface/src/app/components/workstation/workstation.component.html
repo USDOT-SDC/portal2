@@ -1,0 +1,57 @@
+<div class="workstation">
+    <div class="icon" [ngClass]="workstation.status == false ? 'bg-light' : 'bg-info-subtle' ">
+        <span class="fa-stack" style="vertical-align: center;">
+            <i class="fa-brands fa-stack-2x text-muted" data-fa-transform="up-4" [ngClass]="'fa-' + workstation.machine.os"></i>
+            <i class="fa-solid fa-desktop fa-stack-1x fa-5x text-muted"></i>
+        </span>
+    </div>
+    <div class="info">
+        <p class="text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="workstation.display_name"><b>{{ workstation.display_name }}</b></p>
+        <div class="details">
+            <p><small>vCPUs: {{ workstation.machine.cpu || 0 }}</small></p>
+            <p><small>RAM(GiB): {{ workstation.machine.ram || 0 }}</small></p>
+        </div>
+    </div>
+    <div class="actions">
+
+        <button class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Turn Workstation On/Off" title="Turn Workstation On/Off" [ngClass]="workstation.status == false ? 'btn-outline-secondary' : 'btn-danger'" [disabled]="workstation.loading" (click)="emit_action('toggle', { instance_id: workstation.instance_id })"><!-- (click)="toggle_workstation(workstation.instance_id)" -->
+
+            <ng-container *ngIf="workstation.loading == true; else DefaultToggleButton;">
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+            </ng-container>
+            <ng-template #DefaultToggleButton>
+                <i class="fa-solid fa-power-off"></i>
+            </ng-template>
+        </button>
+
+        <button class="btn btn-sm text-nowrap" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Connect to Workstation" title="Connect to Workstation" [ngClass]="workstation.status == false ? 'btn-outline-secondary' : 'btn-success'" [disabled]="workstation.status == false || workstation.loading == true" (click)="emit_action('launch', { instance_id: workstation.instance_id })"><!-- (click)="launch_workstation(workstation.instance_id)" -->
+            <i class="fa-solid fa-square-arrow-up-right me-1"></i>CONNECT
+        </button>
+
+        <div class="dropdown dropstart">
+            <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="dropdown"><i class="fa-solid fa-gear"></i></button>
+            <ul class="dropdown-menu">
+                <li>
+                    <h6 class="dropdown-header">Manage Workstation</h6>
+                </li>
+                <li>
+                    <!-- (click)="open_modal_resize_workstation_modal()"         -->
+                    <button class="dropdown-item" type="button" [disabled]="workstation.loading == true" (click)="emit_action('resize', { instance_id: workstation.instance_id })">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center me-2"></i>Resize Workstation
+                    </button>
+                </li>
+                <!-- <li>
+                    <button class="dropdown-item" type="button" [disabled]="workstation.loading == true" (click)="emit_action('schedule', { instance_id: workstation.instance_id })">
+                        <i class="fa-solid fa-calendar-week me-2"></i>Schedule Up-Time
+                    </button>
+                </li> -->
+                <li>
+                    <button class="dropdown-item" type="button" [disabled]="workstation.loading == true || true" (click)="emit_action('storage', { instance_id: workstation.instance_id })">
+                        <i class="fa-solid fa-hard-drive me-2"></i>Add Storage (Coming Soon)
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
