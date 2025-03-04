@@ -1,6 +1,9 @@
 # Environment Setup
+The follow setup steps should only need to be done once.  
 1. Install AWS CLI version 2 [download here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-1. Install Terraform `~> 1.0` [download here](https://releases.hashicorp.com/terraform/)
+1. Install Terraform version 1 [download here](https://releases.hashicorp.com/terraform/)
+1. Install Node.js version 22 [download here](https://nodejs.org/en/download)
+1. Install Angular version 18 via Node.js `npm install -g @angular/cli`
 1. Configuration
    1. Update `terraform/configuration.tf` if needed
       1. terraform.backend.s3.region and key
