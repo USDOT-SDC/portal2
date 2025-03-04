@@ -6,8 +6,7 @@
 *.jpg binary
 *.webp binary
 *.zip binary
-*.gz binary
 *.tar binary
+*.gz binary
 *.jar binary
-*.zip binary
 *.war binary

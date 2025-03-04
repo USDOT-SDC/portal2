@@ -6,7 +6,7 @@ module "be" {
   common       = local.common
   route53_zone = data.terraform_remote_state.infrastructure.outputs.route53_zone
   certificates = data.terraform_remote_state.infrastructure.outputs.certificates
-  fqdn         = local.fqdn
+  fqdn         = var.fqdn
 }
 
 # Frontend
@@ -15,7 +15,7 @@ module "fe" {
   module_slug = "fe"
   source      = "./frontend"
   common      = local.common
-  fqdn        = local.fqdn
+  fqdn        = var.fqdn
   backend = {
     resource_urls = module.be.resource_urls
     s3 = {
