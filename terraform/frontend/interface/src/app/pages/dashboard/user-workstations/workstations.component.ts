@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 declare var bootstrap: any;
 
@@ -71,7 +72,7 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public launch_workstation(id: string): void {
     // console.log("workstation id", id);
     const { token } = this.auth.current_user.getValue();
-    window.open(`https://portal.sdc-dev.dot.gov/guacamole?authToken=${token}`, '_blank')
+    window.open(`https://` + environment.resource_urls.guacamole + '/guacamole', '_blank')
   }
 
   /* ::===================:: MODALS ::===================:: */
