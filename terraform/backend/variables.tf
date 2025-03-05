@@ -26,4 +26,7 @@ locals {
     "App Support" = "Jeff.Ussing.CTR"
     "Fed Owner"   = "Dan Morgan"
   }
+  dev_web_acl_id  = "arn:aws:wafv2:us-east-1:505135622787:global/webacl/FMManagedWebACLV2-Enable-Shield-Advanced-Global-Policy-1681826198080/81323598-c0ec-4d6e-8690-95c47433d82e"
+  prod_web_acl_id = "arn:aws:wafv2:us-east-1:004118380849:global/webacl/FMManagedWebACLV2-Enable-Shield-Advanced-Global-Policy-1681826031617/91b49653-e00e-4d6a-86a3-9041f4de20ce"
+  web_acl_id      = var.common.environment == "dev" ? local.dev_web_acl_id : local.prod_web_acl_id
 }

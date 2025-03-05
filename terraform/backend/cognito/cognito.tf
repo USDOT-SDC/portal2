@@ -7,10 +7,10 @@ resource "aws_cognito_user_pool" "this" {
       priority = 1
     }
 
-    recovery_mechanism {
-      name     = "verified_phone_number"
-      priority = 2
-    }
+    # recovery_mechanism {
+    #   name     = "verified_phone_number"
+    #   priority = 2
+    # }
   }
 
   admin_create_user_config {
@@ -50,13 +50,13 @@ resource "aws_cognito_user_pool" "this" {
     temporary_password_validity_days = 3
   }
 
-  sms_authentication_message = var.sms_authentication_message
+  # sms_authentication_message = var.sms_authentication_message
 
-  sms_configuration {
-    external_id    = local.external_id
-    sns_caller_arn = aws_iam_role.this.arn
-    sns_region     = var.common.region
-  }
+  # sms_configuration {
+  #   external_id    = local.external_id
+  #   sns_caller_arn = aws_iam_role.this.arn
+  #   sns_region     = var.common.region
+  # }
 
   software_token_mfa_configuration {
     enabled = true
@@ -77,7 +77,7 @@ resource "aws_cognito_user_pool" "this" {
     email_message_by_link = var.verification_message_template.email_message_by_link
     email_subject         = var.verification_message_template.email_subject
     email_subject_by_link = var.verification_message_template.email_subject_by_link
-    sms_message           = var.verification_message_template.sms_message
+    # sms_message           = var.verification_message_template.sms_message
   }
 
   tags = local.common_tags
@@ -111,11 +111,11 @@ resource "aws_cognito_user_pool_client" "this" {
     "http://localhost:4200/login/redirect",
     "http://localhost:5000",
     "http://localhost:5000/authorize",
-    "https://sub1.sdc-dev.dot.gov/dashboard",
-    "https://sub1.sdc-dev.dot.gov/login/redirect",
-    "https://portal.sdc-dev.dot.gov/dashboard",
-    "https://portal.sdc-dev.dot.gov/login/redirect",
-    "https://guacamole.sdc-dev.dot.gov/guacamole",
+    "https://sub1.${var.fqdn}/dashboard",
+    "https://sub1.${var.fqdn}/login/redirect",
+    "https://portal.${var.fqdn}/dashboard",
+    "https://portal.${var.fqdn}/login/redirect",
+    "https://guacamole.${var.fqdn}/guacamole",
   ]
 
   # default_redirect_uri = ""
@@ -140,9 +140,9 @@ resource "aws_cognito_user_pool_client" "this" {
   logout_urls = [
     "http://localhost:4200/index.html",
     "http://localhost:5000/index.html",
-    "https://sub1.sdc-dev.dot.gov/index.html",
-    "https://portal.sdc-dev.dot.gov/index.html",
-    "https://guacamole.sdc-dev.dot.gov/guacamole"
+    "https://sub1.${var.fqdn}/index.html",
+    "https://portal.${var.fqdn}/index.html",
+    "https://guacamole.${var.fqdn}/guacamole"
   ]
 
   refresh_token_validity = 30 # default unit is days

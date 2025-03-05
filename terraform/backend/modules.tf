@@ -268,6 +268,7 @@ module "cognito" {
     email_subject_by_link = "Verify your email"
     sms_message           = "Your verification code is {####}."
   }
+  fqdn = var.fqdn
 }
 
 # module "cognito_old" {
