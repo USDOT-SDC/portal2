@@ -1,8 +1,7 @@
 variable "module_name" {}
 variable "module_slug" {}
 variable "common" {}
-# variable "rest_api" {}
-# variable "authorizer_id" {}
+variable "fqdn" {}
 locals {
   external_id = "DesperateZebraFlops" # just a random string
   common_tags = {

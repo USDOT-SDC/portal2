@@ -33,7 +33,7 @@ resource "terraform_data" "pip_install" {
   }
 
   provisioner "local-exec" {
-    command = "pip install --platform manylinux2014_x86_64 --only-binary=:all: --no-binary=:none: --implementation cp --python-version 3.12 --upgrade -t ${local.site_packages_dir} -r ${path.module}\\requirements.txt"
+    command = "pip install --platform manylinux2014_x86_64 --only-binary=:all: --no-binary=:none: --implementation cp --python-version 3.13 --upgrade -t ${local.site_packages_dir} -r ${path.module}\\requirements.txt"
   }
 }
 

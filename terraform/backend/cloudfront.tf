@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "portal" {
     minimum_protocol_version = "TLSv1.2_2021"
     ssl_support_method       = "sni-only"
   }
-  web_acl_id          = "arn:aws:wafv2:us-east-1:505135622787:global/webacl/FMManagedWebACLV2-Enable-Shield-Advanced-Global-Policy-1681826198080/81323598-c0ec-4d6e-8690-95c47433d82e"
+  web_acl_id          = local.web_acl_id
   retain_on_delete    = true  # Disables instead of deletes when destroying through Terraform. If set, needs to be deleted manually afterwards.
   wait_for_deployment = false # If enabled, the resource will wait for the distribution status to change from InProgress to Deployed.
 }
