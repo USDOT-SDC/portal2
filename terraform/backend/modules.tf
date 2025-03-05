@@ -271,10 +271,6 @@ module "cognito" {
   fqdn = var.fqdn
 }
 
-# module "cognito_old" {
-#   source = "./cognito_old"
-# }
-
 module "ddb_crud" {
   module_name   = "API, DynamoDB CRUD"
   module_slug   = "api-ddb-crud"
