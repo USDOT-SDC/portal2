@@ -104,9 +104,17 @@ systemctl stop tomcat
 aws s3 cp s3://${terraform_bucket}/${guac_war_key} $TOMCAT_HOME/webapps/guacamole.war
 unzip $TOMCAT_HOME/webapps/guacamole.war -d $TOMCAT_HOME/webapps/guacamole/ >/dev/null
 yes | rm $TOMCAT_HOME/webapps/guacamole.war
+echo_to_log "Deploying Guacamole Client: Done!"
+
+echo_to_log "Copying Guacamole web.xml:..."
+GUACAMOLE_WEB_XML_PATH=$TOMCAT_HOME/webapps/guacamole/WEB-INF/web.xml
+aws s3 cp --recursive s3://${terraform_bucket}/${guac_web_xml_key} $GUACAMOLE_WEB_XML_PATH
+echo_to_log "Copying Guacamole web.xml: Done!"
+
+echo_to_log "chown/chcon the Tomcat dir:..."
 chown -R tomcat:tomcat $TOMCAT_HOME
 chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME
-echo_to_log "Deploying Guacamole Client: Done!"
+echo_to_log "chown/chcon the Tomcat dir: Done!"
 
 echo_to_log "Creating Guacamole Client property file:..."
 mkdir -p $GUACAMOLE_HOME
@@ -135,26 +143,6 @@ echo === === === === guacamole.properties === === === ===
 cat $GUACAMOLE_HOME/guacamole.properties
 echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
-
-# echo_to_log "Creating Guacamole Client context file:..."
-# # Converts Servlet 4.0 to Servlet 5.0 applications
-# cat <<EOF >$TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-# <Context>
-#    <Loader jakartaConverter="TOMCAT" />
-# </Context>
-# EOF
-# echo === === === === guacamole.xml === === === ===
-# cat $TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-# echo === === === === guacamole.xml === === === ===
-# echo_to_log "Creating Guacamole Client context file: Done!"
-
-# echo_to_log "Installing MariaDB Client:..."
-# run the following for help
-# curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --help
-# curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --os-type=rhel --os-version=8
-# dnf install MariaDB-shared -y
-# dnf install MariaDB-client -y
-# echo_to_log "Installing MariaDB Client: Done!"
 
 echo_to_log "Guacamole Server and prerequisites:..."
 dnf install guacd-${guac_version} -y
@@ -201,6 +189,15 @@ chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME/webapps
 setsebool -P httpd_can_network_connect 1
 setsebool -P tomcat_can_network_connect_db 1
 echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configuring SElinux permissions: Done!"
+
+echo_to_log "Remove other Tomcat webapps:..."
+# TODO: Put this back after everything is dialed in
+# yes | rm -rf $TOMCAT_HOME/webapps/docs/
+# yes | rm -rf $TOMCAT_HOME/webapps/examples/
+# yes | rm -rf $TOMCAT_HOME/webapps/host-manager/
+# yes | rm -rf $TOMCAT_HOME/webapps/manager/
+# yes | rm -rf $TOMCAT_HOME/webapps/ROOT/
+echo_to_log "Remove other Tomcat webapps: Done!"
 
 echo_to_log "Starting tomcat and guacd:..."
 systemctl daemon-reload
