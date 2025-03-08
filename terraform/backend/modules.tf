@@ -268,11 +268,8 @@ module "cognito" {
     email_subject_by_link = "Verify your email"
     sms_message           = "Your verification code is {####}."
   }
+  fqdn = var.fqdn
 }
-
-# module "cognito_old" {
-#   source = "./cognito_old"
-# }
 
 module "ddb_crud" {
   module_name   = "API, DynamoDB CRUD"
@@ -350,4 +347,7 @@ module "guacamole" {
   certificates = var.certificates
   cognito      = module.cognito.cognito
   fqdn         = var.fqdn
+  # TODO switch these for finial deployment
+  # portal_url   = aws_route53_record.portal.name
+  portal_url = aws_route53_record.sub1.name
 }
