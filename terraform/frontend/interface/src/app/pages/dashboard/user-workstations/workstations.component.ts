@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 declare var bootstrap: any;
 
@@ -69,9 +70,27 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Launch and Connect to Workstation
   public launch_workstation(id: string): void {
-    // console.log("workstation id", id);
-    const { token } = this.auth.current_user.getValue();
-    window.open(`https://portal.sdc-dev.dot.gov/guacamole?authToken=${token}`, '_blank')
+
+    // Get Guacamole URL from **Resource URLS** in `environment.ts`
+    const guacamole_url = `https://${environment.resource_urls.guacamole}/guacamole/#/`;
+
+    // Create Headers for Guacamole using current user `username`
+    const guacamole_headers: Headers = new Headers();
+    guacamole_headers.set("remote_user", this.user_info.username);
+
+    // Create Async Function that will generate Guacamole Window with headers.
+    const OpenGuacamoleWindow = async (url: string, headers: Headers) => {
+      console.log("[OpenGuacamoleWindow]: ", { url, headers });
+      fetch(url, { method: "GET", headers, mode: "no-cors" }).then((res) => res.blob()).then((blob) => {
+        console.log("[fetch:response]: ", { blob: blob.text() })
+        var guacamole = window.URL.createObjectURL(blob);
+        console.log("Opening New Tab....\n")
+        window.open(guacamole, "_blank")?.focus();
+      })
+    };
+
+    // Call Async Function with URL and Headers, wait for window to open. 
+    OpenGuacamoleWindow(guacamole_url, guacamole_headers).then(() => { });
   }
 
   /* ::===================:: MODALS ::===================:: */
@@ -81,18 +100,22 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Open Shutdown Workstation Modal
   public open_shutdown_workstation_modal(): void { this.Modal_ShutDownWorkstation.open(); }
   // Shutdown Workstation Api Call
+  public shutting_down_workstation: boolean = false;
   public shutdown_workstation(): void {
     const id = this.selected_workstation.instance_id;
+    this.shutting_down_workstation = true;
     const _API = this.api.workstation_action(id, 'stop').subscribe((response: any) => {
       console.log('Workstation: stopped', response)
       _API.unsubscribe();
       this.selected_workstation.status = false;
       this.close_shutdown_workstation_modal();
+      this.shutting_down_workstation = false;
     })
   }
   // Close Shutdown Workstation Modal
   public close_shutdown_workstation_modal(): void {
     this.selected_workstation.loading = false;
+    this.shutting_down_workstation = false;
     this.selected_workstation = undefined;
     this.Modal_ShutDownWorkstation.close();
   }

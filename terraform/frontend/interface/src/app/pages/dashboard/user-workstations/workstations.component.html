@@ -25,7 +25,7 @@
 
 
 <!-- Modal: Shutdown Workstation -->
-<app-modal #Modal_ShutDownWorkstation [size]="'sm'">
+<app-modal #Modal_ShutDownWorkstation [size]="'md'">
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
             <h5 class="m-0"><i class="fa-solid fa-power-off me-2"></i>Shutdown Workstation</h5>
@@ -43,8 +43,11 @@
     </ng-container>
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="close_shutdown_workstation_modal()">Close</button>
-            <button class="btn btn-danger" (click)="shutdown_workstation()">Shutdown the Workstation</button>
+            <button class="btn btn-secondary" [disabled]="shutting_down_workstation==true" (click)="close_shutdown_workstation_modal()">Close</button>
+            <button class="btn btn-danger" [disabled]="shutting_down_workstation==true" (click)="shutdown_workstation()">
+                <ng-container *ngIf="shutting_down_workstation==true; else DefaultShutdownButton;"><i class="fa-solid fa-circle-notch fa-spin me-2"></i>Shuting down...</ng-container>
+                <ng-template #DefaultShutdownButton>Shutdown Workstation</ng-template>
+            </button>
         </div>
     </ng-container>
 </app-modal>
