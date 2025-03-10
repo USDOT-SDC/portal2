@@ -1,0 +1,31 @@
+plugins {
+  id 'java-library'
+  id 'eclipse'
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+task fatJar(type: Jar) {
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
+
+dependencies {
+  testImplementation 'junit:junit:4.12'
+
+  implementation group: 'com.google.inject', name: 'guice', version: '3.0'
+  implementation group: 'com.google.inject.extensions', name: 'guice-multibindings', version: '3.0'
+  implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.8'
+
+  // I think Maven "provided" translates to compileOnly ?
+  compileOnly group: 'org.apache.guacamole', name: 'guacamole-ext', version: '0.9.14'
+  compileOnly group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+
+}
