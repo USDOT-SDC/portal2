@@ -71,26 +71,15 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Launch and Connect to Workstation
   public launch_workstation(id: string): void {
 
+    const { id_token } = this.auth.current_user.getValue();
+    console.log({ id_token });
+
     // Get Guacamole URL from **Resource URLS** in `environment.ts`
-    const guacamole_url = `https://${environment.resource_urls.guacamole}/guacamole/#/`;
+    const guacamole_url = `https://${environment.resource_urls.guacamole}/guacamole/#/?authToken=${id_token}`;
 
-    // Create Headers for Guacamole using current user `username`
-    const guacamole_headers: Headers = new Headers();
-    guacamole_headers.set("remote_user", this.user_info.username);
+    console.log({ guacamole_url });
 
-    // Create Async Function that will generate Guacamole Window with headers.
-    const OpenGuacamoleWindow = async (url: string, headers: Headers) => {
-      console.log("[OpenGuacamoleWindow]: ", { url, headers });
-      fetch(url, { method: "GET", headers, mode: "no-cors" }).then((res) => res.blob()).then((blob) => {
-        console.log("[fetch:response]: ", { blob: blob.text() })
-        var guacamole = window.URL.createObjectURL(blob);
-        console.log("Opening New Tab....\n")
-        window.open(guacamole, "_blank")?.focus();
-      })
-    };
-
-    // Call Async Function with URL and Headers, wait for window to open. 
-    OpenGuacamoleWindow(guacamole_url, guacamole_headers).then(() => { });
+    window.open(guacamole_url)/* ?.focus(); */
   }
 
   /* ::===================:: MODALS ::===================:: */
