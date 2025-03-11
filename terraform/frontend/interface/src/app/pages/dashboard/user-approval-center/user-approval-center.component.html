@@ -13,7 +13,7 @@
         <div class="collapse show" id="ExportFileRequests_Collapse">
             <hr>
             <ng-container *ngIf="s3_requests.length > 0; else No_ExportFiles_ToShow">
-                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                <div class="card card-body bg-light-subtle-subtle p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of s3_requests">
                             <div class="col-12 col-md-6 col-lg-4">
@@ -62,7 +62,7 @@
 
             <ng-template #No_ExportFiles_ToShow>
                 <div class="card">
-                    <div class="card-body bg-light">
+                    <div class="card-body bg-light-subtle-subtle">
                         <div class="d-flex align-items-center justify-content-center p-4">
                             <h5 class="text-center text-muted m-0">No Export File Requests</h5>
                         </div>
@@ -86,7 +86,7 @@
         <div class="collapse" id="ExportTableRequests_Collapse">
             <hr>
             <ng-container *ngIf="table_export_requests.length > 0; else No_ExportTables_ToShow">
-                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                <div class="card card-body bg-light-subtle-subtle p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of table_export_requests">
                             <div class="col-4">
@@ -138,7 +138,7 @@
 
             <ng-template #No_ExportTables_ToShow>
                 <div class="card">
-                    <div class="card-body bg-light">
+                    <div class="card-body bg-light-subtle-subtle">
                         <div class="d-flex align-items-center justify-content-center p-4">
                             <h5 class="text-center text-muted m-0">No Export Table Requests</h5>
                         </div>
@@ -163,7 +163,7 @@
             <hr>
 
             <ng-container *ngIf="trusted_user_status_requests.length > 0; else No_TrustedUsers_ToShow">
-                <div class="card card-body bg-light p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                <div class="card card-body bg-light-subtle-subtle p-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
                     <div class="row">
                         <ng-container *ngFor="let request of trusted_user_status_requests">
                             <div class="col-12 col-md-6 col-lg-4">
@@ -199,7 +199,7 @@
 
             <ng-template #No_TrustedUsers_ToShow>
                 <div class="card">
-                    <div class="card-body bg-light">
+                    <div class="card-body bg-light-subtle-subtle">
                         <div class="d-flex align-items-center justify-content-center p-4">
                             <h5 class="text-center text-muted m-0">No Trusted User Requests</h5>
                         </div>
@@ -225,13 +225,13 @@
     <ng-container modal-body>
         <div class="p-2" *ngIf="selected_request">
             <ng-container *ngIf="view_raw_data == true; else DisplayDefaultDataForm">
-                <div class="card card-body">
-                    <code class="text-dark"><pre>{{ selected_request | json }}</pre></code>
+                <div class="card card-body bg-light-subtle-subtle">
+                    <code><pre>{{ selected_request | json }}</pre></code>
                 </div>
             </ng-container>
             <ng-template #DisplayDefaultDataForm>
                 <h5><small>Submission Details</small></h5>
-                <div class="card card-body bg-light">
+                <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <div class="col-6 mb-2">
                             <p class="mb-0"><small> <b>Name</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
@@ -252,7 +252,7 @@
                 </div>
                 <hr>
                 <h5><small>Request Details</small></h5>
-                <div class="card card-body bg-light">
+                <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <ng-container *ngIf="selected_request.ApprovalForm">
                             <div class="col-6 mb-2">

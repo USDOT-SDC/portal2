@@ -2,7 +2,7 @@
     <h3> My Workstations <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data."></i></sup> </h3>
     <hr>
 
-    <div class="workstation-wrapper bg-light">
+    <div class="workstation-wrapper">
         <ng-container *ngIf="loading; else DefaultElemWrapper">
             <div class="no-workstations">
                 <h5><i class="fa-solid fa-spinner"></i> Loading Workstations...</h5>
@@ -34,7 +34,7 @@
     <ng-container modal-body>
         <div class="p-2">
             <h5 class="text-center mb-3">Are you sure you to shutdown this Workstation?</h5>
-            <div class="card card-body bg-light mb-3">
+            <div class="card card-body bg-light-subtle mb-3">
                 <h3 class="text-center">{{ selected_workstation?.display_name }}</h3>
                 <!-- <h6 class="text-center m-0"><small>Running Since: 00/00/000 - 14:00:00</small></h6> -->
             </div>

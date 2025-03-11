@@ -18,6 +18,13 @@
                     <button class="nav-link text-center mb-2" id="v-pills-approvals-tab" data-bs-toggle="pill" data-bs-target="#v-pills-approvals" type="button" role="tab" aria-controls="v-pills-approvals" aria-selected="false">Approval Center</button>
                 </ng-container>
             </div>
+            <hr>
+            <div class="dashboard-theme-toggle">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="DarkModeToggleElem" [checked]="is_dark_mode" (change)="toggle_theme_mode()">
+                    <label class="form-check-label" for="DarkModeToggleElem">Toggle Dark Mode</label>
+                </div>
+            </div>
         </div>
 
         <div class="content">
@@ -36,7 +43,7 @@
                 <div class="tab-pane fade" id="v-pills-resources" role="tabpanel" aria-labelledby="v-pills-resources-tab" tabindex="0">
                     <div class="mb-4">
                         <app-sdc-datasets [sdc_datasets]="sdc_datasets"></app-sdc-datasets>
-                    </div> 
+                    </div>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-requests" role="tabpanel" aria-labelledby="v-pills-requests-tab" tabindex="0">
