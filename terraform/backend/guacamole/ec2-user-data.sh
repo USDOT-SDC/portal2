@@ -1,4 +1,6 @@
 #! /bin/bash
+
+# log all outputs from user-data script
 exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
 # Echo to a custom log file since STDOUT is not captured
@@ -9,6 +11,11 @@ echo_to_log() {
     echo "================================================================================"
     echo "$(date) - $1" >>$ECHO_FILE
 }
+
+# ensure that we can still use ssh keys to connect w/o a password
+echo_to_log "Delete password for ec2-user:..."
+passwd -delete ec2-user
+echo_to_log "Delete password for ec2-user: Done!"
 
 # === Instance Setup ===
 echo_to_log "Getting info from meta-data:..."
@@ -124,12 +131,9 @@ guacd-port: 4822
 guacd-ssl: false
 
 extension-priority: header
-openid-authorization-endpoint: https://${cognito_pool_domain}/oauth2/authorize
-openid-jwks-endpoint: https://${cognito_pool_endpoint}/.well-known/jwks.json
-openid-issuer: https://${cognito_pool_endpoint}
-openid-client-id: ${cognito_pool_client_id}
-openid-redirect-uri: https://guacamole.${fqdn}/guacamole
-openid-scope: openid email phone profile
+http-auth-header: REMOTE_USER
+http-request-param: authToken
+cognito-web-key-url: https://${cognito_pool_endpoint}/.well-known/jwks.json
 
 mysql-hostname: ${mariadb_address}
 mysql-database: guacamole_db
@@ -158,7 +162,7 @@ mkdir -p $GUACAMOLE_HOME/lib
 GUACAMOLE_AUTH_JDBC_MYSQL_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-mysql-${guac_version}.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_mysql_key} $GUACAMOLE_AUTH_JDBC_MYSQL_PATH
 
-GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-${guac_version}.jar
+GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-0.9.14.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_header_key} $GUACAMOLE_AUTH_HEADER_PATH
 
 MYSQL_CONNECTOR_PATH=$GUACAMOLE_HOME/lib/mysql-connector-j-${mysql_connector_version}
@@ -266,5 +270,10 @@ echo_to_log "Configuring Firewall: Done!"
 echo_to_log "Running System update:..."
 dnf update -y
 echo_to_log "Running System update: Done!"
+
+# ensure that we can still use ssh keys to connect w/o a password
+echo_to_log "Delete password for ec2-user:..."
+passwd -delete ec2-user
+echo_to_log "Delete password for ec2-user: Done!"
 
 echo_to_log "User Data Script Complete!"

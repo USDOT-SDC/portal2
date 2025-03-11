@@ -16,7 +16,7 @@ data "template_file" "user_data" {
     guac_version             = "1.5.5"
     guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
     guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key
-    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-1.5.5.jar"].key
+    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-0.9.14.jar"].key
     guac_web_xml_key         = aws_s3_object.web_xml.key
     mysql_connector_version  = "9.2.0"
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
