@@ -204,7 +204,7 @@
                 <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
             </div>
             <hr>
-            <div class="card bg-light">
+            <div class="card bg-light-subtle">
                 <div class="card-header">Acceptable Use Policy</div>
                 <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
                     <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">

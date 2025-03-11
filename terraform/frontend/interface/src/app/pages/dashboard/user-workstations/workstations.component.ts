@@ -70,9 +70,16 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Launch and Connect to Workstation
   public launch_workstation(id: string): void {
-    // console.log("workstation id", id);
-    const { token } = this.auth.current_user.getValue();
-    window.open(`https://` + environment.resource_urls.guacamole + '/guacamole', '_blank')
+
+    const { id_token } = this.auth.current_user.getValue();
+    console.log({ id_token });
+
+    // Get Guacamole URL from **Resource URLS** in `environment.ts`
+    const guacamole_url = `https://${environment.resource_urls.guacamole}/guacamole/#/?authToken=${id_token}`;
+
+    console.log({ guacamole_url });
+
+    window.open(guacamole_url)/* ?.focus(); */
   }
 
   /* ::===================:: MODALS ::===================:: */
@@ -82,18 +89,22 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Open Shutdown Workstation Modal
   public open_shutdown_workstation_modal(): void { this.Modal_ShutDownWorkstation.open(); }
   // Shutdown Workstation Api Call
+  public shutting_down_workstation: boolean = false;
   public shutdown_workstation(): void {
     const id = this.selected_workstation.instance_id;
+    this.shutting_down_workstation = true;
     const _API = this.api.workstation_action(id, 'stop').subscribe((response: any) => {
       console.log('Workstation: stopped', response)
       _API.unsubscribe();
       this.selected_workstation.status = false;
       this.close_shutdown_workstation_modal();
+      this.shutting_down_workstation = false;
     })
   }
   // Close Shutdown Workstation Modal
   public close_shutdown_workstation_modal(): void {
     this.selected_workstation.loading = false;
+    this.shutting_down_workstation = false;
     this.selected_workstation = undefined;
     this.Modal_ShutDownWorkstation.close();
   }

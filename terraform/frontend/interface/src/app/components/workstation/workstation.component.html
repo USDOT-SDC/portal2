@@ -1,8 +1,8 @@
-<div class="workstation">
-    <div class="icon" [ngClass]="workstation.status == false ? 'bg-light' : 'bg-info-subtle' ">
+<div class="workstation border" [ngClass]="{ 'border-info shadow' : workstation.status == true }">
+    <div class="icon" [ngClass]="workstation.status == false ? 'bg-light-subtle-subtle' : 'bg-info-subtle border-info' ">
         <span class="fa-stack" style="vertical-align: center;">
-            <i class="fa-brands fa-stack-2x text-muted" data-fa-transform="up-4" [ngClass]="'fa-' + workstation.machine.os"></i>
-            <i class="fa-solid fa-desktop fa-stack-1x fa-5x text-muted"></i>
+            <i class="fa-brands fa-stack-2x text-body-secondary" data-fa-transform="up-4" [ngClass]="'fa-' + workstation.machine.os"></i>
+            <i class="fa-solid fa-desktop fa-stack-1x fa-5x text-body-secondary"></i>
         </span>
     </div>
     <div class="info">
