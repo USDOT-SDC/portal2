@@ -14,9 +14,10 @@ declare var bootstrap: any;
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public loading: boolean = false;
+  public is_dark_mode: boolean = false;
 
   public current_user: any;
- 
+
   public user_is_approver: boolean = false;
   public user_name: any;
 
@@ -31,6 +32,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public parseUserName(name: string): string {
     if (name == undefined || name == "") return "Researcher";
     else { return `${name.split("\\").pop()}`; }
+  }
+
+  public toggle_theme_mode(): void {
+    const body = document.body;
+    body.dataset['bsTheme'] = body.dataset['bsTheme'] == 'dark' ? 'light' : 'dark';
+    localStorage.setItem('sdc_ui_theme', body.dataset['bsTheme']);
+    this.is_dark_mode = body.dataset['bsTheme'] == 'dark';
   }
 
   private set_user_as_approver(): void {
@@ -59,6 +67,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+
+    const body = document.body;
+    const theme = localStorage.getItem('sdc_ui_theme');
+    if (theme) {
+      body.dataset['bsTheme'] = theme;
+      this.is_dark_mode = body.dataset['bsTheme'] == 'dark';
+    }
 
     this.auth.isLoggedIn().then(() => {
       this._subscriptions.push(

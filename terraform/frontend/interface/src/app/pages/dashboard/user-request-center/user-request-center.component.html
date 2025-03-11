@@ -12,7 +12,7 @@
             </div>
             <div class="collapse show" id="RequestTrustedUserStatusCollappse">
                 <hr>
-                <div class="card card-body bg-light">
+                <div class="card card-body bg-light-subtle-subtle">
                     <p>Trusted Status is a mechanism to help speed the turnaround of future, similar export requests. Obtaining Trusted Status eliminates the Data Provider review/approval requirements for subsequent, similar requests and will enable immediate export of data, at the time of your request.</p>
                     <p>A separate Trusted Status should be acquired, depending on each specific combination of Project, Data Provider, and Sub-Data Set/Data Type requested for export.</p>
                     <hr>
@@ -32,7 +32,7 @@
             </div>
             <div class="collapse" id="RequestEdgeDatabase">
                 <hr>
-                <div class="card card-body bg-light">
+                <div class="card card-body bg-light-subtle-subtle">
                     <p>Researchers can export their summarized, aggregated and/or analysis results data, which do not contain sensitive information, to the public Edge database. This enhances analytical capabilities, enabling connections from the Edge database to local applications and/or other public data sources.</p>
                     <p>Users are required to submit initial table export requests, and any subsequent changes to the given table schema, for review and approval by the Data Steward.</p>
                     <p>Learn more about requesting table exports to the Edge Database.</p>
@@ -106,7 +106,7 @@
                 <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
             </div>
             <hr>
-            <div class="card bg-light">
+            <div class="card bg-light-subtle">
                 <div class="card-header">Acceptable Use Policy</div>
                 <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
                     <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
@@ -241,7 +241,7 @@
 
             <hr>
 
-            <div class="card bg-light">
+            <div class="card bg-light-subtle">
                 <div class="card-header">Acceptable Use Policy</div>
                 <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
                     <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
