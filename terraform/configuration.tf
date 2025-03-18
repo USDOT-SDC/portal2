@@ -17,6 +17,10 @@ terraform {
       source  = "hashicorp/template"
       version = "~> 2.2"
     }
+    git = {
+      source  = "metio/git"
+      version = "~> 2025.3"
+    }
   }
   backend "s3" {
     # Variables can not be used here

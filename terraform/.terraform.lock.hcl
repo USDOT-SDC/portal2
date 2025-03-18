@@ -81,3 +81,26 @@ provider "registry.terraform.io/hashicorp/template" {
     "zh:c979425ddb256511137ecd093e23283234da0154b7fa8b21c2687182d9aea8b2",
   ]
 }
+
+provider "registry.terraform.io/metio/git" {
+  version     = "2025.3.14"
+  constraints = "~> 2025.3"
+  hashes = [
+    "h1:XVgDUor3nSnXUYJ2qq35yetfOqR2jnW6gRTYi/R3AsQ=",
+    "zh:000dc41513e68bb88ddef03027ef4bffced6ae971b2fdc9f68c857b9f5adca55",
+    "zh:013de543a340341ffeba0261c96f6d7f706a55fe8a23bbbcf471fbcd397d4a2f",
+    "zh:06ce8687a0ec767bde97b8d9b30a1c83070cad6e0dc061e9f4dfbea618777e7b",
+    "zh:07f00b819ac698958088f4469e3e69d29ba258b0fb74ff65792c6e1315a92d62",
+    "zh:2257cf295c442d43e5c577084aed5d2d6d48f8de139a7e0837f2c68182ea4adc",
+    "zh:2c7a4c85c25e0debd9eaec9ca9456c23cdd6fe4c08b3e1e7fba137782bfb90f6",
+    "zh:3378acc37862a2673d0d83e33acda37610305845771dba0bbb6dda81636424f5",
+    "zh:4ae78a5c5ebd9e53b989d7fa21ef4ec9c42fd8ee7f987379097d05fab41d662c",
+    "zh:546ed11ba534acb09f00cb9551282e44e7e382c79b0fbf3d6fc72f8dbaf4eec1",
+    "zh:5e0ea61c2750c9c1f76d86bf5ff52454fa7184318a46e1b2aefb498d73eb00ec",
+    "zh:5e6e3aa129c810865a2d59c722cc709be6edd6499cd34161a4db2b563185dc51",
+    "zh:9be9ac83db35f3c3774a997e82cb1ded2b433fa0aade618ad119c43302f39d99",
+    "zh:b1fdefff54a9b037d995faa4bb77f8fbe843fb00152acefaabf1561bcb535057",
+    "zh:d6ed9c9ad382c3a2e5f0880ab44cbbb3d57bbe62fd241d13a5d7f80ce51006e5",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
+  ]
+}
