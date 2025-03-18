@@ -23,7 +23,7 @@ locals {
     Project        = "Platform"
     Team           = "Platform"
     Owner          = "Support Team"
-    config_version = var.config_version
+    # config_version = var.config_version
   }
 }
 
