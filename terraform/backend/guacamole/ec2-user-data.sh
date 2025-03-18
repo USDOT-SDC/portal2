@@ -18,7 +18,7 @@ echo_to_log() {
 
 # ensure that we can still use ssh keys to connect w/o a password
 echo_to_log "Delete password for ec2-user:..."
-passwd -delete ec2-user
+passwd -d ec2-user
 echo_to_log "Delete password for ec2-user: Done!"
 
 # === Instance Setup ===
