@@ -27,15 +27,15 @@ goto end
 pushd ..\terraform
 %command%
 popd ..\scripts
-for /F "tokens=*" %%t in ('git tag --points-at HEAD') do (set current_tag=%%t)
-for /F %%b in ('git branch --show-current') do (set branch=%%b)
-if %config_version% NEQ %current_tag% (
-    git tag -f %config_version%
-    git push --set-upstream origin %branch%
-    git push -u origin
-    git push --delete origin %config_version%
-    git push -f origin %config_version%
-)
+@REM for /F "tokens=*" %%t in ('git tag --points-at HEAD') do (set current_tag=%%t)
+@REM for /F %%b in ('git branch --show-current') do (set branch=%%b)
+@REM if %config_version% NEQ %current_tag% (
+@REM     git tag -f %config_version%
+@REM     git push --set-upstream origin %branch%
+@REM     git push -u origin
+@REM     git push --delete origin %config_version%
+@REM     git push -f origin %config_version%
+@REM )
 goto end
 
 :no_execute
