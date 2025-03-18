@@ -22,6 +22,8 @@ data "template_file" "user_data" {
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
+    config_version           = var.common.config_version
+    git_commit               = var.common.git_commit_head_sha1
   }
 }
 

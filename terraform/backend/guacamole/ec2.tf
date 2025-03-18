@@ -117,17 +117,21 @@ resource "aws_instance" "guacamole" {
     ignore_changes = [
       instance_type,
       root_block_device,
-      tags["Name"]
+      tags["Name"],
+      tags["config_version"],
+      tags["git_commit"],
     ]
   }
   tags = merge(
     local.tags,
     {
-      Name = "guacamole",
-      Role = "Guacamole-Server"
+      Name           = "guacamole",
+      Role           = "Guacamole-Server"
+      config_version = var.common.config_version
+      git_commit     = var.common.git_commit_head_sha1
     }
   )
-  
+
   # set some defaults to keep rebuilds clean
   hibernation = false
   capacity_reservation_specification {
