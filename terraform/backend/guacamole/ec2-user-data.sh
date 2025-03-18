@@ -3,6 +3,10 @@
 # log all outputs from user-data script
 exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
+# Exactly what version of code is being run
+echo "config_version: ${config_version}"
+echo "git_commit: ${git_commit}"
+
 # Echo to a custom log file since STDOUT is not captured
 ECHO_FILE=/tmp/user-data-echo.log
 echo_to_log() {
@@ -196,11 +200,11 @@ echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configu
 
 echo_to_log "Remove other Tomcat webapps:..."
 # TODO: Put this back after everything is dialed in
-# yes | rm -rf $TOMCAT_HOME/webapps/docs/
-# yes | rm -rf $TOMCAT_HOME/webapps/examples/
-# yes | rm -rf $TOMCAT_HOME/webapps/host-manager/
-# yes | rm -rf $TOMCAT_HOME/webapps/manager/
-# yes | rm -rf $TOMCAT_HOME/webapps/ROOT/
+yes | rm -rf $TOMCAT_HOME/webapps/docs/
+yes | rm -rf $TOMCAT_HOME/webapps/examples/
+yes | rm -rf $TOMCAT_HOME/webapps/host-manager/
+yes | rm -rf $TOMCAT_HOME/webapps/manager/
+yes | rm -rf $TOMCAT_HOME/webapps/ROOT/
 echo_to_log "Remove other Tomcat webapps: Done!"
 
 echo_to_log "Starting tomcat and guacd:..."
