@@ -5,7 +5,6 @@ exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
 # Exactly what version of code is being run
 echo "config_version: ${config_version}"
-echo "git_commit: ${git_commit}"
 
 # Echo to a custom log file since STDOUT is not captured
 ECHO_FILE=/tmp/user-data-echo.log

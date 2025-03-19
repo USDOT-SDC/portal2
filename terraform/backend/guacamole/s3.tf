@@ -23,7 +23,6 @@ data "template_file" "user_data" {
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
     config_version           = var.common.config_version
-    git_commit               = var.common.git_commit_head_sha1
   }
 }
 
