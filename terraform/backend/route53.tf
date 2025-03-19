@@ -4,12 +4,6 @@ data "aws_route53_zone" "public" {
 }
 
 # === Guacamole Canonical Name Record ===
-locals {
-  dev_guacamole_elb  = "internal-guacamole-app-1899819619.us-east-1.elb.amazonaws.com"
-  prod_guacamole_elb = "internal-prod-guacamole-load-balancer-923347317.us-east-1.elb.amazonaws.com"
-  guacamole_elb      = var.common.environment == "dev" ? local.dev_guacamole_elb : local.prod_guacamole_elb
-}
-
 resource "aws_route53_record" "guacamole" {
   name            = "guacamole.${var.fqdn}"
   allow_overwrite = true
