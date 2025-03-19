@@ -10,3 +10,5 @@
 *.gz binary
 *.jar binary
 *.war binary
+*.bin binary
+*.lock binary
