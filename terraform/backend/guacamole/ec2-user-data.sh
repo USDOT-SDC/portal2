@@ -116,11 +116,6 @@ unzip $TOMCAT_HOME/webapps/guacamole.war -d $TOMCAT_HOME/webapps/guacamole/ >/de
 yes | rm $TOMCAT_HOME/webapps/guacamole.war
 echo_to_log "Deploying Guacamole Client: Done!"
 
-echo_to_log "Copying Guacamole web.xml:..."
-GUACAMOLE_WEB_XML_PATH=$TOMCAT_HOME/webapps/guacamole/WEB-INF/web.xml
-aws s3 cp --recursive s3://${terraform_bucket}/${guac_web_xml_key} $GUACAMOLE_WEB_XML_PATH
-echo_to_log "Copying Guacamole web.xml: Done!"
-
 echo_to_log "chown/chcon the Tomcat dir:..."
 chown -R tomcat:tomcat $TOMCAT_HOME
 chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME
