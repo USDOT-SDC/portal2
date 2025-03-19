@@ -1,6 +1,7 @@
 @echo off
 if "%1"=="-help" goto print_help
 if "%1"=="--help" goto print_help
+if "%1"=="" goto print_help
 goto normal_start
 
 :print_help

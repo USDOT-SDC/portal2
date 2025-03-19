@@ -17,11 +17,12 @@ data "template_file" "user_data" {
     guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
     guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key
     guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-0.9.14.jar"].key
-    guac_web_xml_key         = aws_s3_object.web_xml.key
+    # guac_web_xml_key         = aws_s3_object.web_xml.key
     mysql_connector_version  = "9.2.0"
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
+    config_version           = var.common.config_version
   }
 }
 
@@ -32,22 +33,6 @@ resource "aws_s3_object" "user_data" {
   content_type           = "text/x-shellscript"
   server_side_encryption = "AES256"
   depends_on             = [data.template_file.user_data]
-}
-
-data "template_file" "web_xml" {
-  template = file("${path.module}/web.xml")
-  vars = {
-    portal_url = var.portal_url
-  }
-}
-
-resource "aws_s3_object" "web_xml" {
-  bucket                 = var.common.terraform_bucket.bucket
-  key                    = "portal2/terraform/be/guacamole/files/web.xml"
-  content                = data.template_file.web_xml.rendered
-  content_type           = "text/xml"
-  server_side_encryption = "AES256"
-  depends_on             = [data.template_file.web_xml]
 }
 
 # === Contents of Files ===
