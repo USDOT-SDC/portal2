@@ -30,14 +30,16 @@ locals {
   dev_nginx_elb  = "internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com"
   prod_nginx_elb = "internal-prod-nginx-load-balancer-539264498.us-east-1.elb.amazonaws.com"
   nginx_elb      = var.common.environment == "dev" ? local.dev_nginx_elb : local.prod_nginx_elb
+  r53_type       = var.common.environment == "dev" ? "CNAME" : "A"
+  r53_records    = var.common.environment == "dev" ? [local.dev_nginx_elb] : ["204.69.252.79", "204.69.252.59"]
 }
 
 resource "aws_route53_record" "portal" {
   zone_id = data.aws_route53_zone.public.zone_id
   name    = "portal.${var.fqdn}"
-  type    = "CNAME"
+  type    = local.r53_type
   ttl     = 300
-  records = [local.nginx_elb]
+  records = local.r53_records
 }
 
 # === SFTP Canonical Name Record ===
@@ -54,7 +56,6 @@ resource "aws_route53_record" "sftp" {
   ttl     = 300
   records = [local.transfer_server_url]
 }
-
 
 # ==== Test Subdomains ====
 # === Sub1 (Test Portal) Canonical Name Record ===
