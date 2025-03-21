@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
   stage: 'prod',
-  build: '1.0.0',
-  buildDateTime: '2025-03-05 13:30 EST',
+  build: '1.0.1',
+  buildDateTime: '2025-03-21 14:45 EST',
   resource_urls: {
     portal: 'sub1.sdc.dot.gov',
     portal_api: 'portal-api.sdc.dot.gov/v1',
@@ -16,7 +16,7 @@ export const environment = {
     authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_TgCjgpriJ',
     redirectUrl: window.location.origin + '/login/redirect',
     clientId: '51nhfldlrp6e62cdo360fh9o78',
-    scope: 'email openid profile',
+    scope: 'email openid phone profile',
     responseType: 'code'
   },
 
