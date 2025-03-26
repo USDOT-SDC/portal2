@@ -1,5 +1,10 @@
 #! /bin/bash
+
+# log all outputs from user-data script
 exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
+
+# Exactly what version of code is being run
+echo "config_version: ${config_version}"
 
 # Echo to a custom log file since STDOUT is not captured
 ECHO_FILE=/tmp/user-data-echo.log
@@ -9,6 +14,11 @@ echo_to_log() {
     echo "================================================================================"
     echo "$(date) - $1" >>$ECHO_FILE
 }
+
+# ensure that we can still use ssh keys to connect w/o a password
+echo_to_log "Delete password for ec2-user:..."
+passwd -d ec2-user
+echo_to_log "Delete password for ec2-user: Done!"
 
 # === Instance Setup ===
 echo_to_log "Getting info from meta-data:..."
@@ -104,9 +114,12 @@ systemctl stop tomcat
 aws s3 cp s3://${terraform_bucket}/${guac_war_key} $TOMCAT_HOME/webapps/guacamole.war
 unzip $TOMCAT_HOME/webapps/guacamole.war -d $TOMCAT_HOME/webapps/guacamole/ >/dev/null
 yes | rm $TOMCAT_HOME/webapps/guacamole.war
+echo_to_log "Deploying Guacamole Client: Done!"
+
+echo_to_log "chown/chcon the Tomcat dir:..."
 chown -R tomcat:tomcat $TOMCAT_HOME
 chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME
-echo_to_log "Deploying Guacamole Client: Done!"
+echo_to_log "chown/chcon the Tomcat dir: Done!"
 
 echo_to_log "Creating Guacamole Client property file:..."
 mkdir -p $GUACAMOLE_HOME
@@ -116,12 +129,9 @@ guacd-port: 4822
 guacd-ssl: false
 
 extension-priority: header
-openid-authorization-endpoint: https://${cognito_pool_domain}/oauth2/authorize
-openid-jwks-endpoint: https://${cognito_pool_endpoint}/.well-known/jwks.json
-openid-issuer: https://${cognito_pool_endpoint}
-openid-client-id: ${cognito_pool_client_id}
-openid-redirect-uri: https://guacamole.${fqdn}/guacamole
-openid-scope: openid email phone profile
+http-auth-header: REMOTE_USER
+http-request-param: authToken
+cognito-web-key-url: https://${cognito_pool_endpoint}/.well-known/jwks.json
 
 mysql-hostname: ${mariadb_address}
 mysql-database: guacamole_db
@@ -135,26 +145,6 @@ echo === === === === guacamole.properties === === === ===
 cat $GUACAMOLE_HOME/guacamole.properties
 echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
-
-# echo_to_log "Creating Guacamole Client context file:..."
-# # Converts Servlet 4.0 to Servlet 5.0 applications
-# cat <<EOF >$TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-# <Context>
-#    <Loader jakartaConverter="TOMCAT" />
-# </Context>
-# EOF
-# echo === === === === guacamole.xml === === === ===
-# cat $TOMCAT_HOME/conf/Catalina/localhost/guacamole.xml
-# echo === === === === guacamole.xml === === === ===
-# echo_to_log "Creating Guacamole Client context file: Done!"
-
-# echo_to_log "Installing MariaDB Client:..."
-# run the following for help
-# curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --help
-# curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --os-type=rhel --os-version=8
-# dnf install MariaDB-shared -y
-# dnf install MariaDB-client -y
-# echo_to_log "Installing MariaDB Client: Done!"
 
 echo_to_log "Guacamole Server and prerequisites:..."
 dnf install guacd-${guac_version} -y
@@ -170,7 +160,7 @@ mkdir -p $GUACAMOLE_HOME/lib
 GUACAMOLE_AUTH_JDBC_MYSQL_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-mysql-${guac_version}.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_mysql_key} $GUACAMOLE_AUTH_JDBC_MYSQL_PATH
 
-GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-${guac_version}.jar
+GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-0.9.14.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_header_key} $GUACAMOLE_AUTH_HEADER_PATH
 
 MYSQL_CONNECTOR_PATH=$GUACAMOLE_HOME/lib/mysql-connector-j-${mysql_connector_version}
@@ -201,6 +191,15 @@ chcon -R system_u:object_r:usr_t:s0 $TOMCAT_HOME/webapps
 setsebool -P httpd_can_network_connect 1
 setsebool -P tomcat_can_network_connect_db 1
 echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configuring SElinux permissions: Done!"
+
+echo_to_log "Remove other Tomcat webapps:..."
+# TODO: Put this back after everything is dialed in
+yes | rm -rf $TOMCAT_HOME/webapps/docs/
+yes | rm -rf $TOMCAT_HOME/webapps/examples/
+yes | rm -rf $TOMCAT_HOME/webapps/host-manager/
+yes | rm -rf $TOMCAT_HOME/webapps/manager/
+yes | rm -rf $TOMCAT_HOME/webapps/ROOT/
+echo_to_log "Remove other Tomcat webapps: Done!"
 
 echo_to_log "Starting tomcat and guacd:..."
 systemctl daemon-reload
@@ -269,5 +268,10 @@ echo_to_log "Configuring Firewall: Done!"
 echo_to_log "Running System update:..."
 dnf update -y
 echo_to_log "Running System update: Done!"
+
+# ensure that we can still use ssh keys to connect w/o a password
+echo_to_log "Delete password for ec2-user:..."
+passwd -delete ec2-user
+echo_to_log "Delete password for ec2-user: Done!"
 
 echo_to_log "User Data Script Complete!"

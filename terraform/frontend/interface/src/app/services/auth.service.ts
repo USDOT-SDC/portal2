@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { BehaviorSubject, map, take } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
@@ -43,7 +44,7 @@ export class AuthService {
     this.current_user.next(undefined);
     this.user_info.next(undefined);
     this.user_uploaded_data.next(undefined);
-    window.location.href = "https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=4binc5ifp081iu97i0dhb10q68&logout_uri=http://localhost:4200/index.html";
+    window.location.href = environment.logout_url;
   }
 
 }

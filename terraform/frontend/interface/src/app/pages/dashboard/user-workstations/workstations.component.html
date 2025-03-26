@@ -2,7 +2,7 @@
     <h3> My Workstations <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data."></i></sup> </h3>
     <hr>
 
-    <div class="workstation-wrapper bg-light">
+    <div class="workstation-wrapper">
         <ng-container *ngIf="loading; else DefaultElemWrapper">
             <div class="no-workstations">
                 <h5><i class="fa-solid fa-spinner"></i> Loading Workstations...</h5>
@@ -25,7 +25,7 @@
 
 
 <!-- Modal: Shutdown Workstation -->
-<app-modal #Modal_ShutDownWorkstation [size]="'sm'">
+<app-modal #Modal_ShutDownWorkstation [size]="'md'">
     <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
             <h5 class="m-0"><i class="fa-solid fa-power-off me-2"></i>Shutdown Workstation</h5>
@@ -34,7 +34,7 @@
     <ng-container modal-body>
         <div class="p-2">
             <h5 class="text-center mb-3">Are you sure you to shutdown this Workstation?</h5>
-            <div class="card card-body bg-light mb-3">
+            <div class="card card-body bg-light-subtle mb-3">
                 <h3 class="text-center">{{ selected_workstation?.display_name }}</h3>
                 <!-- <h6 class="text-center m-0"><small>Running Since: 00/00/000 - 14:00:00</small></h6> -->
             </div>
@@ -43,8 +43,11 @@
     </ng-container>
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="close_shutdown_workstation_modal()">Close</button>
-            <button class="btn btn-danger" (click)="shutdown_workstation()">Shutdown the Workstation</button>
+            <button class="btn btn-secondary" [disabled]="shutting_down_workstation==true" (click)="close_shutdown_workstation_modal()">Close</button>
+            <button class="btn btn-danger" [disabled]="shutting_down_workstation==true" (click)="shutdown_workstation()">
+                <ng-container *ngIf="shutting_down_workstation==true; else DefaultShutdownButton;"><i class="fa-solid fa-circle-notch fa-spin me-2"></i>Shuting down...</ng-container>
+                <ng-template #DefaultShutdownButton>Shutdown Workstation</ng-template>
+            </button>
         </div>
     </ng-container>
 </app-modal>

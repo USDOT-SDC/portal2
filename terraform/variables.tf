@@ -17,13 +17,14 @@ locals {
     app_slug                    = "portal2"
     secrets_path                = "../../portal2-secrets"
     config_version              = var.config_version
+    git_commit_head_sha1               = data.git_commit.head.sha1
   }
   default_tags = {
-    Repository     = "portal2"
-    Project        = "Platform"
-    Team           = "Platform"
-    Owner          = "Support Team"
-    config_version = var.config_version
+    Repository = "portal2"
+    Project    = "Platform"
+    Team       = "Platform"
+    Owner      = "Support Team"
+    # config_version = var.config_version
   }
 }
 

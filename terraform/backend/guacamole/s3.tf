@@ -1,26 +1,28 @@
 data "template_file" "user_data" {
   template = file("${path.module}/ec2-user-data.sh")
   vars = {
-    mariadb_password       = nonsensitive(data.aws_ssm_parameter.mariadb_password.value),
-    mariadb_address        = data.aws_db_instance.mariadb.address,
-    aws_region             = var.common.region,
-    cognito_pool_id        = var.cognito.user_pool.id
-    cognito_pool_domain    = var.cognito.user_pool.domain
-    cognito_pool_endpoint  = var.cognito.user_pool.endpoint
-    cognito_pool_client_id = var.cognito.user_pool.client.id
-    fqdn                   = var.fqdn
-    environment            = var.common.environment
-    terraform_bucket       = var.common.terraform_bucket.bucket
+    mariadb_password         = nonsensitive(data.aws_ssm_parameter.mariadb_password.value),
+    mariadb_address          = data.aws_db_instance.mariadb.address,
+    aws_region               = var.common.region,
+    cognito_pool_id          = var.cognito.user_pool.id
+    cognito_pool_domain      = var.cognito.user_pool.domain
+    cognito_pool_endpoint    = var.cognito.user_pool.endpoint
+    cognito_pool_client_id   = var.cognito.user_pool.client.id
+    fqdn                     = var.fqdn
+    environment              = var.common.environment
+    terraform_bucket         = var.common.terraform_bucket.bucket
     tomcat_version           = "9.0.100"
     tomcat_key               = aws_s3_object.files["apache-tomcat-9.0.100.tar.gz"].key
     guac_version             = "1.5.5"
     guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
     guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key
-    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-1.5.5.jar"].key
+    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-0.9.14.jar"].key
+    # guac_web_xml_key         = aws_s3_object.web_xml.key
     mysql_connector_version  = "9.2.0"
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
+    config_version           = var.common.config_version
   }
 }
 
@@ -42,6 +44,7 @@ resource "aws_s3_object" "user_data" {
 # guacamole-{version}.war
 # guacamole-auth-header-{version}.jar
 # guacamole-auth-jdbc-mysql-{version}.jar
+# web.xml from: https://github.com/apache/guacamole-client/blob/main/guacamole/src/main/webapp/WEB-INF/web.xml
 # == MySQL Connector/J == 
 #    (https://dev.mysql.com/downloads/connector/j/ Select[Platform Independent] .jar is inside the archive)
 # mysql-connector-j-{version}.jar

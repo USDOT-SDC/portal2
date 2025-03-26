@@ -115,10 +115,7 @@ locals {
   # api_gateway_deployment_list = module.api["hello_world"].deployment_hash
   modules_deployment_hash_map = { for k, v in local.api_resources : k => module.api[k].deployment_hash }
   other_deployment_hash_map = {
-    account_linked           = module.account_linked.deployment_hash
     ddb_crud                 = module.ddb_crud.deployment_hash
-    link_account             = module.link_account.deployment_hash
-    reset_temporary_password = module.reset_temporary_password.deployment_hash
     health = sha1(
       jsonencode(
         {

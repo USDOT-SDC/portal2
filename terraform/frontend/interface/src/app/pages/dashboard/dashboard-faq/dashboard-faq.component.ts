@@ -45,6 +45,13 @@ export class DashboardFaqComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    const body = document.body;
+    const theme = localStorage.getItem('sdc_ui_theme');
+    console.log({ theme })
+    if (theme) body.dataset['bsTheme'] = theme;
+
+
     // Check if URL has Hashed Parameter
     if (location.hash)
       // If True, Toggle the Collapse that belongs to the Hash Parameter

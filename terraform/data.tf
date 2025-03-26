@@ -37,3 +37,8 @@ data "terraform_remote_state" "research_teams" {
     key    = "research-teams/terraform/terraform.tfstate"
   }
 }
+
+data "git_commit" "head" {
+  directory = path.root
+  revision  = "@"
+}
