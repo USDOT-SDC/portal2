@@ -1,6 +1,6 @@
 data "archive_file" "f" {
   type        = "zip"
-  source_dir = "backend/lambdas/${var.resource_slug}/src/"
+  source_dir  = "backend/lambdas/${var.resource_slug}/src/"
   output_path = "backend/lambdas/${var.resource_slug}/lambda_deployment_package.zip"
 }
 
@@ -12,6 +12,7 @@ resource "aws_lambda_function" "f" {
   handler          = "lambda_function.lambda_handler"
   runtime          = var.runtime
   timeout          = 60
+  memory_size      = try(var.foo.memory_size, 128)
   environment {
     variables = var.foo.environment_variables
   }
