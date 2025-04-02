@@ -11,8 +11,8 @@ data "template_file" "user_data" {
     fqdn                     = var.fqdn
     environment              = var.common.environment
     terraform_bucket         = var.common.terraform_bucket.bucket
-    tomcat_version           = "9.0.100"
-    tomcat_key               = aws_s3_object.files["apache-tomcat-9.0.100.tar.gz"].key
+    tomcat_version           = "9.0.102"
+    tomcat_key               = aws_s3_object.files["apache-tomcat-9.0.102.tar.gz"].key
     guac_version             = "1.5.5"
     guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
     guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key

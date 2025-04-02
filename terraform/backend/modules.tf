@@ -184,6 +184,7 @@ locals {
     }
     s3_metadata = {
       http_method = "GET"
+      memory_size = 160
       environment_variables = {
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
         ALLOW_ORIGIN_URL              = local.allow_origin_url
