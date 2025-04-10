@@ -66,7 +66,7 @@ def get_user_autoexportstatus(userid):
 
 def lambda_handler(event, context):
     user_info = {}
-    roles = []
+    ##roles = []
     try:
         id_token = event["headers"]["Authorization"]
         info_dict = get_user_details(id_token)
