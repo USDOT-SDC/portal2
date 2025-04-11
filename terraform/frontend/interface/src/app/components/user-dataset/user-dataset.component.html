@@ -1,21 +1,22 @@
 <div class="row align-items-center">
     <div class="col-1">
-        <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || (dataset.status == 'Denied' || dataset.status == 'Submitted')" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
+        <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || (dataset.status == '-' || dataset.status == 'Submitted'|| dataset.status =='Rejected')" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
     </div>
     <div class="col-6 text-truncate">
         <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="dataset.status == 'Approved' ? 'text-dark' : 'text-muted'"><b>{{ dataset.filename }}</b></label>
     </div>
     <div class="col-2">
         <div class="d-flex align-items-center justify-content-center w-100">
-            <button class="btn btn-sm" [ngClass]="dataset.status == 'Denied' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Approved'" (click)="toggle_export_request()">
-                <i class="fa-solid fa-file-export"></i>
+            <!--button class="btn btn-sm" [ngClass]="dataset.status == 'Denied' || dataset.status == 'Submitted' ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Approved'" (click)="toggle_export_request()"-->      
+            <button class="btn btn-sm" [ngClass]="dataset.status == 'Rejected' || dataset.status == '-' && dataset.filename.substring(0,15) == 'export_requests'? 'btn-outline-primary'  : dataset.status == '-' && dataset.filename.substring(0,16) !== 'export_requests'? 'btn-outline-light' : 'btn-outline-secondary'" [disabled]="is_loading == true || dataset.status == 'Approved' || dataset.status == '-' && dataset.filename.substring(0,15) !== 'export_requests'"(click)="toggle_export_request()">
+            <i class="fa-solid fa-file-export"></i>
             </button>
         </div>
     </div>
     <div class="col-3 text-center">
         <ng-container *ngIf="is_loading == true; else DisplayElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
         <ng-template #DisplayElem>
-            <p class="m-0" [ngClass]="{'text-muted' : dataset.status == 'Submitted', 'text-success' : dataset.status == 'Approved', 'text-danger' : dataset.status == 'Denied'}"><b>{{ dataset.status || '--'}}</b></p>
+            <p class="m-0" [ngClass]="{'text-muted' : dataset.status == 'Submitted', 'text-success' : dataset.status == 'Approved', 'text-danger' : dataset.status == 'Rejected'}"><b>{{ dataset.status || '-'}}</b></p>
         </ng-template>
     </div>
 </div>
