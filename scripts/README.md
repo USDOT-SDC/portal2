@@ -1,4 +1,4 @@
-# Portal 2 Deployment Scripts -test
+# Portal 2 Deployment Scripts
 
 ## Environment Setup
 1. Follow instructions in the repo's [Environment Setup](/plans/setup.md)
