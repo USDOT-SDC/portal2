@@ -201,6 +201,31 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   }
 
+    requestDownload() {
+    console.log("requestDownload called");
+    for (let selectedFile of this.selectedFiles) {
+      this.myDatasets.forEach((datasetObj, index) => {
+        if (selectedFile.filename == datasetObj["filename"]) {
+          if (datasetObj["download"] == "true") {
+            this.gatewayService
+              .getDownloadUrl(
+                "download_url?bucket_name=" +
+                  this.userBucketName +
+                  "&file_name=" +
+                  selectedFile.filename +
+                  "&username=" +
+                  this.userName
+              )
+              .subscribe((response: any) => {
+                window.open(response, "_blank");
+              });
+          }
+        } else {
+          console.log("selected file datasetObj key is not filename");
+        }
+      });
+    }
+  }
 
   // Export Request Module Functions
 
