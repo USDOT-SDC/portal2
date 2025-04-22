@@ -74,14 +74,15 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     }
 
     function sortByStatus_asc(a: any, b: any) {
-      const statusOrder: any = { "Submitted": 0, "Denied": 1, "Approved": 2 };
+      const statusOrder: any = { "-": 0, "Submitted": 1, "Rejected": 2, "Approved": 3 };
+
       let statusA: any = a.status, statusB: any = b.status;
       // Use the predefined order to compare statuses
       return statusOrder[statusA] - statusOrder[statusB];
     }
 
     function sortByStatus_desc(a: any, b: any) {
-      const statusOrder: any = { "Submitted": 0, "Denied": 1, "Approved": 2 };
+      const statusOrder: any = { "-": 0, "Submitted": 1, "Rejected": 2, "Approved": 3 };
       let statusA: any = a.status, statusB: any = b.status;
       // Use the predefined order to compare statuses
       return statusOrder[statusB] - statusOrder[statusA];
