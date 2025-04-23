@@ -213,7 +213,8 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
           selectedDataSet: this.selected_dataset_project,
           selectedDataProvider: this.selected_provider.name,
           selectedDatatype: this.selected_provider_sub_dataset.name
-        }
+        },
+        acceptableUse: "Accept",    //TO DO: replace hard-coded val, add conditional to convert policy_accepted bool
       }
       console.log("send_trusted_user_request", message);
 
