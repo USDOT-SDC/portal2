@@ -185,8 +185,10 @@
                                         <div class="d-flex align-items-center justify-content-between gap-2">
                                             <button class="btn btn-outline-info btn-sm flex-grow-1" (click)="toggle_view_request_details(request)"><i class="fa-solid fa-circle-info me-2"></i>More&nbsp;Details</button>
                                             <div class="d-flex gap-2">
-                                                <button class="btn btn-success btn-sm" (click)="submit_trusted_status_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
-                                                <button class="btn btn-danger btn-sm" (click)="submit_trusted_status_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
+                                                <div class="d-flex gap-2" *ngIf="request.RequestReviewStatus == 'Submitted'">
+                                                <button class="btn btn-success btn-sm" (click)="respond_trusted_status_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
+                                                <button class="btn btn-danger btn-sm" (click)="respond_trusted_status_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
