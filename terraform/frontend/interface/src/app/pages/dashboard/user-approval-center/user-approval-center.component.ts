@@ -112,7 +112,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     const user = this.auth.user_info.getValue();
     console.log('respond_trusted_status_request, incoming data: ', { data, user });
     var payload: any = {
-      status: approved == true ? 'Approved' : 'Rejected',
+      status: approved == true ? 'Trusted' : 'Untrusted',
       //key1: data.S3KeyHash,
       key1: user.username,
       //key2: data.RequestedBy_Epoch,

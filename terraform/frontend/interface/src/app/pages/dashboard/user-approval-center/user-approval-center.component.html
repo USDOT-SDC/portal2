@@ -107,7 +107,6 @@
                                                             <span class="badge text-bg-secondary py-1"> {{ request.RequestReviewStatus | titlecase }} </span>
                                                         </ng-container>
                                                     </ng-container>
-
                                                 </p>
                                             </div>
                                             <hr class="my-2">
@@ -171,7 +170,19 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between w-100">
                                             <p class="m-0"><i class="fa-solid fa-calendar-day me-2"></i>{{ timestamp_to_date(request.ReqReceivedTimestamp) | date: 'shortDate' }}</p>
-                                            <p class="m-0"> <span class="badge text-bg-secondary py-1"> Submitted </span> </p>
+                                            <p class="m-0">
+                                                <ng-container [ngSwitch]="request.TrustedStatus">
+                                                    <ng-container *ngSwitchCase="'Trusted'">
+                                                        <span class="badge text-bg-success py-1">Trusted</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchCase="'Untrusted'">
+                                                        <span class="badge text-bg-danger py-1">Untrusted</span>
+                                                    </ng-container>
+                                                    <ng-container *ngSwitchDefault>
+                                                        <span class="badge text-bg-secondary py-1"> {{ request.TrustedStatus | titlecase }} </span>
+                                                    </ng-container>
+                                                </ng-container> 
+                                            </p>
                                         </div>
                                         <hr class="my-2">
                                         <p class="m-0"><b>User:</b> {{ request.UserID }}</p>
@@ -184,7 +195,7 @@
                                     <div class="card-footer p-2">
                                         <div class="d-flex align-items-center justify-content-between gap-2">
                                             <button class="btn btn-outline-info btn-sm flex-grow-1" (click)="toggle_view_request_details(request)"><i class="fa-solid fa-circle-info me-2"></i>More&nbsp;Details</button>
-                                            <div class="d-flex gap-2">
+                                            <div class="d-flex gap-2" *ngIf="request.TrustedStatus == 'Submitted'">
                                                 <button class="btn btn-success btn-sm" (click)="respond_trusted_status_request(true, request)"><i class="fa-regular fa-thumbs-up"></i></button>
                                                 <button class="btn btn-danger btn-sm" (click)="respond_trusted_status_request(false, request)"><i class="fa-regular fa-thumbs-down"></i></button>
                                             </div>
