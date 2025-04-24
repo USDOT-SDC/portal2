@@ -60,7 +60,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     this.view_raw_data = false;
   }
 
-
+  
   /**
    * Export Table Request - Handle Approver Response
    */
@@ -114,12 +114,14 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     var payload: any = {
       status: approved == true ? 'Trusted' : 'Untrusted',
       //key1: data.S3KeyHash,
-      key1: user.username,
+      //key1: user.username,
+      key1: data.UserID,
       //key2: data.RequestedBy_Epoch,
       datainfo: data['Dataset-DataProvider-Datatype'],
       //S3Key: data.S3Key,
       //TeamBucket: data.TeamBucket,
-      userEmail: user.email
+      //userEmail: user.email
+      userEmail: data.UserEmail
     };
     console.log('respond_trusted_status_request', payload);
     const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
