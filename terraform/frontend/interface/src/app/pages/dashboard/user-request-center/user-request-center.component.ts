@@ -30,7 +30,6 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   private request_type: any;
   public request_justification: any;
   public request_policy_agreement: boolean = false;
-  public policy_agreement_string: any;
 
   public team_slug: any;
 
@@ -202,10 +201,6 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   private send_trusted_user_request(): Promise<any> {
     const user = this.auth.user_info.getValue();
-    //convert request_policy_agreement bool to string val, may need to move this outside of function later
-    if (this.request_policy_agreement == true){
-      this.policy_agreement_string = 'Accept';}
-      else {this.policy_agreement_string = 'Decline';};
     return new Promise((resolve, reject) => {
       const message = {
         UserID: user.username,
@@ -218,7 +213,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
           selectedDataProvider: this.selected_provider.name,
           selectedDatatype: this.selected_provider_sub_dataset.name
         },
-        acceptableUse: this.policy_agreement_string
+        acceptableUse: this.request_policy_agreement == true ? "Accept" : "Decline"
       }
       console.log("send_trusted_user_request", message);
 
