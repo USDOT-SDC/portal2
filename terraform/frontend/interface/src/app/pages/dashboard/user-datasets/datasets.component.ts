@@ -211,7 +211,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
             this.api
               .download_file_from_s3(
                 "download_url?bucket_name=" +
-                this.current_user.TeamBucket +
+                this.current_user_upload_bucket +
                 "&file_name=" +
                 selectedFile.filename +
                 "&username=" +
