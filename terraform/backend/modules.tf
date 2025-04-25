@@ -220,8 +220,9 @@ locals {
     update_trusted_status = {
       http_method = "POST"
       environment_variables = {
-        RECEIVER_EMAIL   = local.receiver_email
-        ALLOW_ORIGIN_URL = local.allow_origin_url
+        RECEIVER_EMAIL              = local.receiver_email
+        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
+        ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
     }
     workstation_schedule = {

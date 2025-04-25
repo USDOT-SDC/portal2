@@ -60,9 +60,9 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     this.view_raw_data = false;
   }
 
-
+  
   /**
-   * Export Table Request Submission
+   * Export Table Request - Handle Approver Response
    */
   public submit_export_table_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
@@ -83,7 +83,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   }
 
   /**
-   * Export File Request Submission
+   * Export File Request - Handle Approver Response
    */
   public submit_file_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
@@ -106,23 +106,20 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   }
 
   /**
-   * Trusted User Status Request Submission
+   * Trusted User Status Request - Handle Approver Response
    */
-  public submit_trusted_status_request(approved: boolean, data: any) {
+  public respond_trusted_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
-    // console.log('submit_trusted_status_request, incoming data: ', { data, user });
+    console.log('respond_trusted_status_request, incoming data: ', { data, user });
     var payload: any = {
-      status: approved == true ? 'Approved' : 'Rejected',
-      key1: data.S3KeyHash,
-      key2: data.RequestedBy_Epoch,
+      status: approved == true ? 'Trusted' : 'Untrusted',
+      key1: data.UserID,
       datainfo: data['Dataset-DataProvider-Datatype'],
-      S3Key: data.S3Key,
-      TeamBucket: data.TeamBucket,
-      userEmail: user.email
+      userEmail: data.UserEmail
     };
-    // console.log('submit_trusted_status_request', payload);
+    console.log('respond_trusted_status_request', payload);
     const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
-      // console.log(response);
+      console.log(response);
       this.get_approvals(user);
       api.unsubscribe();
     });
@@ -130,7 +127,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
 
   public get_approvals(user: any) {
     const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
-      // console.log(response);
+      console.log(response);
       if (response.exportRequests) {
         const { exportRequests, trustedRequests, autoExportRequests } = response;
         this.table_export_requests = exportRequests.tableRequests.sort(this.sort_requests);
@@ -139,7 +136,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
           this.trusted_user_status_requests = [];
           trustedRequests.forEach((array: any) => { this.trusted_user_status_requests.push(...array) });
         }
-        // console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
+        console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
       }
       API.unsubscribe();
     });
