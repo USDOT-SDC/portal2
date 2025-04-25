@@ -202,20 +202,20 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   }
 
-    public download_files() {
+  public download_files() {
     console.log("download_files called");
     for (let selectedFile of this.selected_files) {
       this.user_datasets_algorithms.forEach((datasetObj, index) => {
-        if (selectedFile.filename == datasetObj["filename"]) {
-          if (datasetObj["download"] == "true") {
+        if (selectedFile["filename"] == datasetObj["filename"]) {
+          if (datasetObj["status"] == "Approved") {
             this.api
               .download_file_from_s3(
                 "download_url?bucket_name=" +
-                  this.userBucketName +
-                  "&file_name=" +
-                  selectedFile.filename +
-                  "&username=" +
-                  this.current_user
+                this.current_user.TeamBucket +
+                "&file_name=" +
+                selectedFile.filename +
+                "&username=" +
+                this.current_user
               )
               .subscribe((response: any) => {
                 window.open(response, "_blank");
