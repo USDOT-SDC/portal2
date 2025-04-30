@@ -147,31 +147,31 @@ resource "aws_cognito_user_pool_client" "this" {
 
   refresh_token_validity = 30 # default unit is days
 
-  supported_identity_providers = ["COGNITO"]
-  # supported_identity_providers = ["COGNITO", "DOT-PIV"]
-  depends_on                   = [aws_cognito_identity_provider.dot_piv]
+  # supported_identity_providers = ["COGNITO"]
+  supported_identity_providers = ["COGNITO", "DOT-PIV"]
+  depends_on = [aws_cognito_identity_provider.dot_piv]
 }
 
 locals {
-  idp_dot_piv_metadata = "${abspath(path.root)}/../../portal2-secrets/backend/cognito/idp_dot_piv_metadata.xml"
+  client_id_dev  = "8bb2d24b-2e18-451a-8a5a-34f0ef3caaba"
+  client_id_prod = "9cfb5e72-7b26-4b73-a19d-d592c95acd72"
+  client_id      = var.common.environment == "dev" ? local.client_id_dev : local.client_id_prod
 }
 
 resource "aws_cognito_identity_provider" "dot_piv" {
   user_pool_id  = aws_cognito_user_pool.this.id
   provider_name = "DOT-PIV"
-  provider_type = "SAML"
-  attribute_mapping = {
-    "email" = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-  }
-  idp_identifiers = []
+  provider_type = "OIDC"
+  # attribute_mapping = {
+  #   "email" = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+  # }
+  # idp_identifiers = []
   provider_details = {
-    "IDPSignout"            = "false"
-    "MetadataFile"          = file(local.idp_dot_piv_metadata)
-    "SLORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
-    "SSORedirectBindingURI" = "https://adfs.dot.gov/adfs/ls/"
-  }
-  lifecycle {
-    ignore_changes = [ provider_details["ActiveEncryptionCertificate"] ]
+    client_id                 = "8bb2d24b-2e18-451a-8a5a-34f0ef3caaba"
+    client_secret             = var.common.client_secret
+    authorize_scopes          = "email openid phone profile"
+    oidc_issuer               = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0"
+    attributes_request_method = "GET"
   }
 }
 
