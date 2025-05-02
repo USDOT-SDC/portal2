@@ -210,12 +210,9 @@ export class DatasetsComponent implements OnInit, OnDestroy {
           if (datasetObj["status"] == "Approved") {
             this.api
               .download_file_from_s3(
-                "download_url?bucket_name=" +
-                this.current_user_upload_bucket +
-                "&file_name=" +
-                selectedFile.filename +
-                "&username=" +
-                this.current_user
+                this.current_user_upload_bucket,
+                selectedFile.filename,
+                this.current_user.username
               )
               .subscribe((response: any) => {
                 window.open(response, "_blank");

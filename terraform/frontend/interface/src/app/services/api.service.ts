@@ -31,7 +31,7 @@ export class ApiService {
 
   public upload_file_to_s3(presigned_url: string, file: any, file_type: string): Observable<any> { return this.http.put(presigned_url, file, { headers: { 'Content-Type': file_type } }); }
 
-  public download_file_from_s3(presigned_url: string) {return this.http.get(this.BASE_URI + presigned_url, { responseType: "text" });}
+  public download_file_from_s3(bucket: string, file_name:string, username: string): Observable<any> {return this.http.get(`${this.BASE_URI}/download_url?bucket_name=${bucket}&file_name=${file_name}&username=${username}`, { headers: this.auth_header });}
 
   public set_s3_object_as_confidential(): Observable<any> { return this.http.get(`${this.BASE_URI}`); } // Does Not Exist yet
 
