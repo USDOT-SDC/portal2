@@ -5,6 +5,7 @@ import logging
 
 
 TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
+print(os.getenv('TABLENAME_TRUSTED_USERS'))
 RECEIVER = os.getenv("RECEIVER_EMAIL")
 ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")
 
@@ -57,7 +58,7 @@ def lambda_handler(event, context):
     try:
         status=params['status']
         key1=params['key1']
-        key2=params['key2']
+        key2=params['datainfo']
         userEmail = params['userEmail']
 
         trustedRequestTable = dynamodb_client.Table(TABLENAME_TRUSTED_USERS)
@@ -66,7 +67,7 @@ def lambda_handler(event, context):
                                 'UserID': key1,
                                 'Dataset-DataProvider-Datatype': key2
                             },
-                            UpdateExpression="set TrustedStatus = :val",
+                            UpdateExpression="SET TrustedStatus = :val",
                             ExpressionAttributeValues = {
                                 ':val': status
                             },
@@ -79,7 +80,7 @@ def lambda_handler(event, context):
         send_notification(listOfPOC, emailContent)
 
     except BaseException as be:
-        logging.exception("Error: Failed to updatetrustedtatus" + str(be))
+        logging.exception("Error: Failed to updatetrustedtatus " + str(be))
         raise ("Failed to updatetrustedtatus")
 
     return {
