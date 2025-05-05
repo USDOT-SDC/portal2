@@ -218,8 +218,6 @@ export class DatasetsComponent implements OnInit, OnDestroy {
                 window.open(response, "_blank");
               });
           }
-        } else {
-          console.log("selected file datasetObj key is not filename");
         }
       });
     }
