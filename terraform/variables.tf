@@ -19,6 +19,19 @@ locals {
     client_secret               = file("../../portal2-secrets/backend/cognito/client_secret_${nonsensitive(data.aws_ssm_parameter.environment.value)}.txt")
     config_version              = var.config_version
     git_commit_head_sha1        = data.git_commit.head.sha1
+    time = {
+      rotating = {
+        hours = {
+          8  = time_rotating._8hours.id
+          12 = time_rotating._12hours.id
+          24 = time_rotating._24hours.id
+        }
+        days = {
+          7  = time_rotating._7days.id
+          30 = time_rotating._30days.id
+        }
+      }
+    }
   }
   default_tags = {
     Repository = "portal2"

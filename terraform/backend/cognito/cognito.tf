@@ -163,26 +163,27 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   provider_name = "DOT-PIV"
   provider_type = "OIDC"
   attribute_mapping = {
-    email                    = "email"
-    family_name              = "family_name"
-    given_name               = "given_name"
-    name                     = "name"               # Last, First (Mode)
-    preferred_username       = "preferred_username" # email
-    profile                  = "profile"
+    "username"         = "sub"
+    email              = "email"
+    family_name        = "family_name"
+    given_name         = "given_name"
+    name               = "name"               # Last, First (Mode)
+    preferred_username = "preferred_username" # email
+    profile            = "profile"
   }
   # idp_identifiers = []
   provider_details = {
     # https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0/.well-known/openid-configuration
-    client_id                     = "8bb2d24b-2e18-451a-8a5a-34f0ef3caaba"
+    client_id                     = local.client_id
     client_secret                 = var.common.client_secret
     authorize_scopes              = "email openid profile offline_access"
     attributes_request_method     = "GET"
-    oidc_issuer                   = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0"
+    attributes_url_add_attributes = false
     attributes_url                = "https://graph.microsoft.com/oidc/userinfo"
-    # attributes_url_add_attributes = true
+    oidc_issuer                   = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0"
     authorize_url                 = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/oauth2/v2.0/authorize"
-    jwks_uri                      = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/discovery/v2.0/keys"
     token_url                     = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/oauth2/v2.0/token"
+    jwks_uri                      = "https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/discovery/v2.0/keys"
   }
 }
 
