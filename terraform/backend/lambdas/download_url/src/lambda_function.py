@@ -1,5 +1,6 @@
 import boto3
 import logging
+import simplejson as json
 import os
 
 ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")
@@ -24,5 +25,5 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
                 'Content-Type': 'text/plain'
         }, 
-        'body':response
+        'body':json.dumps(response)
     }
