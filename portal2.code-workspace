@@ -5,11 +5,57 @@
 		}
 	],
 	"settings": {
+		"terraform.experimentalFeatures.prefillRequiredFields": true,
+		"git.autofetch": true,
+		"github.gitProtocol": "ssh",
+		"github-enterprise.uri": "https://git.dot.gov/",
+		"editor.suggest.preview": true,
+		"editor.fontFamily": "Fira Code",
+		"editor.fontLigatures": true,
+		"editor.tabSize": 4,
+		"diffEditor.ignoreTrimWhitespace": false,
+		"python.analysis.autoFormatStrings": true,
+		"python.analysis.completeFunctionParens": true,
+		"python.analysis.inlayHints.functionReturnTypes": true,
+		"python.analysis.inlayHints.variableTypes": true,
+		"python.languageServer": "Jedi",
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter"
+		},
+		"black-formatter.args": [
+			"--line-length",
+			"139"
+		],
+		"autoDocstring.startOnNewLine": true,
+		"java.jdt.ls.java.home": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-23",
+		"java.configuration.runtimes": [
+			{
+				"name": "JavaSE-1.8",
+				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-1.8"
+			},
+			{
+				"name": "JavaSE-13",
+				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-13",
+				"default": true
+			},
+			{
+				"name": "JavaSE-21",
+				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-21",
+			},
+			{
+				"name": "JavaSE-23",
+				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-23",
+			},
+		],
 		"java.configuration.updateBuildConfiguration": "interactive",
 		"cSpell.words": [
 			"OICD",
 			"redeployments",
 			"rolename"
+		],
+		"cSpell.ignorePaths": [
+			"*.json",
+			"*.code-workspace"
 		]
 	},
 }
