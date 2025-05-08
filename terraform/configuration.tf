@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.92"
+      version = "~> 5.97"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -19,7 +19,11 @@ terraform {
     }
     git = {
       source  = "metio/git"
-      version = "~> 2025.3"
+      version = "~> 2025.4"
+    }
+    time = {
+      source = "hashicorp/time"
+      version = "~> 0.13"
     }
   }
   backend "s3" {

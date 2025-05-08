@@ -74,14 +74,15 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     }
 
     function sortByStatus_asc(a: any, b: any) {
-      const statusOrder: any = { "Submitted": 0, "Denied": 1, "Approved": 2 };
+      const statusOrder: any = { "-": 0, "Submitted": 1, "Rejected": 2, "Approved": 3 };
+
       let statusA: any = a.status, statusB: any = b.status;
       // Use the predefined order to compare statuses
       return statusOrder[statusA] - statusOrder[statusB];
     }
 
     function sortByStatus_desc(a: any, b: any) {
-      const statusOrder: any = { "Submitted": 0, "Denied": 1, "Approved": 2 };
+      const statusOrder: any = { "-": 0, "Submitted": 1, "Rejected": 2, "Approved": 3 };
       let statusA: any = a.status, statusB: any = b.status;
       // Use the predefined order to compare statuses
       return statusOrder[statusB] - statusOrder[statusA];
@@ -201,6 +202,26 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   }
 
+  public download_files() {
+    console.log("download_files called");
+    for (let selectedFile of this.selected_files) {
+      this.user_datasets_algorithms.forEach((datasetObj, index) => {
+        if (selectedFile["filename"] == datasetObj["filename"]) {
+          if (datasetObj["status"] == "Approved") {
+            this.api
+              .download_file_from_s3(
+                this.current_user_upload_bucket,
+                selectedFile.filename,
+                this.current_user.username
+              )
+              .subscribe((response: any) => {
+                window.open(response, "_blank");
+              });
+          }
+        }
+      });
+    }
+  }
 
   // Export Request Module Functions
 

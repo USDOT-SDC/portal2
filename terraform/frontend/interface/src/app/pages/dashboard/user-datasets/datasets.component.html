@@ -35,7 +35,7 @@
                     <input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)">
                 </div>
                 <div class="col-6"><b>Filename</b></div>
-                <div class="col-2 text-center"><b>Export</b></div>
+                <div class="col-2 text-center"><b>Request Data Export</b></div>
                 <div class="col-3 text-center"><b>Export Request Status</b></div>
             </div>
         </div>
@@ -55,7 +55,7 @@
         </ng-template>
         <div class="card-footer border-top-none">
             <div class="d-flex align-items-center justify-content-end">
-                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0">
+                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0" (click)="download_files()">
                     <i class="fa-solid fa-download me-2"></i>
                     <ng-container *ngIf="selected_files.length > 0; else DefaultDownloadElem"> Download {{selected_files.length}} Selected Files</ng-container>
                     <ng-template #DefaultDownloadElem> Download Selected </ng-template>
