@@ -160,7 +160,7 @@ mkdir -p $GUACAMOLE_HOME/lib
 GUACAMOLE_AUTH_JDBC_MYSQL_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-jdbc-mysql-${guac_version}.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_jdbc_mysql_key} $GUACAMOLE_AUTH_JDBC_MYSQL_PATH
 
-GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-0.9.14.jar
+GUACAMOLE_AUTH_HEADER_PATH=$GUACAMOLE_HOME/extensions/guacamole-auth-header-${guac_auth_header_version}.jar
 aws s3 cp s3://${terraform_bucket}/${guac_auth_header_key} $GUACAMOLE_AUTH_HEADER_PATH
 
 MYSQL_CONNECTOR_PATH=$GUACAMOLE_HOME/lib/mysql-connector-j-${mysql_connector_version}
