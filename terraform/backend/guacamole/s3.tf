@@ -1,3 +1,9 @@
+locals {
+  tomcat_version           = "9.0.104"
+  guac_version             = "1.5.5"
+  guac_auth_header_version = "0.9.14"
+  mysql_connector_version  = "9.2.0"
+}
 data "template_file" "user_data" {
   template = file("${path.module}/ec2-user-data.sh")
   vars = {
@@ -11,15 +17,15 @@ data "template_file" "user_data" {
     fqdn                     = var.fqdn
     environment              = var.common.environment
     terraform_bucket         = var.common.terraform_bucket.bucket
-    tomcat_version           = "9.0.102"
-    tomcat_key               = aws_s3_object.files["apache-tomcat-9.0.102.tar.gz"].key
-    guac_version             = "1.5.5"
-    guac_war_key             = aws_s3_object.files["guacamole-1.5.5.war"].key
-    guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-1.5.5.jar"].key
-    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-0.9.14.jar"].key
-    # guac_web_xml_key         = aws_s3_object.web_xml.key
-    mysql_connector_version  = "9.2.0"
-    mysql_connector_key      = aws_s3_object.files["mysql-connector-j-9.2.0.jar"].key
+    tomcat_version           = local.tomcat_version
+    tomcat_key               = aws_s3_object.files["apache-tomcat-${local.tomcat_version}.tar.gz"].key
+    guac_version             = local.guac_version
+    guac_war_key             = aws_s3_object.files["guacamole-${local.guac_version}.war"].key
+    guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-${local.guac_version}.jar"].key
+    guac_auth_header_version = local.guac_auth_header_version
+    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-${local.guac_auth_header_version}.jar"].key
+    mysql_connector_version  = local.mysql_connector_version
+    mysql_connector_key      = aws_s3_object.files["mysql-connector-j-${local.mysql_connector_version}.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
     config_version           = var.common.config_version
