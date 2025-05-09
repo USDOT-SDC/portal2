@@ -58,8 +58,19 @@ resource "aws_lb_target_group" "guacamole" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.common.vpc.id
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    interval            = 30
+    matcher             = "200"
+    path                = "/guacamole/"
+    port                = "8080"
+    protocol            = "HTTP"
+    timeout             = 5
+  }
   target_health_state {
     enable_unhealthy_connection_termination = false
+    unhealthy_draining_interval             = 0
   }
   tags = local.tags
 }
@@ -104,8 +115,8 @@ resource "aws_instance" "guacamole" {
   availability_zone    = data.aws_subnet.four.availability_zone
   iam_instance_profile = aws_iam_instance_profile.ec2.name
   # iam_instance_profile = "SDC-Power-User-Role"
-  instance_type        = "c6a.xlarge"
-  key_name             = "ost-sdc-${var.common.environment}"
+  instance_type = "c6a.xlarge"
+  key_name      = "ost-sdc-${var.common.environment}"
   vpc_security_group_ids = [
     data.aws_security_group.FMS_managed.id,
     aws_security_group.guacamole_instance.id
