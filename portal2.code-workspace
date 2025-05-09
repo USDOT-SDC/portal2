@@ -58,4 +58,15 @@
 			"*.code-workspace"
 		]
 	},
+	"extensions": {
+		"recommendations": [
+			"hashicorp.terraform",
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"ms-python.debugpy",
+			"ms-python.black-formatter",
+			"njqdev.vscode-python-typehint",
+			"njpwerner.autodocstring",
+		]
+	}
 }
