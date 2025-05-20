@@ -7,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  public organization: string = 'Federal Highway Administration';
+  public organization: string = 'U.S. Department of Transportation';
   public address: string = "1200 New Jersey Avenue SE";
   public location: string = "Washington, DC 20590";
-  public phone: string = "202-366-4000";
+  public phone: string = "855-368-4200";
 
   public footer_links: Array<any> = [
     { title: 'Privacy Policy', url: 'https://www.fhwa.dot.gov/privacy.cfm' },
