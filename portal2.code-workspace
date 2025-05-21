@@ -26,25 +26,28 @@
 			"--line-length",
 			"139"
 		],
+		"autoDocstring.docstringFormat": "google",
+		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.startOnNewLine": true,
-		"java.jdt.ls.java.home": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-23",
+		"autoDocstring.guessTypes": true,
+		"java.jdt.ls.java.home": "C:\\PortableApps\\jdk\\OpenJDK-13",
 		"java.configuration.runtimes": [
 			{
 				"name": "JavaSE-1.8",
-				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-1.8"
+				"path": "C:\\PortableApps\\jdk\\OpenJDK-1.8"
 			},
 			{
 				"name": "JavaSE-13",
-				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-13",
+				"path": "C:\\PortableApps\\jdk\\OpenJDK-13",
 				"default": true
 			},
 			{
 				"name": "JavaSE-21",
-				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-21",
+				"path": "C:\\PortableApps\\jdk\\OpenJDK-21",
 			},
 			{
 				"name": "JavaSE-23",
-				"path": "%USER_PROFILE%\\PortableApps\\jdk\\OpenJDK-23",
+				"path": "C:\\PortableApps\\jdk\\OpenJDK-23",
 			},
 		],
 		"java.configuration.updateBuildConfiguration": "interactive",
