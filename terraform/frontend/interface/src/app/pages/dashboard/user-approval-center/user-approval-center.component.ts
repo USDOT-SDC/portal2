@@ -77,6 +77,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     const api = this.api.send_update_export_table_status(payload).subscribe((response: any) => {
       // console.log(response);
       this.get_approvals(user);
+      window.location.reload;
       api.unsubscribe();
     });
 
@@ -87,7 +88,8 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
    */
   public submit_file_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
-    // console.log('submit_file_status_request, incoming data: ', { data, user });
+    console.log('submit_file_status_request, incoming data: ', { data });
+    console.log('submit_file_status_request, incoming user: ', { user });
     var payload: any = {
       status: approved == true ? 'Approved' : 'Rejected',
       key1: data.S3KeyHash,
@@ -97,10 +99,12 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
       TeamBucket: data.TeamBucket,
       userEmail: user.email
     };
-    // console.log('submit_file_status_request', payload);
+    console.log('submit_file_status_request', payload);
     const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
-      // console.log(response);
+      console.log('send_update_files_status response: ', response);
+      console.log('user sent to this.get_approvals: ', user)
       this.get_approvals(user);
+      window.location.reload;
       api.unsubscribe();
     });
   }
@@ -121,11 +125,14 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
       console.log(response);
       this.get_approvals(user);
+      window.location.reload;
       api.unsubscribe();
     });
   }
 
   public get_approvals(user: any) {
+  console.log('get_approvals called');
+  console.log('get_approvals-user: ', user);
     const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
       console.log(response);
       if (response.exportRequests) {
