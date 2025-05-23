@@ -106,8 +106,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
     const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
       console.log('send_update_files_status response: ', response);
       console.log('user param submitted to "this.get_approvals": ', user)
-      this.get_approvals(user);
-      window.location.reload;
+      this.auth.user_info.next(user);
       this.api_is_loading = false; // Disabled Loading Boolean 
       api.unsubscribe();
     });
