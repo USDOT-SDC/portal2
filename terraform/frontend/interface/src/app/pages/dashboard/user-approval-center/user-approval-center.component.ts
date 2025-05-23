@@ -17,6 +17,8 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
 
   private _subscription: Array<Subscription> = [];
 
+  public api_is_loading: boolean = false;
+
   public s3_requests: Array<any> = [];
 
   public table_export_requests: Array<any> = [];
@@ -88,8 +90,9 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
    */
   public submit_file_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
-    console.log('submit_file_status_request, incoming data: ', { data });
-    console.log('submit_file_status_request, incoming user: ', { user });
+    this.api_is_loading = true; // Enable Loading Boolean
+    console.log('submit_file_export_request, incoming data: ', { data });
+    console.log('submit_file_export_request, incoming user: ', { user });
     var payload: any = {
       status: approved == true ? 'Approved' : 'Rejected',
       key1: data.S3KeyHash,
@@ -99,12 +102,13 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
       TeamBucket: data.TeamBucket,
       userEmail: user.email
     };
-    console.log('submit_file_status_request', payload);
+    console.log('submit_file_export_request', payload);
     const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
       console.log('send_update_files_status response: ', response);
-      console.log('user sent to this.get_approvals: ', user)
+      console.log('user param submitted to "this.get_approvals": ', user)
       this.get_approvals(user);
       window.location.reload;
+      this.api_is_loading = false; // Disabled Loading Boolean 
       api.unsubscribe();
     });
   }
