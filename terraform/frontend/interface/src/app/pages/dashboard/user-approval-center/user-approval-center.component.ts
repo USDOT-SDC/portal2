@@ -92,8 +92,8 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   public submit_file_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
     this.api_is_loading = true; // Enable Loading Boolean
-    console.log('submit_file_export_request, incoming data: ', { data });
-    console.log('submit_file_export_request, incoming user: ', { user });
+    // console.log('submit_file_export_request, incoming data: ', { data });
+    // console.log('submit_file_export_request, incoming user: ', { user });
     var payload: any = {
       status: approved == true ? 'Approved' : 'Rejected',
       key1: data.S3KeyHash,
@@ -103,10 +103,10 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
       TeamBucket: data.TeamBucket,
       userEmail: user.email
     };
-    console.log('submit_file_export_request', payload);
+    // console.log('submit_file_export_request', payload);
     const api = this.api.send_update_file_status(payload).subscribe((response: any) => {
-      console.log('send_update_files_status response: ', response);
-      console.log('user param submitted to "this.get_approvals": ', user)
+      // console.log('send_update_files_status response: ', response);
+      // console.log('user param submitted to "this.get_approvals": ', user)
       this.auth.user_info.next(user);
       this.api_is_loading = false; // Disabled Loading Boolean 
       api.unsubscribe();
@@ -119,16 +119,16 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   public respond_trusted_status_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
     this.api_is_loading = true; // Enable Loading Boolean
-    console.log('respond_trusted_status_request, incoming data: ', { data, user });
+    // console.log('respond_trusted_status_request, incoming data: ', { data, user });
     var payload: any = {
       status: approved == true ? 'Trusted' : 'Untrusted',
       key1: data.UserID,
       datainfo: data['Dataset-DataProvider-Datatype'],
       userEmail: data.UserEmail
     };
-    console.log('respond_trusted_status_request', payload);
+    // console.log('respond_trusted_status_request', payload);
     const api = this.api.send_update_trusted_status(payload).subscribe((response: any) => {
-      console.log(response);
+      // console.log(response);
       this.auth.user_info.next(user);
       this.api_is_loading = false; // Disabled Loading Boolean
       api.unsubscribe();
@@ -136,10 +136,10 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   }
 
   public get_approvals(user: any) {
-  console.log('get_approvals called');
-  console.log('get_approvals-user: ', user);
+  // console.log('get_approvals called');
+  // console.log('get_approvals-user: ', user);
     const API = this.api.get_export_request_approval_list(user.email).subscribe((response: any) => {
-      console.log(response);
+      // console.log(response);
       if (response.exportRequests) {
         const { exportRequests, trustedRequests, autoExportRequests } = response;
         this.table_export_requests = exportRequests.tableRequests.sort(this.sort_requests);
@@ -148,7 +148,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
           this.trusted_user_status_requests = [];
           trustedRequests.forEach((array: any) => { this.trusted_user_status_requests.push(...array) });
         }
-        console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
+        // console.log({ trusted_user_status_requests: this.trusted_user_status_requests });
       }
       API.unsubscribe();
     });

@@ -35,7 +35,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   constructor(private auth: AuthService, private api: ApiService) { }
 
   private refresh_user_uploads(): void {
-    console.log('start refresh_user_uploads')
+    // console.log('start refresh_user_uploads')
     const user_name = this.current_user.username;
     const user_data_api = this.api.get_user_uploaded_data(this.current_user_upload_bucket, user_name).subscribe((response: any) => {
       this.user_datasets_algorithms = response
@@ -46,8 +46,8 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     })
   }
 
-//Placeholder possibly sort user_uploads by last modified desc... lambda modification likely required....
-//lastmodified data is not part of payload
+// Placeholder: sort user_uploads by last modified desc... 
+// Note: lambda chgs likely required, since lastmodified data is not currently included in response
         //this.user_datasets_algorithms.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
         
 
@@ -211,7 +211,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   }
 
   public download_files() {
-    console.log("download_files called");
+    // console.log("download_files called");
     for (let selectedFile of this.selected_files) {
       this.user_datasets_algorithms.forEach((datasetObj, index) => {
         if (selectedFile["filename"] == datasetObj["filename"]) {
@@ -255,7 +255,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public data_for_export_approval_form : any;
 
   public select_dataset_project(event: any): void {
-    console.log('select_dataset_project starts');
+    // console.log('select_dataset_project starts');
     this.selected_dataset_project = event.target.value;
     const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
 
@@ -391,25 +391,17 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
 
     this.send_export_request().then((response: any) => {
-      console.log('2-submit_request--this.send_export_request response:',response);
-      //this.is_loading = false;
-      console.log('2-call this.close_modal_export_request-commented out');
-      //this.close_modal_export_request();
-      console.log('2-submit_request--call refresh_user_uploads')
+      console.log('submit_request--this.send_export_request response:',response);
       this.refresh_user_uploads();
-      console.log('2-submit_request--call setTimeout()')
       setTimeout(() => {
         this.is_loading = false;
-        console.log('2A-submit_request--call this.close_modal_export_request in setTimeout');
         this.close_modal_export_request();
       }, 2 * 1000);
-      console.log('2-submit_request--end of submit_request--this.send_export request');
     });
-    console.log ('2-submit_request end');
   }
 
   private send_export_request(): Promise<any> {
-    console.log('send_export_request starts');
+    // console.log('send_export_request starts');
     const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
       const message = {
@@ -435,7 +427,6 @@ export class DatasetsComponent implements OnInit, OnDestroy {
         resolve(response);
         API.unsubscribe();
       })
-      console.log('send_export_request returned promise ends');
     });
   }
 
@@ -443,7 +434,6 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     console.log('in close_modal_export-request');
     this.Modal_RequestExportData.close();
     this.reset_forms();
-    //this.refresh_user_uploads();
     }
 
 
@@ -476,7 +466,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
         if (this.current_user) {
           this.current_user_upload_locations = user.upload_locations.map((l: any) => { return { path: l } });
           this.current_user_upload_bucket = user.upload_locations[0].split('/')[0];
-          console.log('ngOnInit calls refresh_user_uploads');
+          // console.log('ngOnInit calls refresh_user_uploads');
           this.refresh_user_uploads();
         }
       })
