@@ -27,5 +27,10 @@ dependencies {
   // I think Maven "provided" translates to compileOnly ?
   compileOnly group: 'org.apache.guacamole', name: 'guacamole-ext', version: '0.9.14'
   compileOnly group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+}
 
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(13)
+  }
 }

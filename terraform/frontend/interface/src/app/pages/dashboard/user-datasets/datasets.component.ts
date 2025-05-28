@@ -35,19 +35,27 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   constructor(private auth: AuthService, private api: ApiService) { }
 
   private refresh_user_uploads(): void {
+    // console.log('start refresh_user_uploads')
     const user_name = this.current_user.username;
     const user_data_api = this.api.get_user_uploaded_data(this.current_user_upload_bucket, user_name).subscribe((response: any) => {
       this.user_datasets_algorithms = response
         .map((file: string) => { return { filename: file, status: false } })
         .filter((file: any) => { if (this.file_is_folder(file.filename) == false) return file });
+      console.log('refresh_user_uploads_this.user_datasets_algorithms: ', this.user_datasets_algorithms);
       user_data_api.unsubscribe();
     })
   }
+
+// Placeholder: sort user_uploads by last modified desc... 
+// Note: lambda chgs likely required, since lastmodified data is not currently included in response
+        //this.user_datasets_algorithms.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
+        
 
   public clear_search_filter(): void { this.file_upload_search_term = undefined; }
 
   // Sort Method - Sort User Datasets and Algorithms
   public sort_ds_and_alg(event: any): void {
+    console.log('sort_ds_and_alg event; ', event)
     const value: number = parseInt(event.target.value);
 
     switch (value) {
@@ -145,11 +153,11 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   
 
-  // Modal Close - Request Export Data Modal
+  // Modal Close - Request Export Data Modal -- NOT CURRENTLY USED
   public modal_close_request_export_data(): void {
-    this.selected_data_for_export = undefined;
-    this.Modal_RequestExportData.close();
-  }
+        this.selected_data_for_export = undefined;
+        this.Modal_RequestExportData.close();
+      }
 
 
   /**
@@ -203,7 +211,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   }
 
   public download_files() {
-    console.log("download_files called");
+    // console.log("download_files called");
     for (let selectedFile of this.selected_files) {
       this.user_datasets_algorithms.forEach((datasetObj, index) => {
         if (selectedFile["filename"] == datasetObj["filename"]) {
@@ -247,6 +255,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public data_for_export_approval_form : any;
 
   public select_dataset_project(event: any): void {
+    // console.log('select_dataset_project starts');
     this.selected_dataset_project = event.target.value;
     const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
 
@@ -355,7 +364,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   // };
 
   public submit_request(): void {
-
+    console.log('submit_request() starts');
     this.is_loading = true;
 
     var payload: any = {
@@ -382,13 +391,17 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
 
     this.send_export_request().then((response: any) => {
-      console.log(response);
-      this.is_loading = false;
-      this.close_modal_export_request();
+      console.log('submit_request--this.send_export_request response:',response);
+      this.refresh_user_uploads();
+      setTimeout(() => {
+        this.is_loading = false;
+        this.close_modal_export_request();
+      }, 2 * 1000);
     });
   }
 
   private send_export_request(): Promise<any> {
+    // console.log('send_export_request starts');
     const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
       const message = {
@@ -407,17 +420,21 @@ export class DatasetsComponent implements OnInit, OnDestroy {
           selectedDatatype: this.selected_provider_sub_dataset.name
         }
       }
-      console.log("send_export_request", message);
+      console.log("send_export_request--message", message);
 
       const API = this.api.send_trusted_user_request(message).subscribe((response: any) => {
-        console.log(response);
+        console.log('send export request--api.send_trusted_user_request response: ', response);
         resolve(response);
         API.unsubscribe();
       })
     });
   }
 
-  public close_modal_export_request(): void { this.Modal_RequestExportData.close(); this.reset_forms(); }
+  public close_modal_export_request(): void {
+    console.log('in close_modal_export-request');
+    this.Modal_RequestExportData.close();
+    this.reset_forms();
+    }
 
 
   public select_dataset_provider_sub_dataset(event: any): void {
@@ -449,6 +466,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
         if (this.current_user) {
           this.current_user_upload_locations = user.upload_locations.map((l: any) => { return { path: l } });
           this.current_user_upload_bucket = user.upload_locations[0].split('/')[0];
+          // console.log('ngOnInit calls refresh_user_uploads');
           this.refresh_user_uploads();
         }
       })

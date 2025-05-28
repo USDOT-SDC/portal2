@@ -12,7 +12,7 @@
             <hr>
             <div class="nav flex-column nav-pills text-start me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link text-center mb-2 active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">My Resources</button>
-                <button class="nav-link text-center mb-2" id="v-pills-resources-tab" data-bs-toggle="pill" data-bs-target="#v-pills-resources" type="button" role="tab" aria-controls="v-pills-resources" aria-selected="false">SDC Resources</button>
+                <button class="nav-link text-center mb-2" id="v-pills-datasets-tab" data-bs-toggle="pill" data-bs-target="#v-pills-datasets" type="button" role="tab" aria-controls="v-pills-datasets" aria-selected="false">SDC Datasets</button>
                 <button class="nav-link text-center mb-2" id="v-pills-requests-tab" data-bs-toggle="pill" data-bs-target="#v-pills-requests" type="button" role="tab" aria-controls="v-pills-requests" aria-selected="false">Request Center</button>
                 <ng-container *ngIf="user_is_approver == true">
                     <button class="nav-link text-center mb-2" id="v-pills-approvals-tab" data-bs-toggle="pill" data-bs-target="#v-pills-approvals" type="button" role="tab" aria-controls="v-pills-approvals" aria-selected="false">Approval Center</button>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="v-pills-resources" role="tabpanel" aria-labelledby="v-pills-resources-tab" tabindex="0">
+                <div class="tab-pane fade" id="v-pills-datasets" role="tabpanel" aria-labelledby="v-pills-datasets-tab" tabindex="0">
                     <div class="mb-4">
                         <app-sdc-datasets [sdc_datasets]="sdc_datasets"></app-sdc-datasets>
                     </div>
