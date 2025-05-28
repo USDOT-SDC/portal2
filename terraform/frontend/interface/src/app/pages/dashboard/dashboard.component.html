@@ -68,30 +68,19 @@
         </div>
     </ng-container>
     <ng-container modal-body>
-        <div class="p-2">
-            <div class="row align-items-end">
-                <p class="modal-text">Your session has expired, please log out and then login again.</p>
+        <div class="d-flex align-items-center justify-content-between p-2">
+            <div>
+                <p class="modal-text">Your session has expired, please log back in.</p>
+            </div>
+            <div>
+                <button class="nav-item">
+                    <a class="nav-link" href="/login">LOGIN</a>
+                </button>
             </div>
         </div>
     </ng-container>
-    <ng-container modal-footer>
-        <!-- <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
-            <button class="btn btn-success" [disabled]="file_uploader.files_to_upload.length == 0 || file_upload_bucket == undefined || uploading_files == true" (click)="upload_files()">
-                <ng-container *ngIf="uploading_files == true; else DefaultNonLoadingStatus">
-                    <i class="fa-solid fa-spinner fa-spin me-2"></i>Uploading File(s)...
-                </ng-container>
-                <ng-template #DefaultNonLoadingStatus>
-                    <ng-container *ngIf="file_uploader.files_to_upload.length > 0; else DefaultUploadStatus">
-                        <i class="fa-solid fa-upload me-2"></i>Upload {{file_uploader.files_to_upload.length}} File(s)
-                    </ng-container>
-                    <ng-template #DefaultUploadStatus>
-                        <i class="fa-solid fa-upload me-2"></i>Upload File(s)
-                    </ng-template>
-                </ng-template>
-            </button>
-        </div> -->
-    </ng-container>
+    <!-- <ng-container modal-footer> -->
+    <!-- </ng-container> -->
 </app-modal>
 <!-- :: AUTH RENEW MODAL :: -->
 <!-- :: AUTH RENEW MODAL :: -->
