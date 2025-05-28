@@ -395,6 +395,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       this.refresh_user_uploads();
       setTimeout(() => {
         this.is_loading = false;
+        window.location.reload();
         this.close_modal_export_request();
       }, 2 * 1000);
     });
