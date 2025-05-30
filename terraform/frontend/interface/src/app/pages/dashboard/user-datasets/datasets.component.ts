@@ -17,6 +17,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   @ViewChild('Modal_UploadFiles') Modal_UploadFiles: ModalComponent | any;
   @ViewChild('Modal_RequestExportData') Modal_RequestExportData: ModalComponent | any;
   @ViewChild('file_uploader') file_uploader: FileUploadComponent | any;
+  @ViewChild('AuthRenewModal') AuthRenewModal: ModalComponent | any;
 
 
   private _subscriptions: Array<Subscription> = [];
@@ -458,6 +459,13 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     this.file_uploader.files_to_upload = [];
   }
 
+  public auth_modal_open(): void {
+    this.AuthRenewModal.open();
+  }
+
+  public auth_modal_close(): void {
+    this.AuthRenewModal.close();
+  }
 
   ngOnInit(): void {
     this._subscriptions.push(
