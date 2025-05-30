@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AuthService } from 'src/app/services/auth.service';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
 
 @Component({
   selector: 'app-login-redirect',
@@ -9,6 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login-redirect.component.less']
 })
 export class LoginRedirectComponent implements OnInit {
+
+  @ViewChild('AuthRenewModal') AuthRenewModal: ModalComponent | any;
 
   constructor(private router: Router, private OICD_Auth: OidcSecurityService, private auth: AuthService) { }
 
@@ -25,4 +28,11 @@ export class LoginRedirectComponent implements OnInit {
 
   }
 
+  public auth_modal_open(): void {
+    this.AuthRenewModal.open();
+  }
+
+  public auth_modal_close(): void {
+    this.AuthRenewModal.close();
+  }
 }

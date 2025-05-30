@@ -5,3 +5,30 @@
 
     </div>
 </section>
+
+
+<!-- :: AUTH RENEW MODAL :: -->
+<!-- :: AUTH RENEW MODAL :: -->
+<app-modal #AuthRenewModal [size]="'md'">
+    <ng-container modal-header>
+        <div class="d-flex align-items-center justify-content-start p-2">
+            <h5 class="m-0">Session Expired</h5>
+        </div>
+    </ng-container>
+    <ng-container modal-body>
+        <div class="d-flex align-items-center justify-content-between p-2">
+            <div>
+                <p class="modal-text">Your session has expired, please log back in.</p>
+            </div>
+            <div>
+                <button class="nav-item">
+                    <a class="nav-link" href="/login">LOGIN</a>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <!-- <ng-container modal-footer> -->
+    <!-- </ng-container> -->
+</app-modal>
+<!-- :: AUTH RENEW MODAL :: -->
+<!-- :: AUTH RENEW MODAL :: -->
