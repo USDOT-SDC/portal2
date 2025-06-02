@@ -1,14 +1,14 @@
 # # === Users ===
-# resource "aws_dynamodb_table" "users" {
-#   name         = "portal_users"
-#   billing_mode = "PAY_PER_REQUEST"
-#   hash_key     = "username"
+resource "aws_dynamodb_table" "user_stacks" {
+  name         = "portal_user_stacks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "email"
 
-#   attribute {
-#     name = "username"
-#     type = "S"
-#   }
-# }
+  attribute {
+    name = "email"
+    type = "S"
+  }
+}
 
 # resource "aws_dynamodb_table_item" "user_acme" {
 #   table_name = aws_dynamodb_table.users.name

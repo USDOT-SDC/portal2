@@ -6,6 +6,7 @@ from boto3.dynamodb.conditions import Key, Attr
 RESTAPIID = os.getenv("RESTAPIID")
 AUTHORIZERID = os.getenv("AUTHORIZERID")
 TABLENAME_USER_STACKS = os.getenv("TABLENAME_USER_STACKS")
+HASH_KEY_USER_STACKS = os.getenv("HASH_KEY_USER_STACKS")
 TABLENAME_AVAILABLE_DATASET = os.getenv("TABLENAME_AVAILABLE_DATASET")
 TABLENAME_TRUSTED_USERS = os.getenv("TABLENAME_TRUSTED_USERS")
 TABLENAME_AUTOEXPORT_USERS = os.getenv("TABLENAME_AUTOEXPORT_USERS")
@@ -72,8 +73,8 @@ def lambda_handler(event, context):
         user_info["email"] = info_dict["email"]
         user_info["username"] = info_dict["username"]
         user_info["datasets"] = get_datasets()["datasets"]["Items"]
-        user_info["userTrustedStatus"] = get_user_trustedstatus(info_dict["username"])
-        user_info["userAutoExportStatus"] = get_user_autoexportstatus(info_dict["username"])
+        user_info["userTrustedStatus"] = get_user_trustedstatus(info_dict["email"])
+        user_info["userAutoExportStatus"] = get_user_autoexportstatus(info_dict["email"])
     except Exception:
         print(Exception)
 
@@ -81,7 +82,7 @@ def lambda_handler(event, context):
 
     # Get the item with role name
     try:
-        response_table = table.get_item(Key={"username": user_info["username"]})
+        response_table = table.get_item(Key={HASH_KEY_USER_STACKS: user_info["username"]})
     except Exception:
         print(Exception)
 
