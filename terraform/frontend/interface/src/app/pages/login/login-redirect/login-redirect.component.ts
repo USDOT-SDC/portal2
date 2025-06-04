@@ -17,13 +17,13 @@ export class LoginRedirectComponent implements OnInit {
 
   ngOnInit(): void {
     this.OICD_Auth.checkAuth(location.href).subscribe((data: any) => {
-      console.log('login-redirect-checkAuth-data', { checkAuth: data })
+      // console.log('login-redirect-checkAuth-data', { checkAuth: data })
       if (data.isAuthenticated) {
         this.auth.current_user.next(data);
         this.auth.isAuthenticated.next(data.isAuthenticated);
         this.router.navigate(['dashboard'])
       }
-      else this.auth_modal_open();
+      else if (data.errorMessage) {console.log(data.errorMessage); this.auth_modal_open()};
     });
 
   }
