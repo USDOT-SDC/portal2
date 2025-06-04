@@ -1,5 +1,5 @@
 locals {
-  tomcat_version           = "9.0.104"
+  tomcat_version           = "9.0.105"
   guac_version             = "1.5.5"
   guac_auth_header_version = "0.9.14"
   mysql_connector_version  = "9.2.0"
