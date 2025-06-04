@@ -25,7 +25,7 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   email_configuration {
-    email_sending_account = "DEVELOPER"
+    email_sending_account  = "DEVELOPER"
     from_email_address     = data.aws_sesv2_email_identity.sdc_support.email_identity
     reply_to_email_address = data.aws_sesv2_email_identity.sdc_support.email_identity
     source_arn             = data.aws_sesv2_email_identity.sdc_support.arn
@@ -88,7 +88,6 @@ resource "aws_cognito_user_pool_client" "this" {
   allowed_oauth_scopes = [
     "email",
     "openid",
-    "phone",
     "profile",
   ]
 
@@ -150,7 +149,7 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   provider_name = "DOT-PIV"
   provider_type = "OIDC"
   attribute_mapping = {
-    "username"         = "sub"
+    username           = "sub"
     email              = "email"
     family_name        = "family_name"
     given_name         = "given_name"
