@@ -7,10 +7,11 @@ resource "aws_api_gateway_rest_api" "portal" {
 
 # === REST API Authorizer ===
 resource "aws_api_gateway_authorizer" "portal" {
-  name          = "PortalCognitoUserPoolAuthorizer"
-  type          = "COGNITO_USER_POOLS"
-  rest_api_id   = aws_api_gateway_rest_api.portal.id
-  provider_arns = [module.cognito.cognito.user_pool.arn]
+  name            = "PortalCognitoUserPoolAuthorizer"
+  type            = "COGNITO_USER_POOLS"
+  rest_api_id     = aws_api_gateway_rest_api.portal.id
+  provider_arns   = [module.cognito.cognito.user_pool.arn]
+  identity_source = "method.request.header.Authorization"
 }
 
 # === REST API Domain Name ===
@@ -115,7 +116,7 @@ locals {
   # api_gateway_deployment_list = module.api["hello_world"].deployment_hash
   modules_deployment_hash_map = { for k, v in local.api_resources : k => module.api[k].deployment_hash }
   other_deployment_hash_map = {
-    ddb_crud                 = module.ddb_crud.deployment_hash
+    ddb_crud = module.ddb_crud.deployment_hash
     health = sha1(
       jsonencode(
         {
@@ -129,6 +130,7 @@ locals {
     )
   }
   api_gateway_deployment_hash_map = merge(
+    { authorizer = sha1(jsonencode(aws_api_gateway_authorizer.portal)) },
     local.modules_deployment_hash_map,
     local.other_deployment_hash_map
   )

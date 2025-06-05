@@ -6,11 +6,6 @@ resource "aws_cognito_user_pool" "this" {
       name     = "verified_email"
       priority = 1
     }
-
-    # recovery_mechanism {
-    #   name     = "verified_phone_number"
-    #   priority = 2
-    # }
   }
 
   admin_create_user_config {
@@ -30,12 +25,14 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   email_configuration {
-    # email_sending_account = "COGNITO_DEFAULT"
-    email_sending_account = "DEVELOPER"
-    # configuration_set      = ""
+    email_sending_account  = "DEVELOPER"
     from_email_address     = data.aws_sesv2_email_identity.sdc_support.email_identity
     reply_to_email_address = data.aws_sesv2_email_identity.sdc_support.email_identity
     source_arn             = data.aws_sesv2_email_identity.sdc_support.arn
+  }
+
+  lambda_config {
+    pre_sign_up = aws_lambda_function.pre_sign_up_lambda.arn
   }
 
   mfa_configuration = var.mfa_enabled ? "ON" : "OFF"
@@ -50,14 +47,6 @@ resource "aws_cognito_user_pool" "this" {
     temporary_password_validity_days = 3
   }
 
-  # sms_authentication_message = var.sms_authentication_message
-
-  # sms_configuration {
-  #   external_id    = local.external_id
-  #   sns_caller_arn = aws_iam_role.this.arn
-  #   sns_region     = var.common.region
-  # }
-
   software_token_mfa_configuration {
     enabled = true
   }
@@ -71,13 +60,12 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   verification_message_template {
-    # default_email_option = "CONFIRM_WITH_CODE"
-    default_email_option  = "CONFIRM_WITH_LINK"
+    default_email_option = "CONFIRM_WITH_CODE"
+    # default_email_option  = "CONFIRM_WITH_LINK"
     email_message         = var.verification_message_template.email_message
     email_message_by_link = var.verification_message_template.email_message_by_link
     email_subject         = var.verification_message_template.email_subject
     email_subject_by_link = var.verification_message_template.email_subject_by_link
-    # sms_message           = var.verification_message_template.sms_message
   }
 
   tags = local.common_tags
@@ -100,7 +88,6 @@ resource "aws_cognito_user_pool_client" "this" {
   allowed_oauth_scopes = [
     "email",
     "openid",
-    "phone",
     "profile",
   ]
 
@@ -147,7 +134,6 @@ resource "aws_cognito_user_pool_client" "this" {
 
   refresh_token_validity = 30 # default unit is days
 
-  # supported_identity_providers = ["COGNITO"]
   supported_identity_providers = ["COGNITO", "DOT-PIV"]
   depends_on                   = [aws_cognito_identity_provider.dot_piv]
 }
@@ -163,7 +149,7 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   provider_name = "DOT-PIV"
   provider_type = "OIDC"
   attribute_mapping = {
-    "username"         = "sub"
+    username           = "sub"
     email              = "email"
     family_name        = "family_name"
     given_name         = "given_name"
