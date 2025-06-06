@@ -153,7 +153,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   private send_export_edge_database_request(): Promise<any> {
    console.log('send_export_edge_db_request starts');
-    const user = this.auth.current_user.getValue();
+    const user = this.auth.user_info.getValue();
     const database = this.sdc_datasets.find(d => d.Name == this.selected_dataset_project);
     console.log('URC: send_export_edge_db_req: user/db: ',{ user, database });
     console.log('URC: send_export_edge_db_req: user: ', user);
