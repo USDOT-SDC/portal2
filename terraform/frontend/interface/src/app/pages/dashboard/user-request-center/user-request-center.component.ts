@@ -193,14 +193,13 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         DatabaseName: this.team_slug,
         TableName: this.export_table_name,
       }
-
-      resolve(undefined);
-
-      /*  const API = this.api.send_export_table_request(message).subscribe((response: any) => {
+      console.log('URC: send_export_edge_database_request() message: ', message );
+      // resolve(undefined);
+      const API = this.api.send_export_table_request(message).subscribe((response: any) => {
          console.log(response);
          resolve(response);
          API.unsubscribe();
-       }) */
+       })
     })
   }
 
