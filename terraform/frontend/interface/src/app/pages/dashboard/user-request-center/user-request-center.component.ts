@@ -186,8 +186,8 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         UserID: user.username,
         selectedDataInfo: {
           selectedDataSet: this.selected_dataset_project,
-          selectedDataProvider: this.selected_provider,
-          selectedDatatype: this.selected_provider_sub_dataset,
+          selectedDataProvider: this.selected_provider.name,
+          selectedDatatype: this.selected_provider_sub_dataset.name,
         },
         acceptableUse: this.request_policy_agreement,
         DatabaseName: this.team_slug,
