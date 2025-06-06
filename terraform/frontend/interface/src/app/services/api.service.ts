@@ -48,7 +48,7 @@ export class ApiService {
 
   public send_email_request(sender: string, message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/send_email?sender=${sender}&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
 
-  public send_export_table_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
+  public send_export_table_request(message: any): Observable<any> { console.log("api.send_export_table_request – message: ", message); return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
   public send_trusted_user_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/request_export`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
