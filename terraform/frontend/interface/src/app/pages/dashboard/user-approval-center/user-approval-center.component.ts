@@ -66,10 +66,11 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   /**
    * Export Table Request - Handle Approver Response
    */
-  public submit_export_table_request(approved: boolean, data: any) {
+  public respond_table_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
-    // console.log('submit_export_table_request, incoming data: ', { data, user });
     this.api_is_loading = true; // Enable Loading Boolean
+    // console.log('submit_export_table_request(response), data: ', data);
+    // console.log('submit_export_table_request(response), user: ', user);
     var payload: any = {
       status: approved == true ? 'Approved' : 'Rejected',
       key1: data.S3KeyHash,
@@ -89,7 +90,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   /**
    * Export File Request - Handle Approver Response
    */
-  public submit_file_status_request(approved: boolean, data: any) {
+  public respond_file_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
     this.api_is_loading = true; // Enable Loading Boolean
     // console.log('submit_file_export_request, incoming data: ', { data });
@@ -116,7 +117,7 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
   /**
    * Trusted User Status Request - Handle Approver Response
    */
-  public respond_trusted_status_request(approved: boolean, data: any) {
+  public respond_trusted_request(approved: boolean, data: any) {
     const user = this.auth.user_info.getValue();
     this.api_is_loading = true; // Enable Loading Boolean
     // console.log('respond_trusted_status_request, incoming data: ', { data, user });
