@@ -46,18 +46,20 @@ def get_user_details(id_token):
         'Authorization': id_token
     })
     print('test invoke authorizer response: ', response)
-    roles_response=response['claims']['family_name']
+    # roles_response=response['claims']['family_name']
     email=response['claims']['email']
-    full_username=response['claims']['cognito:username'].split('\\')[1]
-    roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
-    role_list= roles_list_formatted.split(",")
+    # full_username=response['claims']['cognito:username'].split('\\')[1]
+    full_username=response['claims']['cognito:username']
+    # roles_list_formatted = ast.literal_eval(json.dumps(roles_response))
+    # role_list= roles_list_formatted.split(",")
 
-    roles=[]
-    for r in role_list:
-        if ":role/" in r:
-            roles.append(r.split(":role/")[1])
+    # roles=[]
+    # for r in role_list:
+    #     if ":role/" in r:
+    #         roles.append(r.split(":role/")[1])
 
-    return { 'role' : roles , 'email': email, 'username': full_username }
+    # return { 'role' : roles , 'email': email, 'username': full_username }
+    return { 'email': email, 'username': full_username }
  
 
 def get_user_details_from_username(username):
