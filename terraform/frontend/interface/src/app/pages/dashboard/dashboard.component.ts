@@ -61,10 +61,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const user_info = this.auth.user_info.getValue();
-    // console.log("user_info: ", user_info);
+    console.log("user_info: ", user_info);
 
     this.user_is_approver = approver_list.includes(user_info.email.toLowerCase().trim());
-    // console.log("user_is_approver: ", this.user_is_approver);
+    console.log("user_is_approver: ", this.user_is_approver);
 
   }
 
@@ -91,12 +91,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // New User Get Method
         this.OICD_Auth.getAuthenticationResult().subscribe((user_data) => {
+          console.log('dashboard- user_data: ', user_data);
           if (user_data) {
             this.auth.current_user.next(user_data);
             this.current_user = this.auth.current_user.getValue();
             this.auth.isAuthenticated.next(true);
             const GetUserAPI = this.api.get_user().subscribe((response: any) => {
-              console.log("GetUserAPI: ", { response });
+              console.log("dashboard- api.GetUser response: ", { response });
               if (response) {
                 this.auth.user_info.next(response);
                 this.user_name = response.name;

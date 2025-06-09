@@ -32,7 +32,7 @@ export class UserDatasetComponent implements OnInit {
       this.is_loading = false;
       this.meta_data = response;
       this.dataset.status = this.meta_data.requestReviewStatus == "-1" ? '-' : this.meta_data.requestReviewStatus;
-      console.log("userdataset...this: ", this);
+      // console.log("userdataset...this: ", this);
       init_api.unsubscribe();
     })
   }
