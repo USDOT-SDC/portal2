@@ -1,78 +1,78 @@
-# # === Users ===
-resource "aws_dynamodb_table" "user_stacks" {
-  name         = "portal_user_stacks"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "email"
+# === Users ===
+# resource "aws_dynamodb_table" "user_stacks" {
+#   name         = "portal_user_stacks"
+#   billing_mode = "PAY_PER_REQUEST"
+#   hash_key     = "email"
 
-  attribute {
-    name = "email"
-    type = "S"
-  }
-}
+#   attribute {
+#     name = "email"
+#     type = "S"
+#   }
+# }
 
-resource "aws_dynamodb_table_item" "user_acme" {
-  table_name = aws_dynamodb_table.user_stacks.name
-  hash_key   = aws_dynamodb_table.user_stacks.hash_key
+# resource "aws_dynamodb_table_item" "user_acme" {
+#   table_name = aws_dynamodb_table.user_stacks.name
+#   hash_key   = aws_dynamodb_table.user_stacks.hash_key
 
-  item = jsonencode(
-    {
-      "email" : {
-        "S" : "john.doe@dot.gov"
-      },
-      "name" : {
-        "S" : "John Doe Acme"
-      },
-      "stacks" : {
-        "L" : [
-          {
-            "M" : {
-              "allow_resize" : {
-                "S" : "true"
-              },
-              "application" : {
-                "S" : "SDC Research Workstation, Acme Research Team, John "
-              },
-              "configuration" : {
-                "S" : "vCPUs:2,RAM(GiB):4"
-              },
-              "current_configuration" : {
-                "S" : "vCPUs:2,RAM(GiB):4"
-              },
-              "current_instance_type" : {
-                "S" : "t3a.medium"
-              },
-              "display_name" : {
-                "S" : "wks02"
-              },
-              "instance_id" : {
-                "S" : "i-0daca5caa7c550bab"
-              },
-              "instance_type" : {
-                "S" : "t3a.medium"
-              },
-              "operating_system" : {
-                "S" : "Windows"
-              },
-              "team_bucket_name" : {
-                "S" : "dev.sdc.dot.gov.team.acme-research-team"
-              }
-            }
-          }
-        ]
-      },
-      "teamName" : {
-        "S" : "acme-research-team"
-      },
-      "upload_locations" : {
-        "L" : [
-          {
-            "S" : "dev.sdc.dot.gov.team.acme-research-team/john_doe/uploaded_files"
-          }
-        ]
-      }
-    }
-  )
-}
+#   item = jsonencode(
+#     {
+#       "email" : {
+#         "S" : "john.doe@dot.gov"
+#       },
+#       "name" : {
+#         "S" : "John Doe Acme"
+#       },
+#       "stacks" : {
+#         "L" : [
+#           {
+#             "M" : {
+#               "allow_resize" : {
+#                 "S" : "true"
+#               },
+#               "application" : {
+#                 "S" : "SDC Research Workstation, Acme Research Team, John "
+#               },
+#               "configuration" : {
+#                 "S" : "vCPUs:2,RAM(GiB):4"
+#               },
+#               "current_configuration" : {
+#                 "S" : "vCPUs:2,RAM(GiB):4"
+#               },
+#               "current_instance_type" : {
+#                 "S" : "t3a.medium"
+#               },
+#               "display_name" : {
+#                 "S" : "wks02"
+#               },
+#               "instance_id" : {
+#                 "S" : "i-0daca5caa7c550bab"
+#               },
+#               "instance_type" : {
+#                 "S" : "t3a.medium"
+#               },
+#               "operating_system" : {
+#                 "S" : "Windows"
+#               },
+#               "team_bucket_name" : {
+#                 "S" : "dev.sdc.dot.gov.team.acme-research-team"
+#               }
+#             }
+#           }
+#         ]
+#       },
+#       "teamName" : {
+#         "S" : "acme-research-team"
+#       },
+#       "upload_locations" : {
+#         "L" : [
+#           {
+#             "S" : "dev.sdc.dot.gov.team.acme-research-team/john_doe/uploaded_files"
+#           }
+#         ]
+#       }
+#     }
+#   )
+# }
 
 # # === Teams ===
 # resource "aws_dynamodb_table" "teams" {
