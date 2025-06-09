@@ -1,24 +1,14 @@
-resource "aws_iam_role" "this" {
-  name = "${var.user_pool_name}_cognito_send_sms"
+resource "aws_iam_role" "pre_sign_up_lambda" {
+  name = "${var.user_pool_name}_pre_sign_up_lambda"
   assume_role_policy = jsonencode(
     {
-      "Version" : "2012-10-17",
-      "Statement" : [
+      Version = "2012-10-17"
+      Statement = [
         {
-          "Sid" : "",
-          "Effect" : "Allow",
-          "Principal" : {
-            "Service" : "cognito-idp.amazonaws.com"
-          },
-          "Action" : "sts:AssumeRole",
-          "Condition" : {
-            "StringEquals" : {
-              "sts:ExternalId" : local.external_id,
-              "aws:SourceAccount" : var.common.account_id
-            },
-            "ArnLike" : {
-              "aws:SourceArn" : "arn:aws:cognito-idp:${var.common.region}:${var.common.account_id}:userpool/*"
-            }
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
+          Principal = {
+            Service = "lambda.amazonaws.com"
           }
         }
       ]
@@ -27,24 +17,55 @@ resource "aws_iam_role" "this" {
   tags = local.common_tags
 }
 
-resource "aws_iam_role_policy" "this" {
-  name = "test_policy"
-  role = aws_iam_role.this.id
+
+resource "aws_iam_role_policy" "pre_sign_up_lambda_allow_logging" {
+  name = "allow_logging"
+  role = aws_iam_role.pre_sign_up_lambda.id
   policy = jsonencode(
     {
-      "Version" : "2012-10-17",
-      "Statement" : [
+      Version = "2012-10-17"
+      Statement = [
         {
-          "Effect" : "Allow",
-          "Action" : "sns:Publish",
-          "Resource" : "*",
+          Effect = "Allow"
+          Action = [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:PutMetricFilter",
+            "logs:PutRetentionPolicy"
+          ]
+          Resource = "*"
         }
       ]
     }
   )
 }
 
-resource "aws_iam_role_policies_exclusive" "this" {
-  role_name    = aws_iam_role.this.name
-  policy_names = [aws_iam_role_policy.this.name]
+resource "aws_iam_role_policy" "pre_sign_up_lambda_allow_cognito" {
+  name = "allow_cognito"
+  role = aws_iam_role.pre_sign_up_lambda.id
+  policy = jsonencode(
+    {
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Effect = "Allow"
+          Action = [
+            "cognito-idp:ListUsers",
+            "cognito-idp:AdminLinkProviderForUser",
+            "cognito-idp:AdminUpdateUserAttributes"
+          ]
+          Resource = aws_cognito_user_pool.this.arn
+        }
+      ]
+    }
+  )
+}
+
+resource "aws_iam_role_policies_exclusive" "pre_sign_up_lambda" {
+  role_name    = aws_iam_role.pre_sign_up_lambda.name
+  policy_names = [
+    aws_iam_role_policy.pre_sign_up_lambda_allow_logging.name,
+    aws_iam_role_policy.pre_sign_up_lambda_allow_cognito.name
+    ]
 }
