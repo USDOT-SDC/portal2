@@ -8,8 +8,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -21,8 +20,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -34,8 +32,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -47,8 +44,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -60,8 +56,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS         = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS          = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
@@ -74,8 +69,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS         = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS          = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
         ALLOW_ORIGIN_URL              = local.allow_origin_url
@@ -86,8 +80,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -99,8 +92,8 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
+        HASH_KEY_USER_STACKS        = "username"
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -116,8 +109,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -146,8 +138,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -159,8 +150,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -172,8 +162,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -185,6 +174,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
@@ -213,8 +203,7 @@ locals {
       environment_variables = {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.user_stacks_table.name
-        HASH_KEY_USER_STACKS        = local.user_stacks_table.hash_key
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users

@@ -8,12 +8,11 @@ locals {
   common_tags = {
     "Module Slug" = var.module_slug
   }
-  tablename_autoexport_users  = "${var.common.environment}-AutoExportUsersTable"
-  tablename_available_dataset = "${var.common.environment}-AvailableDataset"
-  tablename_manage_disk       = "${var.common.environment}-ManageDiskspaceRequestsTable"
-  tablename_manage_disk_index = "${var.common.environment}-diskspace-username-index"
-  # tablename_user_stacks         = "${var.common.environment}-UserStacksTable"
-  user_stacks_table         = aws_dynamodb_table.user_stacks
+  tablename_autoexport_users    = "${var.common.environment}-AutoExportUsersTable"
+  tablename_available_dataset   = "${var.common.environment}-AvailableDataset"
+  tablename_manage_disk         = "${var.common.environment}-ManageDiskspaceRequestsTable"
+  tablename_manage_disk_index   = "${var.common.environment}-diskspace-username-index"
+  tablename_user_stacks         = "${var.common.environment}-UserStacksTable"
   tablename_prefix              = var.common.environment == "dev" ? "dev" : "production"
   tablename_manage_user         = "${local.tablename_prefix}-ManageUserWorkstationTable"
   tablename_manage_user_index   = "${local.tablename_prefix}-workstation-username-index"
