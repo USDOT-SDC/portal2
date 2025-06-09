@@ -152,10 +152,10 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   private send_export_edge_database_request(): Promise<any> {
-   console.log('send_export_edge_db_request starts');
+    // console.log('URC: send_export_edge_database_request - START');
     const user = this.auth.user_info.getValue();
     const database = this.sdc_datasets.find(d => d.Name == this.selected_dataset_project);
-    console.log('URC: send_export_edge_db_req: user/db: ',{ user, database });
+    // console.log('URC: send_export_edge_db_req: user/db: ',{ user, database });
     console.log('URC: send_export_edge_db_req: user: ', user);
     console.log('URC: send_export_edge_db_req: database: ', database);
 
@@ -204,7 +204,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   private send_trusted_user_request(): Promise<any> {
-    console.log('send_export_edge_db_request starts');
+    // console.log('send_trusted_user_request starts');
     const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
       const message = {
