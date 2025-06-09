@@ -75,11 +75,13 @@ export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterView
       status: approved == true ? 'Approved' : 'Rejected',
       key1: data.S3KeyHash,
       key2: data.RequestedBy_Epoch,
+      datainfo: data['Dataset-DataProvider-Datatype'],
+      TableName: data.TableName,
       userEmail: user.email
     };
-    // console.log('submit_export_table_request', payload);
+    // console.log('submit_export_table_request-payload', payload);
     const api = this.api.send_update_export_table_status(payload).subscribe((response: any) => {
-      // console.log(response);
+      // console.log('UAC - send_update_export_table_status response: ', response);
       this.auth.user_info.next(user);
       this.api_is_loading = false; // Disabled Loading Boolean
       api.unsubscribe();

@@ -55,7 +55,7 @@ export class ApiService {
   /* ================== :: =============== :: ================== */
   /* ================== :: APPROVAL CENTER :: ================== */
 
-  public send_update_export_table_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_autoexport_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
+  public send_update_export_table_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_file_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
   public send_update_trusted_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_trusted_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
@@ -67,7 +67,6 @@ export class ApiService {
 
   /* ================== :: =================== :: ================== */
   /* ================== :: LOGIN SYNC SERVICES :: ================== */
-
   // Headers specific for Login Sync (No Bearer Auth Token)
   public get login_sync_headers(): HttpHeaders { return new HttpHeaders({ 'Authorization': this.auth.current_user.getValue().token }); }
 
