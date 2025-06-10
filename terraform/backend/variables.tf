@@ -13,7 +13,7 @@ locals {
   tablename_manage_disk         = "${var.common.environment}-ManageDiskspaceRequestsTable"
   tablename_manage_disk_index   = "${var.common.environment}-diskspace-username-index"
   tablename_user_stacks         = "${var.common.environment}-UserStacksTable"
-  tablename_prefix = var.common.environment == "dev" ? "dev" : "production"
+  tablename_prefix              = var.common.environment == "dev" ? "dev" : "production"
   tablename_manage_user         = "${local.tablename_prefix}-ManageUserWorkstationTable"
   tablename_manage_user_index   = "${local.tablename_prefix}-workstation-username-index"
   tablename_export_file_request = "${local.tablename_prefix}-RequestExportTable"

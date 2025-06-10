@@ -6,7 +6,7 @@ locals {
   runtime         = "${local.runtime_name}${local.runtime_version}"
   src_path        = "backend\\lambda_cognito_layer\\src"
   packages_path   = "${local.src_path}\\python\\lib\\${local.runtime}\\site-packages"
-  last_rotation   = var.common.time.rotating.hours.12
+  last_rotation   = var.common.time.rotating.days.30
   mark_path       = "${local.packages_path}\\.mark"
 }
 

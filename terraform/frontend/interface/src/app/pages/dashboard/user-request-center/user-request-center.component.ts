@@ -97,7 +97,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   public is_request_valid(): boolean {
     const type = this.request_type;
-
+    // console.log('user-req: is_req_valid');
     // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
 
     if (this.selected_dataset_project == undefined) return false;
@@ -105,6 +105,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
     if (this.request_policy_agreement == false) return false;
 
     if (type == 'edge-databases') {
+      console.log('URC: is request valid(): type == edge-databases');
       if (this.export_table_name == undefined || this.export_table_name.trim() == "") return false;
       // if (this.export_table_additional_sources == undefined) return false;
     }
@@ -113,6 +114,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   public submit_request(): void {
+    console.log ('URC: start submit_request()');
 
     this.is_loading = true;
 
@@ -127,19 +129,21 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
     // payload.table_name = this.export_table_name;
     // payload.additional_sources = this.export_table_additional_sources;
 
-    console.log("SUBMITTING REQUEST", payload);
+    console.log("URC- SUBMIT REQUEST- payload: ", payload);
 
     if (this.request_type == 'edge-databases') {
+      console.log('URC: submit_request(): req_type == edge-databases');
       this.send_export_edge_database_request().then((response: any) => {
-        console.log(response);
+        console.log('URC: submit_request(): send_export_edge_db_req - response: ', response);
         this.is_loading = false;
         this.close_modal_request_edge_databases();
       });
     }
 
     if (this.request_type == 'trusted-user-status') {
+      console.log('URC: submit_request(): req_type == trusted-user-status');
       this.send_trusted_user_request().then((response: any) => {
-        console.log(response);
+        console.log('URC: submit_request(): send_trusted_user_req - response: ', response);
         this.is_loading = false;
         this.close_modal_request_trusted_user_status();
       });
@@ -148,11 +152,12 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   }
 
   private send_export_edge_database_request(): Promise<any> {
-
-    const user = this.auth.current_user.getValue();
+    // console.log('URC: send_export_edge_database_request - START');
+    const user = this.auth.user_info.getValue();
     const database = this.sdc_datasets.find(d => d.Name == this.selected_dataset_project);
-
-    console.log({ user, database });
+    // console.log('URC: send_export_edge_db_req: user/db: ',{ user, database });
+    console.log('URC: send_export_edge_db_req: user: ', user);
+    console.log('URC: send_export_edge_db_req: database: ', database);
 
     return new Promise((resolve, reject) => {
       const message = {
@@ -181,25 +186,25 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         UserID: user.username,
         selectedDataInfo: {
           selectedDataSet: this.selected_dataset_project,
-          selectedDataProvider: this.selected_provider,
-          selectedDatatype: this.selected_provider_sub_dataset,
+          selectedDataProvider: this.selected_provider.name,
+          selectedDatatype: this.selected_provider_sub_dataset.name,
         },
         acceptableUse: this.request_policy_agreement,
         DatabaseName: this.team_slug,
         TableName: this.export_table_name,
       }
-
-      resolve(undefined);
-
-      /*  const API = this.api.send_export_table_request(message).subscribe((response: any) => {
+      console.log('URC: send_export_edge_database_request() message: ', message );
+      // resolve(undefined);
+      const API = this.api.send_export_table_request(message).subscribe((response: any) => {
          console.log(response);
          resolve(response);
          API.unsubscribe();
-       }) */
+       })
     })
   }
 
   private send_trusted_user_request(): Promise<any> {
+    // console.log('send_trusted_user_request starts');
     const user = this.auth.user_info.getValue();
     return new Promise((resolve, reject) => {
       const message = {

@@ -56,7 +56,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS         = local.tablename_user_stacks
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
@@ -69,7 +69,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS         = local.tablename_user_stacks
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
         ALLOW_ORIGIN_URL              = local.allow_origin_url
@@ -93,6 +93,7 @@ locals {
         RESTAPIID                   = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                = aws_api_gateway_authorizer.portal.id
         TABLENAME_USER_STACKS       = local.tablename_user_stacks
+        HASH_KEY_USER_STACKS        = "username"
         TABLENAME_AVAILABLE_DATASET = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS  = local.tablename_autoexport_users
@@ -220,9 +221,9 @@ locals {
     update_trusted_status = {
       http_method = "POST"
       environment_variables = {
-        RECEIVER_EMAIL              = local.receiver_email
-        TABLENAME_TRUSTED_USERS     = local.tablename_trusted_users
-        ALLOW_ORIGIN_URL            = local.allow_origin_url
+        RECEIVER_EMAIL          = local.receiver_email
+        TABLENAME_TRUSTED_USERS = local.tablename_trusted_users
+        ALLOW_ORIGIN_URL        = local.allow_origin_url
       }
     }
     workstation_schedule = {

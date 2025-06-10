@@ -48,14 +48,14 @@ export class ApiService {
 
   public send_email_request(sender: string, message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/send_email?sender=${sender}&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
 
-  public send_export_table_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
+  public send_export_table_request(message: any): Observable<any> { console.log("api.send_export_table_request – message: ", message); return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
   public send_trusted_user_request(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/request_export`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
   /* ================== :: =============== :: ================== */
   /* ================== :: APPROVAL CENTER :: ================== */
 
-  public send_update_export_table_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_autoexport_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
+  public send_update_export_table_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_file_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
   public send_update_trusted_status(message: any): Observable<any> { return this.http.post(`${this.BASE_URI}/update_trusted_status`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
@@ -67,7 +67,6 @@ export class ApiService {
 
   /* ================== :: =================== :: ================== */
   /* ================== :: LOGIN SYNC SERVICES :: ================== */
-
   // Headers specific for Login Sync (No Bearer Auth Token)
   public get login_sync_headers(): HttpHeaders { return new HttpHeaders({ 'Authorization': this.auth.current_user.getValue().token }); }
 

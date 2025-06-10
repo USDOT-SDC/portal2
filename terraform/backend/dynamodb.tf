@@ -1,41 +1,72 @@
-# # === Users ===
-# resource "aws_dynamodb_table" "users" {
-#   name         = "portal_users"
+# === Users ===
+# resource "aws_dynamodb_table" "user_stacks" {
+#   name         = "portal_user_stacks"
 #   billing_mode = "PAY_PER_REQUEST"
-#   hash_key     = "username"
+#   hash_key     = "email"
 
 #   attribute {
-#     name = "username"
+#     name = "email"
 #     type = "S"
 #   }
 # }
 
 # resource "aws_dynamodb_table_item" "user_acme" {
-#   table_name = aws_dynamodb_table.users.name
-#   hash_key   = aws_dynamodb_table.users.hash_key
+#   table_name = aws_dynamodb_table.user_stacks.name
+#   hash_key   = aws_dynamodb_table.user_stacks.hash_key
 
 #   item = jsonencode(
 #     {
-#       "username" : {
-#         "S" : "auser"
+#       "email" : {
+#         "S" : "john.doe@dot.gov"
 #       },
 #       "name" : {
-#         "S" : "Acme User"
+#         "S" : "John Doe Acme"
 #       },
-#       "teams" : {
+#       "stacks" : {
 #         "L" : [
 #           {
-#             "S" : "acme-research-team"
+#             "M" : {
+#               "allow_resize" : {
+#                 "S" : "true"
+#               },
+#               "application" : {
+#                 "S" : "SDC Research Workstation, Acme Research Team, John "
+#               },
+#               "configuration" : {
+#                 "S" : "vCPUs:2,RAM(GiB):4"
+#               },
+#               "current_configuration" : {
+#                 "S" : "vCPUs:2,RAM(GiB):4"
+#               },
+#               "current_instance_type" : {
+#                 "S" : "t3a.medium"
+#               },
+#               "display_name" : {
+#                 "S" : "wks02"
+#               },
+#               "instance_id" : {
+#                 "S" : "i-0daca5caa7c550bab"
+#               },
+#               "instance_type" : {
+#                 "S" : "t3a.medium"
+#               },
+#               "operating_system" : {
+#                 "S" : "Windows"
+#               },
+#               "team_bucket_name" : {
+#                 "S" : "dev.sdc.dot.gov.team.acme-research-team"
+#               }
+#             }
 #           }
 #         ]
 #       },
-#       "instances" : {
+#       "teamName" : {
+#         "S" : "acme-research-team"
+#       },
+#       "upload_locations" : {
 #         "L" : [
 #           {
-#             "S" : "i-04f8d40a4006d240c"
-#           },
-#           {
-#             "S" : "i-0e4102bcee6179f1e"
+#             "S" : "dev.sdc.dot.gov.team.acme-research-team/john_doe/uploaded_files"
 #           }
 #         ]
 #       }
