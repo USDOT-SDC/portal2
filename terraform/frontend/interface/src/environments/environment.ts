@@ -16,7 +16,7 @@ export const environment = {
     authority: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Hfsr83Wne',
     redirectUrl: window.location.origin + '/login/redirect',
     clientId: 'hvac1g2q751nd3bvn02nu55v0',
-    scope: 'email openid phone profile',
+    scope: 'email openid phone profile offline_access',
     responseType: 'code'
   },
 
