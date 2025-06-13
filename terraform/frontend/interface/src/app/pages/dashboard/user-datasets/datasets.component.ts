@@ -230,7 +230,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
                     console.log(err);
                     },
                     complete: () => {
-                    console.log('file(s) download completed');
+                    console.log('download url(s) received');
                     }
                   });
             } 
