@@ -6,6 +6,7 @@ provider "registry.terraform.io/hashicorp/archive" {
   constraints = "~> 2.7"
   hashes = [
     "h1:RzToQiFwVaxcV0QmgbyaKgNOhqc6oLKiFyZTrQSGcog=",
+    "h1:V06qsFIjiwmVwSwW+BwzEKM9FbRlMseUlRf9ICf3F2M=",
     "zh:19881bb356a4a656a865f48aee70c0b8a03c35951b7799b6113883f67f196e8e",
     "zh:2fcfbf6318dd514863268b09bbe19bfc958339c636bcbcc3664b45f2b8bf5cc6",
     "zh:3323ab9a504ce0a115c28e64d0739369fe85151291a2ce480d51ccbb0c381ac5",
@@ -25,6 +26,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   version     = "5.99.1"
   constraints = "~> 5.99"
   hashes = [
+    "h1:CF5a0mSDao3g0pKmEgWrC3804htnE5hPnwPka4XfFlM=",
     "h1:atjIGE0AtiuzUl6VF8ttGpVdQ583uBslxmIn0A/egyA=",
     "zh:00b0a61c6d295300f0aa7a79a7d40e9f836164f1fff816d38324c148cd846887",
     "zh:1ee9d5ccb67378704642db62113ac6c0d56d69408a9c1afb9a8e14b095fc0733",
@@ -48,6 +50,7 @@ provider "registry.terraform.io/hashicorp/local" {
   version     = "2.5.3"
   constraints = "~> 2.5"
   hashes = [
+    "h1:MZnjJz8zgbM6CQp61cBwMWlhjbi8ALM4FBENksu1mP4=",
     "h1:xb77x0HwwHCexdX4nLf5SrknvPskapmi4i1Vk5Tni1M=",
     "zh:284d4b5b572eacd456e605e94372f740f6de27b71b4e1fd49b63745d8ecd4927",
     "zh:40d9dfc9c549e406b5aab73c023aa485633c1b6b730c933d7bcc2fa67fd1ae6e",
@@ -69,6 +72,7 @@ provider "registry.terraform.io/hashicorp/template" {
   constraints = "~> 2.2"
   hashes = [
     "h1:LN84cu+BZpVRvYlCzrbPfCRDaIelSyEx/W9Iwwgbnn4=",
+    "h1:N2IXrfDhxid5pFKHISN9V23ptHJyFZEdojUegdx5YkM=",
     "zh:01702196f0a0492ec07917db7aaa595843d8f171dc195f4c988d2ffca2a06386",
     "zh:09aae3da826ba3d7df69efeb25d146a1de0d03e951d35019a0f80e4f58c89b53",
     "zh:09ba83c0625b6fe0a954da6fbd0c355ac0b7f07f86c91a2a97849140fea49603",
@@ -87,6 +91,7 @@ provider "registry.terraform.io/hashicorp/time" {
   constraints = "~> 0.13"
   hashes = [
     "h1:5l8PAnxPdoUPqNPuv1dAr3efcCCtSCnY+Vj2nSGkQmw=",
+    "h1:ugKMG/6JzIMkD7MCFDGAxq41wBopfNOs6LlRGJO66Gc=",
     "zh:02cb9aab1002f0f2a94a4f85acec8893297dc75915f7404c165983f720a54b74",
     "zh:04429b2b31a492d19e5ecf999b116d396dac0b24bba0d0fb19ecaefe193fdb8f",
     "zh:26f8e51bb7c275c404ba6028c1b530312066009194db721a8427a7bc5cdbc83a",
@@ -107,6 +112,7 @@ provider "registry.terraform.io/metio/git" {
   constraints = "~> 2025.5"
   hashes = [
     "h1:70+XboJhmeWYZdUocEYrssg4tJjXP/DFiwIyWdtNaPQ=",
+    "h1:v1BnPmnwmz3S4vWlMeSzON2sYcBECz+/E+HrPxkcDr4=",
     "zh:014b1a2f86ab4da529cc0b65657ab42db3cd82f7ee6a18e16c6b30813401de62",
     "zh:40a9ede36880cf366eec29aaef175eb5176de9f46daeffc27353ce0582afd23a",
     "zh:4764c2c37215e2d3ca9d66b3d5b185cbc485f0d2c90195e6018c248304bc4411",

@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { map, Subscription, take } from 'rxjs';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -12,6 +13,8 @@ declare var bootstrap: any;
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @ViewChild('AuthRenewModal') AuthRenewModal: ModalComponent | any;
 
   public loading: boolean = false;
   public is_dark_mode: boolean = false;
@@ -63,6 +66,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.user_is_approver = approver_list.includes(user_info.email.toLowerCase().trim());
     console.log("user_is_approver: ", this.user_is_approver);
 
+  }
+
+  public auth_modal_open(): void {
+    this.AuthRenewModal.open();
+  }
+
+  public auth_modal_close(): void {
+    this.AuthRenewModal.close();
   }
 
   ngOnInit(): void {

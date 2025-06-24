@@ -17,6 +17,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   @ViewChild('Modal_UploadFiles') Modal_UploadFiles: ModalComponent | any;
   @ViewChild('Modal_RequestExportData') Modal_RequestExportData: ModalComponent | any;
   @ViewChild('file_uploader') file_uploader: FileUploadComponent | any;
+  @ViewChild('AuthRenewModal') AuthRenewModal: ModalComponent | any;
 
 
   private _subscriptions: Array<Subscription> = [];
@@ -214,20 +215,29 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     // console.log("download_files called");
     for (let selectedFile of this.selected_files) {
       this.user_datasets_algorithms.forEach((datasetObj, index) => {
-        if (selectedFile["filename"] == datasetObj["filename"]) {
-          if (datasetObj["status"] == "Approved") {
-            this.api
-              .download_file_from_s3(
-                this.current_user_upload_bucket,
-                selectedFile.filename,
-                this.current_user.username
-              )
-              .subscribe((response: any) => {
-                window.open(response, "_blank");
-              });
+          if (selectedFile["filename"] == datasetObj["filename"]) {
+            if (datasetObj["status"] == "Approved") {
+              this.api
+                .download_file_from_s3(
+                  this.current_user_upload_bucket,
+                  selectedFile.filename,
+                  this.current_user.username
+                )
+                  .subscribe({
+                    next: (response: any) => {
+                    window.open(response, "_blank");
+                    },
+                    error: (err: any) => {
+                    console.log(err);
+                    },
+                    complete: () => {
+                    console.log('download url(s) received');
+                    }
+                  });
+            } 
           }
         }
-      });
+      )
     }
   }
 
@@ -459,6 +469,13 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     this.file_uploader.files_to_upload = [];
   }
 
+  public auth_modal_open(): void {
+    this.AuthRenewModal.open();
+  }
+
+  public auth_modal_close(): void {
+    this.AuthRenewModal.close();
+  }
 
   ngOnInit(): void {
     this._subscriptions.push(
