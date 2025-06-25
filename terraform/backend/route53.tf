@@ -6,8 +6,11 @@ data "aws_route53_zone" "public" {
 # === Guacamole Name Record ===
 locals {
   # Address in prod, else Canonical
-  guac_type    = var.common.environment == "prod" ? "A" : "CNAME"
-  guac_records = var.common.environment == "prod" ? ["192.168.0.1", "192.168.0.2"] : [module.guacamole.lb.dns_name]
+  # Flip this back on after Cloud Team implements changes
+  # guac_type    = var.common.environment == "prod" ? "A" : "CNAME"
+  # guac_records = var.common.environment == "prod" ? ["192.168.0.1", "192.168.0.2"] : [module.guacamole.lb.dns_name]
+  guac_type    = "CNAME"
+  guac_records = [module.guacamole.lb.dns_name]
 }
 
 resource "aws_route53_record" "guacamole" {
