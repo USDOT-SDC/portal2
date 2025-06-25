@@ -21,7 +21,7 @@ resource "aws_vpc_security_group_egress_rule" "guacamole_lb_allow_all" {
 
 resource "aws_vpc_endpoint_service" "guacamole_es" {
   # This is where public traffic enters the SDC going to the public Guacamole server
-  # SDC Route53 --> DOT public IPs --> Transit VPCe --> This VPCse
+  # SDC Route53 --> DOT public IPs --> Transit VPCe --> This VPCse --> Guac NLB
   # only deploy to prod
   for_each                   = var.common.environment == "prod" ? { "deployed" : {} } : {}
   acceptance_required        = var.common.environment == "prod" ? false : true
@@ -37,6 +37,7 @@ resource "aws_vpc_endpoint_service" "guacamole_es" {
 }
 
 resource "aws_lb" "guacamole_nlb" {
+  # This NLB --> Guac NLB Listener
   # only deploy to prod
   for_each                         = var.common.environment == "prod" ? { "deployed" : {} } : {}
   name                             = "guacamole-nlb"
@@ -64,9 +65,60 @@ resource "aws_lb" "guacamole_nlb" {
   )
 }
 
+resource "aws_lb_listener" "guacamole_nlb" {
+  # This Listener --> Guac NLB Target Group 
+  # only deploy to prod
+  for_each          = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  load_balancer_arn = aws_lb.guacamole_nlb["deployed"].arn
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.guacamole_nlb["deployed"].arn
+  }
+  port     = "443"
+  protocol = "TCP"
+  # ssl_policy                           = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  # certificate_arn                      = var.certificates.external.arn
+  routing_http_response_server_enabled = true
+  tags                                 = local.tags
+}
+
+resource "aws_lb_target_group" "guacamole_nlb" {
+  # This Target Group --> Guac NLB Attachment
+  # only deploy to prod
+  for_each = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  name     = "guacamole-nlb"
+  port     = 8080
+  protocol = "TCP"
+  target_type = "alb"
+  vpc_id   = var.common.vpc.id
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    interval            = 30
+    matcher             = "200"
+    path                = "/guacamole/"
+    port                = "8080"
+    protocol            = "HTTP"
+    timeout             = 5
+  }
+  target_health_state {
+    enable_unhealthy_connection_termination = false
+    unhealthy_draining_interval             = 0
+  }
+  tags = local.tags
+}
+
+resource "aws_lb_target_group_attachment" "guacamole_nlb" {
+  # This Attachment --> Guac ALB
+  # only deploy to prod
+  for_each         = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  target_group_arn = aws_lb_target_group.guacamole_nlb["deployed"].arn
+  target_id        = aws_lb.guacamole_alb.id
+  port             = 443
+}
+
 resource "aws_lb" "guacamole_alb" {
-  # do not deploy to prod
-  for_each           = var.common.environment == "prod" ? {} : { "deployed" : {} }
+  # This ALB --> Guac ALB Listener
   name               = "guacamole-alb"
   load_balancer_type = "application"
   internal           = true
@@ -91,12 +143,12 @@ resource "aws_lb" "guacamole_alb" {
   )
 }
 
-resource "aws_lb_listener" "guacamole" {
-  # use NLB in prod, else ALB
-  load_balancer_arn = var.common.environment == "prod" ? aws_lb.guacamole_nlb["deployed"].arn : aws_lb.guacamole_alb["deployed"].arn
+resource "aws_lb_listener" "guacamole_alb" {
+  # This Listener --> Guac ALB Target Group 
+  load_balancer_arn = aws_lb.guacamole_alb.arn
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.guacamole.arn
+    target_group_arn = aws_lb_target_group.guacamole_alb.arn
   }
   port                                 = "443"
   protocol                             = "HTTPS"
@@ -106,8 +158,9 @@ resource "aws_lb_listener" "guacamole" {
   tags                                 = local.tags
 }
 
-resource "aws_lb_target_group" "guacamole" {
-  name     = "guacamole"
+resource "aws_lb_target_group" "guacamole_alb" {
+  # This Target Group --> Guac ALB Attachment
+  name     = "guacamole-alb"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.common.vpc.id
@@ -128,8 +181,9 @@ resource "aws_lb_target_group" "guacamole" {
   tags = local.tags
 }
 
-resource "aws_lb_target_group_attachment" "guacamole" {
-  target_group_arn = aws_lb_target_group.guacamole.arn
+resource "aws_lb_target_group_attachment" "guacamole_alb" {
+  # This Attachment --> Guac Instance
+  target_group_arn = aws_lb_target_group.guacamole_alb.arn
   target_id        = aws_instance.guacamole.id
   port             = 8080
 }
