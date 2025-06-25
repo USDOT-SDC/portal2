@@ -3,14 +3,20 @@ data "aws_route53_zone" "public" {
   zone_id = var.route53_zone.public.id
 }
 
-# === Guacamole Canonical Name Record ===
+# === Guacamole Name Record ===
+locals {
+  # Address in prod, else Canonical
+  guac_type    = var.common.environment == "prod" ? "A" : "CNAME"
+  guac_records = var.common.environment == "prod" ? ["192.168.0.1", "192.168.0.2"] : [module.guacamole.lb.dns_name]
+}
+
 resource "aws_route53_record" "guacamole" {
   name            = "guacamole.${var.fqdn}"
-  allow_overwrite = true
-  ttl             = 300
-  type            = "CNAME"
   zone_id         = data.aws_route53_zone.public.zone_id
-  records         = [module.guacamole.lb.dns_name]
+  allow_overwrite = true
+  type            = local.guac_type
+  records         = local.guac_records
+  ttl             = 300
 }
 
 # === Portal API Address Record ===
@@ -25,21 +31,22 @@ resource "aws_route53_record" "portal_api" {
   }
 }
 
-# === Portal Canonical Name Record ===
+# === Portal Name Record ===
 locals {
+  # Address in prod, else Canonical
   dev_nginx_elb  = "internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com"
   prod_nginx_elb = "internal-prod-nginx-load-balancer-539264498.us-east-1.elb.amazonaws.com"
-  nginx_elb      = var.common.environment == "dev" ? local.dev_nginx_elb : local.prod_nginx_elb
-  r53_type       = var.common.environment == "dev" ? "CNAME" : "A"
-  r53_records    = var.common.environment == "dev" ? [local.dev_nginx_elb] : ["204.69.252.79", "204.69.252.59"]
+  nginx_elb      = var.common.environment == "prod" ? local.prod_nginx_elb : local.dev_nginx_elb
+  nginx_type     = var.common.environment == "prod" ? "A" : "CNAME"
+  nginx_records  = var.common.environment == "prod" ? ["204.69.252.79", "204.69.252.59"] : [local.dev_nginx_elb]
 }
 
 resource "aws_route53_record" "portal" {
-  zone_id = data.aws_route53_zone.public.zone_id
   name    = "portal.${var.fqdn}"
-  type    = local.r53_type
+  zone_id = data.aws_route53_zone.public.zone_id
+  type    = local.nginx_type
+  records = local.nginx_records
   ttl     = 300
-  records = local.r53_records
 }
 
 # === SFTP Canonical Name Record ===

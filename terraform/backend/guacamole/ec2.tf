@@ -19,8 +19,55 @@ resource "aws_vpc_security_group_egress_rule" "guacamole_lb_allow_all" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
-resource "aws_lb" "guacamole" {
-  name               = "guacamole"
+resource "aws_vpc_endpoint_service" "guacamole_es" {
+  # This is where public traffic enters the SDC going to the public Guacamole server
+  # SDC Route53 --> DOT public IPs --> Transit VPCe --> This VPCse
+  # only deploy to prod
+  for_each                   = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  acceptance_required        = var.common.environment == "prod" ? false : true
+  allowed_principals         = ["arn:aws:iam::338629629125:root"]
+  network_load_balancer_arns = [aws_lb.guacamole_nlb["deployed"].arn]
+  supported_ip_address_types = ["ipv4"]
+  tags = merge(
+    local.tags,
+    {
+      Name = "Guacamole ES"
+    }
+  )
+}
+
+resource "aws_lb" "guacamole_nlb" {
+  # only deploy to prod
+  for_each                         = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  name                             = "guacamole-nlb"
+  load_balancer_type               = "network"
+  internal                         = true
+  enable_cross_zone_load_balancing = true
+  ip_address_type                  = "ipv4"
+  security_groups = [
+    aws_security_group.guacamole_lb.id
+  ]
+  subnets = [
+    var.common.vpc.subnet_four.id,
+    var.common.vpc.subnet_five.id
+  ]
+  preserve_host_header = "true"
+  access_logs {
+    enabled = true
+    bucket  = "aws-elb-logs-131321883543"
+  }
+  tags = merge(
+    local.tags,
+    {
+      Name = "Guacamole NLB"
+    }
+  )
+}
+
+resource "aws_lb" "guacamole_alb" {
+  # do not deploy to prod
+  for_each           = var.common.environment == "prod" ? {} : { "deployed" : {} }
+  name               = "guacamole-alb"
   load_balancer_type = "application"
   internal           = true
   ip_address_type    = "ipv4"
@@ -36,11 +83,17 @@ resource "aws_lb" "guacamole" {
     enabled = true
     bucket  = "aws-elb-logs-131321883543"
   }
-  tags = local.tags
+  tags = merge(
+    local.tags,
+    {
+      Name = "Guacamole ALB"
+    }
+  )
 }
 
 resource "aws_lb_listener" "guacamole" {
-  load_balancer_arn = aws_lb.guacamole.arn
+  # use NLB in prod, else ALB
+  load_balancer_arn = var.common.environment == "prod" ? aws_lb.guacamole_nlb["deployed"].arn : aws_lb.guacamole_alb["deployed"].arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.guacamole.arn
