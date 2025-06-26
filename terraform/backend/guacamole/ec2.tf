@@ -74,10 +74,8 @@ resource "aws_lb_listener" "guacamole_nlb" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.guacamole_nlb["deployed"].arn
   }
-  port     = "443"
-  protocol = "TCP"
-  # ssl_policy                           = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  # certificate_arn                      = var.certificates.external.arn
+  port                                 = "443"
+  protocol                             = "TCP"
   routing_http_response_server_enabled = true
   tags                                 = local.tags
 }
@@ -85,12 +83,12 @@ resource "aws_lb_listener" "guacamole_nlb" {
 resource "aws_lb_target_group" "guacamole_nlb" {
   # This Target Group --> Guac NLB Attachment
   # only deploy to prod
-  for_each = var.common.environment == "prod" ? { "deployed" : {} } : {}
-  name     = "guacamole-nlb"
-  port     = 8080
-  protocol = "TCP"
+  for_each    = var.common.environment == "prod" ? { "deployed" : {} } : {}
+  name        = "guacamole-nlb"
+  port        = 8080
+  protocol    = "TCP"
   target_type = "alb"
-  vpc_id   = var.common.vpc.id
+  vpc_id      = var.common.vpc.id
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 5
