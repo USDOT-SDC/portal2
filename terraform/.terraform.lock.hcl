@@ -27,6 +27,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   constraints = "~> 5.100"
   hashes = [
     "h1:H3mU/7URhP0uCRGK8jeQRKxx2XFzEqLiOq/L2Bbiaxs=",
+    "h1:lcDxx0Nx+ifFqTBpxz8Un27O0s+I7UNJAr/rUpSqlig=",
     "zh:054b8dd49f0549c9a7cc27d159e45327b7b65cf404da5e5a20da154b90b8a644",
     "zh:0b97bf8d5e03d15d83cc40b0530a1f84b459354939ba6f135a0086c20ebbe6b2",
     "zh:1589a2266af699cbd5d80737a0fe02e54ec9cf2ca54e7e00ac51c7359056f274",
@@ -110,6 +111,7 @@ provider "registry.terraform.io/metio/git" {
   version     = "2025.6.20"
   constraints = "~> 2025.6"
   hashes = [
+    "h1:C9tMoNFDnkmXFJ8HSXSimvIDphwoN8nFUNMgRy5pnzw=",
     "h1:XrnsWogUtHx1pulBoRa4h+dW6VFHVWDYi9jHrIpYd1s=",
     "zh:2467348a0b65fd00414b5ef95118d47c5bb527f73e6edbdc01df43c2ac61b5a8",
     "zh:3424ea982a1ef3b45282cf2d345bee85e474e3e1abee79c682ebbb5a7a692bdf",
