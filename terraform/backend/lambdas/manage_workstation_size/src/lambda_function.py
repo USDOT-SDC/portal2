@@ -265,7 +265,7 @@ def lambda_handler(event, context):
     try:
         # this is necessary since .get only inserts a default value if the key is absent, not if the value is None
         if not params.get("workstation_schedule_to_date", None): 
-            params["workstation_schedule_to_date"] = "12-31-2099"       
+            params["workstation_schedule_to_date"] = "2099-12-31"       
             
         user_requests_process(params)
     except BaseException as be:
