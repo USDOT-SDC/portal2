@@ -243,7 +243,7 @@
                 <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <div class="col-6 mb-2">
-                            <p class="mb-0"><small> <b>Name/UserID</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
+                            <p class="mb-0"><small> <b>UserID</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
                         </div>
                         <div class="col-6 mb-2">
                             <p class="mb-0"><small> <b>Email Address</b> </small><br>{{selected_request.UserEmail}}</p>
@@ -286,7 +286,6 @@
                                 <hr>
                                 <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.ApprovalForm.justification || selected_request.ApprovalForm.justifyExport || " - - " }}</p>
                             </div>
-
                         </ng-container>
                         <ng-container *ngIf="selected_request.TrustedStatus">
                             <div class="col-12">
