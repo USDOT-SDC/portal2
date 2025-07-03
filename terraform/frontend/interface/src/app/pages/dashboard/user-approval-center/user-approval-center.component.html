@@ -39,9 +39,9 @@
                                         <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
                                         <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
                                         <p class="m-0"><b>File Name:</b> {{ request.S3Key }}</p>
-                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
+                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justification">
                                             <b>Justification:</b>&nbsp;
-                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
+                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justification}">{{request.ApprovalForm.justification || " - - " }}</span>
                                         </p>
                                     </div>
                                     <div class="card-footer p-2">
