@@ -280,7 +280,7 @@
                                 <p class="mb-0"><small><b>Sub-dataset or Data Type</b></small><br> {{selected_request.ApprovalForm.datatype || selected_request.ApprovalForm.dataset.name || " - - " }}</p>
                             </div>
                             <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Additional Data Sources</b></small><br> {{selected_request.ApprovalForm.additional_data_sources || " - - " }}</p>
+                                <p class="mb-0"><small><b>Additional Data Sources</b></small><br> {{selected_request.ApprovalForm.additional_data_sources || selected_request.ApprovalForm.datasources || " - - " }}</p>
                             </div>
                             <div class="col-12">
                                 <hr>
