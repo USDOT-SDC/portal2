@@ -267,24 +267,24 @@
                 <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <ng-container *ngIf="selected_request.ApprovalForm">
-                            <div class="col-6 mb-2">
+                            <!--div class="col-6 mb-2">
                             <p class="mb-0"><small><b>Requestor Name</b></small><br> {{selected_request.ApprovalForm.name  ||  selected_request.ApprovalForm.derivedDataSetname}}</p>
-                            </div>
+                            </div-->
                             <div class="col-6 mb-2">
                                 <p class="mb-0"><small><b>Provider</b></small><br>{{selected_request.ApprovalForm.project}}</p>
                             </div>
                             <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Dataset</b></small><br> {{selected_request.ApprovalForm.datasetName}}</p>
+                                <p class="mb-0"><small><b>Dataset</b></small><br> {{selected_request.ApprovalForm.datasetName || " - - " }}</p>
                             </div>
                             <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Data Sources</b></small><br> {{selected_request.ApprovalForm.additional_data_sources}}</p>
+                                <p class="mb-0"><small><b>Specific Sub-datasets or Data Types</b></small><br> {{selected_request.ApprovalForm.dataset.name || " - - " }}</p>
                             </div>
                             <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Specific sub-datasets or Data Types</b></small><br> {{selected_request.ApprovalForm.dataset.name}}</p>
+                                <p class="mb-0"><small><b>Additional Data Sources</b></small><br> {{selected_request.ApprovalForm.additional_data_sources || " - - " }}</p>
                             </div>
                             <div class="col-12">
                                 <hr>
-                                <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.ApprovalForm.justification || selected_request.ApprovalForm.justifyExport || " - - " }}</p>
+                                <p class="m-0"><small><b>Justification</b></small><br>{{selected_request.ApprovalForm.justifyExport || selected_request.ApprovalForm.justification || " - - " }}</p>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="selected_request.TrustedStatus">
