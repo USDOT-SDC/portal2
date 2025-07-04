@@ -380,6 +380,8 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     var payload: any = {
       request_type: this.request_type,
       project: this.selected_dataset_project,
+      provider: this.selected_provider.name,
+      dataset: this.selected_provider_sub_dataset.name,
       justification: this.request_justification,
       policy_accepted: this.request_policy_agreement,
       name: this.request_name,
@@ -392,12 +394,13 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       S3Key: this.selected_data_for_export.filename
     };
     // payload.provider = this.selected_provider;
-    payload.dataset =  this.selected_provider_sub_dataset;
+    // payload.dataset =  this.selected_provider_sub_dataset;
     // payload.table_name = this.export_table_name;
     // payload.additional_sources = this.export_table_additional_sources;
     this.data_for_export_approval_form = payload
     console.log("SUBMITTING REQUEST", payload);
     console.log("Submission Type == ", this.request_type)
+    
 
 
     this.send_export_request().then((response: any) => {
@@ -451,13 +454,15 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public select_dataset_provider_sub_dataset(event: any): void {
     const dataset = this.export_workflows_datasets.find(d => d.name == event.target.value)
     this.selected_provider_sub_dataset = dataset;
-    console.log(this.selected_provider_sub_dataset);
+    console.log('this.selected_provider_sub_dataset: ',this.selected_provider_sub_dataset);
+        console.log('this.selected_provider_sub_dataset.name: ',this.selected_provider_sub_dataset.name);
   }
 
   public select_dataset_provider(event: any): void {
     const provider = this.export_workflows.find(w => w.name == event.target.value);
     this.selected_provider = provider;
-    console.log(this.selected_provider);
+    console.log('this.selected_provider:', this.selected_provider);
+    console.log('this.selected_provider.name:', this.selected_provider.name);
   }
 
 
