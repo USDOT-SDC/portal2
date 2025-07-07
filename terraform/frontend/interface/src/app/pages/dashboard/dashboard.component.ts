@@ -82,8 +82,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let sessionTimer: any;
     let warningTimer: any;
     let sessionStart: number;
-    const sessionTimeout = 30000; // 30 minutes in milliseconds
-    const warningTime = 20000; // 28 minutes in milliseconds
+    const sessionTimeout = 1800000; // 30 minutes in milliseconds
+    const warningTime = 1680000; // 28 minutes in milliseconds
 
     const isSessionExpired = () => {
       return Date.now() - sessionStart > sessionTimeout;
