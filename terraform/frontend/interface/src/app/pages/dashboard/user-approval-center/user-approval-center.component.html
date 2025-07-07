@@ -111,7 +111,7 @@
                                             <hr class="my-2">
                                             <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
                                             <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
-                                            <p class="m-0"><b>Email:</b> {{ request.UserEmail }}</p>
+                                            <p class="m-0"><b>Table Name:</b> {{ request.TableName }}</p>
                                             <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
                                                 <b>Justification:</b>&nbsp;
                                                 <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
