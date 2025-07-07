@@ -172,15 +172,14 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         RequestID: null,
         ApprovalForm: {
           privateDatabase: this.team_slug,
-          privateTable: '',
-          datasetName: '',
-          derivedDataSetname: '',
-          detailedderiveddataset: '',
-          dataprovider: '',
-          datatype: '',
-          datasources: '',
-          justifyExport: '',
-
+          privateTable: this.export_table_name,
+          datasetName: this.selected_dataset_project,
+          //derivedDataSetname: '',
+          //detailedderiveddataset: '',
+          dataprovider: this.selected_provider.name ,
+          datatype: this.selected_provider_sub_dataset.name,
+          datasources: this.export_table_additional_sources,
+          justifyExport: this.request_justification
         }, // approvalForm,
         RequestReviewStatus: "Submitted",
         UserID: user.username,
