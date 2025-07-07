@@ -4,6 +4,7 @@ import { map, Subscription, take } from 'rxjs';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router, NavigationStart } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -14,7 +15,8 @@ declare var bootstrap: any;
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('AuthRenewModal') AuthRenewModal: ModalComponent | any;
+  @ViewChild('AuthWarningModal') AuthWarningModal: ModalComponent | any;
+  @ViewChild('AuthExpirationModal') AuthExpirationModal: ModalComponent | any;
 
   public loading: boolean = false;
   public is_dark_mode: boolean = false;
@@ -30,7 +32,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscriptions: Array<Subscription> = [];
 
-  constructor(private auth: AuthService, private api: ApiService, private OICD_Auth: OidcSecurityService) { }
+  constructor(private auth: AuthService, private api: ApiService, private OICD_Auth: OidcSecurityService, private router: Router) { }
 
   public parseUserName(name: string): string {
     if (name == undefined || name == "") return "Researcher";
@@ -68,16 +70,67 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  public auth_modal_open(): void {
-    this.AuthRenewModal.open();
+  private warning_modal_open(): void {
+    this.AuthWarningModal.open();
   }
 
-  public auth_modal_close(): void {
-    this.AuthRenewModal.close();
+  private expiration_modal_open(): void {
+    this.AuthExpirationModal.open();
+  }
+
+  private inactivityTimer() {
+    let sessionTimer: any;
+    let warningTimer: any;
+    let sessionStart: number;
+    const sessionTimeout = 1800000; // 30 minutes in milliseconds
+    const warningTime = 1680000; // 28 minutes in milliseconds
+
+    const isSessionExpired = () => {
+      return Date.now() - sessionStart > sessionTimeout;
+    };
+
+    const startSessionTimer = () => {
+      sessionTimer = setTimeout(() => {
+        this.auth.logout();
+        this.expiration_modal_open();
+      }, sessionTimeout);
+    };
+
+    const showWarningAlert = () => {
+      warningTimer = setTimeout(() => {
+        this.warning_modal_open();
+
+        // if (isSessionExpired()) {
+        //   this.refreshPage();
+        // }
+      }, warningTime);
+    };
+
+    const resetTimers = () => {
+      clearTimeout(sessionTimer);
+      clearTimeout(warningTimer);
+    };
+
+    sessionStart = Date.now();
+    startSessionTimer();
+    showWarningAlert();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        clearTimeout(sessionTimer);
+        clearTimeout(warningTimer);
+        resetTimers();
+      }
+    });
+  }
+
+  refreshPage() {
+    window.location.reload(); // Refresh the page
   }
 
   ngOnInit(): void {
     this.loading = true;
+    this.inactivityTimer();
 
     const body = document.body;
     const theme = localStorage.getItem('sdc_ui_theme');

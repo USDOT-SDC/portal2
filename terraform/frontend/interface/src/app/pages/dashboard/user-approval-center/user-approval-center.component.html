@@ -39,9 +39,9 @@
                                         <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
                                         <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
                                         <p class="m-0"><b>File Name:</b> {{ request.S3Key }}</p>
-                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
+                                        <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justification">
                                             <b>Justification:</b>&nbsp;
-                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
+                                            <span [ngClass]="{'text-muted': !request.ApprovalForm.justification}">{{request.ApprovalForm.justification || " - - " }}</span>
                                         </p>
                                     </div>
                                     <div class="card-footer p-2">
@@ -111,7 +111,7 @@
                                             <hr class="my-2">
                                             <p class="m-0"><b>User:</b> {{ request.RequestedBy }}</p>
                                             <p class="m-0"><b>Dataset:</b> {{request['Dataset-DataProvider-Datatype'] }}</p>
-                                            <p class="m-0"><b>Email:</b> {{ request.UserEmail }}</p>
+                                            <p class="m-0"><b>Table Name:</b> {{ request.TableName }}</p>
                                             <p class="m-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" [attr.data-bs-title]="'Justification: \n' + request.ApprovalForm.justifyExport">
                                                 <b>Justification:</b>&nbsp;
                                                 <span [ngClass]="{'text-muted': !request.ApprovalForm.justifyExport}">{{request.ApprovalForm.justifyExport || " - - " }}</span>
@@ -243,7 +243,7 @@
                 <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <div class="col-6 mb-2">
-                            <p class="mb-0"><small> <b>Name</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
+                            <p class="mb-0"><small> <b>UserID</b> </small><br>{{selected_request.RequestedBy || selected_request.UserID}}</p>
                         </div>
                         <div class="col-6 mb-2">
                             <p class="mb-0"><small> <b>Email Address</b> </small><br>{{selected_request.UserEmail}}</p>
@@ -251,12 +251,15 @@
                         <div class="col-6 mb-2" *ngIf="selected_request.TeamBucket">
                             <p class="mb-0"><small> <b>Team</b> </small><br>{{selected_request.TeamBucket}}</p>
                         </div>
-                        <div class="col-6 mb-2" *ngIf="selected_request.S3Key">
+                        <div class="col-6 mb-2" *ngIf="selected_request.S3Key && !selected_request.ApprovalForm.privateDatabase">
                             <p class="mb-0"><small> <b>File Name</b> </small><br> {{selected_request.S3Key}}</p>
+                        </div>                        
+                        <div class="col-6 mb-2" *ngIf="selected_request.S3Key && selected_request.ApprovalForm.privateDatabase">
+                            <p class="mb-0"><small> <b>Table Name</b> </small><br> {{selected_request.S3Key}}</p>
                         </div>
-                        <div class="col-6 mb-2" *ngIf="selected_request.TrustedStatus">
+                        <!--div class="col-6 mb-2" *ngIf="selected_request.TrustedStatus">
                             <p class="mb-0"><small> <b>Request Type</b> </small><br> {{ selected_request.TrustedStatus }} </p>
-                        </div>
+                        </div-->
                     </div>
                 </div>
                 <hr>
@@ -264,32 +267,54 @@
                 <div class="card card-body bg-light-subtle-subtle">
                     <div class="row">
                         <ng-container *ngIf="selected_request.ApprovalForm">
-                            <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Derived Dataset</b></small><br> {{selected_request.ApprovalForm.derivedDataSetname}}</p>
-                            </div>
-                            <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Provider</b></small><br>{{selected_request.ApprovalForm.dataprovider}}</p>
-                            </div>
-                            <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Dataset</b></small><br> {{selected_request.ApprovalForm.datasetName}}</p>
-                            </div>
-                            <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Data Sources</b></small><br> {{selected_request.ApprovalForm.datasources}}</p>
-                            </div>
-                            <div class="col-6 mb-2">
-                                <p class="mb-0"><small><b>Specific sub-datasets or Data Types</b></small><br> {{selected_request.ApprovalForm.datatype}}</p>
-                            </div>
-                            <div class="col-12">
-                                <hr>
-                                <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.ApprovalForm.justifyExport || " - - " }}</p>
-                            </div>
-
+                                <ng-container *ngIf="selected_request.ApprovalForm.request_type =='exportRequest'">
+                                <div class="col-6 mb-2">
+                                    <p class="mb-2"><small><b>Requested DataSet</b></small><br>{{selected_request.ApprovalForm.project || " - - " }}<br>{{selected_request.ApprovalForm.provider || " - - " }}<br> {{selected_request.ApprovalForm.dataset || " - - " }}</p>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <p class="mb-0"><small><b>Additional Data Sources</b></small><br> {{selected_request.ApprovalForm.additional_data_sources || selected_request.ApprovalForm.datasources || " - - " }}</p>
+                                </div>
+                                <div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Requestor Provided Name</b></small><br>{{selected_request.ApprovalForm.name  || ' - - '}}</p>
+                                </div>
+                                <div class="col-4 mb-2">
+                                    <p class="mb-0"><small><b>Requestor Provided Address</b></small><br>{{selected_request.ApprovalForm.address || ' - - '}}<br>{{selected_request.ApprovalForm.city || ' - - '}}, {{selected_request.ApprovalForm.state || ' - - '}}  {{selected_request.ApprovalForm.zipcode || ' - - '}}</p>
+                                </div>
+                                <div class="col-4 mb-2">
+                                    <p class="mb-0"><small><b>Requestor Provided Email</b></small><br>{{selected_request.ApprovalForm.email}}</p>
+                                </div>                            
+                                <div class="col-12">
+                                    <hr>
+                                    <p class="m-0"><small><b>Justification</b></small><br>{{selected_request.ApprovalForm.justifyExport || selected_request.ApprovalForm.justification || " - - " }}</p>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="selected_request.TableName">
+                                <!--div class="col-6 mb-2">
+                                <p class="mb-0"><small><b>Requestor Name</b></small><br> {{selected_request.ApprovalForm.name  ||  selected_request.ApprovalForm.derivedDataSetname}}</p>
+                                </div-->
+                                <div class="col-6 mb-2">
+                                    <p class="mb-0"><small><b>Project/Dataset</b></small><br>{{selected_request.ApprovalForm.datasetName || " - - " }}</p>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <p class="mb-0"><small><b>Data Provider</b></small><br> {{selected_request.ApprovalForm.dataprovider || " - - " }}</p>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <p class="mb-0"><small><b>Sub-dataset or Data Type</b></small><br> {{selected_request.ApprovalForm.datatype || " - - " }}</p>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <p class="mb-0"><small><b>Additional Data Sources</b></small><br> {{selected_request.ApprovalForm.datasources || " - - " }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <hr>
+                                    <p class="m-0"><small><b>Justification</b></small><br>{{selected_request.ApprovalForm.justifyExport || " - - " }}</p>
+                                </div>
+                            </ng-container>
                         </ng-container>
                         <ng-container *ngIf="selected_request.TrustedStatus">
                             <div class="col-12">
                                 <p class="m-0"><small><b>Justification</b></small><br>{{ selected_request.TrustedJustification || " - - " }}</p>
                             </div>
-                        </ng-container>
+                        </ng-container> 
                     </div>
                 </div>
             </ng-template>
