@@ -32,21 +32,12 @@ resource "aws_route53_record" "portal_api" {
 }
 
 # === Portal Name Record ===
-locals {
-  # Address in prod, else Canonical
-  dev_nginx_elb  = "internal-dev-nginx-load-balancer-429520900.us-east-1.elb.amazonaws.com"
-  prod_nginx_elb = "internal-prod-nginx-load-balancer-539264498.us-east-1.elb.amazonaws.com"
-  nginx_elb      = var.common.environment == "prod" ? local.prod_nginx_elb : local.dev_nginx_elb
-  nginx_type     = var.common.environment == "prod" ? "A" : "CNAME"
-  nginx_records  = var.common.environment == "prod" ? ["204.69.252.79", "204.69.252.59"] : [local.dev_nginx_elb]
-}
-
 resource "aws_route53_record" "portal" {
   name    = "portal.${var.fqdn}"
+  type    = "CNAME"
   zone_id = data.aws_route53_zone.public.zone_id
-  type    = local.nginx_type
-  records = local.nginx_records
   ttl     = 300
+  records = [aws_cloudfront_distribution.portal.domain_name]
 }
 
 # === SFTP Canonical Name Record ===
