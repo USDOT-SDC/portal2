@@ -1,10 +1,10 @@
 export const environment = {
   production: false,
   stage: 'dev',
-  build: '1.0.6',
-  buildDateTime: '2025-06-24 20:45 EST',
+  build: '2.0.0',
+  buildDateTime: '2025-07-09 12:00 EST',
   resource_urls: {
-    portal: 'sub1.sdc-dev.dot.gov',
+    portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
     guacamole: 'guacamole.sdc-dev.dot.gov',
     sftp: 'sftp.sdc-dev.dot.gov',
