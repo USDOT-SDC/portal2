@@ -127,6 +127,7 @@ locals {
     manage_workstation_size = {
       http_method = "GET"
       environment_variables = {
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_MANAGE_USER       = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
         ALLOW_ORIGIN_URL            = local.allow_origin_url
