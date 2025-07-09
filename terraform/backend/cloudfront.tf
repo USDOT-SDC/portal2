@@ -5,7 +5,10 @@ locals {
 resource "aws_cloudfront_distribution" "portal" {
   enabled = true
   comment = "Portal 2"
-  aliases = ["sub1.${var.fqdn}"]
+  aliases = [
+    "portal.${var.fqdn}",
+    "sub1.${var.fqdn}",
+  ]
 
   # AWS Managed Caching Policy (CachingDisabled)
   default_cache_behavior {
