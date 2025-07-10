@@ -173,10 +173,23 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   }
 }
 
+# === Cognito Auth Address Record ===
+resource "aws_route53_record" "auth" {
+  name    = "auth.portal.${var.fqdn}"
+  type    = "A"
+  zone_id = var.route_53.zone.public.zone_id
+  alias {
+    evaluate_target_health = false
+    name                   = aws_cognito_user_pool_domain.this.cloudfront_distribution
+    zone_id                = aws_cognito_user_pool_domain.this.cloudfront_distribution_zone_id
+  }
+}
+
 resource "aws_cognito_user_pool_domain" "this" {
-  domain = "usdot-sdc-${var.common.environment}"
-  # certificate_arn = var.common.certificates.external.arn
-  user_pool_id = aws_cognito_user_pool.this.id
+  # domain = "usdot-sdc-${var.common.environment}"
+  domain          = "auth.portal.${var.fqdn}"
+  certificate_arn = var.common.certificates.external.arn
+  user_pool_id    = aws_cognito_user_pool.this.id
 }
 
 data "aws_sesv2_email_identity" "sdc_support" {
