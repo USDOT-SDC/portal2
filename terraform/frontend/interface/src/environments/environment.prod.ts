@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
   stage: 'prod',
-  build: '2.0.0',
-  buildDateTime: '2025-07-09 12:00 EST',
+  build: '2.0.1',
+  buildDateTime: '2025-07-10 15:00 EST',
   resource_urls: {
     portal: 'portal.sdc.dot.gov',
     portal_api: 'portal-api.sdc.dot.gov/v1',
@@ -20,5 +20,5 @@ export const environment = {
     responseType: 'code'
   },
 
-  logout_url: 'https://usdot-sdc-prod.auth.us-east-1.amazoncognito.com/logout?client_id=51nhfldlrp6e62cdo360fh9o78&logout_uri=' + window.location.origin + '/index.html'
+  logout_url: 'https://auth.portal.sdc.dot.gov/logout?client_id=51nhfldlrp6e62cdo360fh9o78&logout_uri=' + window.location.origin + '/index.html'
 };
