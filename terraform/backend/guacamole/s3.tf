@@ -1,8 +1,8 @@
 locals {
-  tomcat_version           = "9.0.105"
-  guac_version             = "1.5.5"
+  tomcat_version           = "9.0.107"
+  guac_version             = "1.6.0"
   guac_auth_header_version = "0.9.14"
-  mysql_connector_version  = "9.2.0"
+  mysql_connector_version  = "9.3.0"
 }
 data "template_file" "user_data" {
   template = file("${path.module}/ec2-user-data.sh")
