@@ -308,7 +308,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public is_request_valid(): boolean {
     const type = this.request_type;
 
-    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
+    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project_key, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
     if (this.request_name == undefined) return false;
     if (this.request_email == undefined) return false;
     if (this.request_address == undefined) return false;
