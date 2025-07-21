@@ -23,7 +23,9 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   public export_workflows: any[] = [];
   public export_workflows_datasets: any[] = [];
 
+  public selected_dataset_project_name: any;
   public selected_dataset_project: any;
+  public selected_dataset_project_key: any;  
   public selected_provider: any;
   public selected_provider_sub_dataset: any;
 
@@ -35,6 +37,8 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService, private auth: AuthService) { }
 
+  public objectKeys = Object.keys;
+
   public open_modal_request_trusted_user_status(): void { this.request_type = 'trusted-user-status'; this.Modal_RequestTrustedUserStatus.open(); }
   public close_modal_request_trusted_user_status(): void { this.Modal_RequestTrustedUserStatus.close(); this.reset_forms(); }
 
@@ -42,8 +46,14 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   public close_modal_request_edge_databases(): void { this.Modal_RequestEdgeDatabases.close(); this.reset_forms(); }
 
   public select_dataset_project(event: any): void {
-    this.selected_dataset_project = event.target.value;
-    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
+    const value = event.target.value;
+    const [projectName,workflowKey] = value.split('|');
+    console.log('projectName: ', projectName);
+    this.selected_dataset_project = value;
+    this.selected_dataset_project_name = projectName;
+    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project_name) return d; });
+    this.selected_dataset_project_key = workflowKey;
+
 
     this.export_workflows = [];
     this.export_workflows_datasets = [];
@@ -88,6 +98,8 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
     this.export_workflows = [];
     this.export_workflows_datasets = [];
     this.selected_dataset_project = undefined;
+    this.selected_dataset_project_key = undefined;
+    this.selected_dataset_project_name = undefined;
     this.selected_provider = undefined;
     this.selected_provider_sub_dataset = undefined;
     this.request_type = undefined;
@@ -98,7 +110,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   public is_request_valid(): boolean {
     const type = this.request_type;
     // console.log('user-req: is_req_valid');
-    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
+    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project_key ,justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
 
     if (this.selected_dataset_project == undefined) return false;
     if (this.request_justification == undefined || this.request_justification.trim() == "") return false;
@@ -120,7 +132,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
     var payload: any = {
       request_type: this.request_type,
-      project: this.selected_dataset_project,
+      project: this.selected_dataset_project_key,
       justification: this.request_justification,
       policy_accepted: this.request_policy_agreement
     };
@@ -154,7 +166,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
   private send_export_edge_database_request(): Promise<any> {
     // console.log('URC: send_export_edge_database_request - START');
     const user = this.auth.user_info.getValue();
-    const database = this.sdc_datasets.find(d => d.Name == this.selected_dataset_project);
+    const database = this.sdc_datasets.find((d: any) => { if (d.Name == this.selected_dataset_project_name) return d; });
     // console.log('URC: send_export_edge_db_req: user/db: ',{ user, database });
     console.log('URC: send_export_edge_db_req: user: ', user);
     console.log('URC: send_export_edge_db_req: database: ', database);
@@ -173,7 +185,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         ApprovalForm: {
           privateDatabase: this.team_slug,
           privateTable: this.export_table_name,
-          datasetName: this.selected_dataset_project,
+          datasetName: this.selected_dataset_project_key,
           //derivedDataSetname: '',
           //detailedderiveddataset: '',
           dataprovider: this.selected_provider.name ,
@@ -184,7 +196,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
         RequestReviewStatus: "Submitted",
         UserID: user.username,
         selectedDataInfo: {
-          selectedDataSet: this.selected_dataset_project,
+          selectedDataSet: this.selected_dataset_project_key,
           selectedDataProvider: this.selected_provider.name,
           selectedDatatype: this.selected_provider_sub_dataset.name,
         },
@@ -213,7 +225,7 @@ export class UserRequestCenterComponent implements OnInit, OnDestroy {
           trustedRequestReason: this.request_justification,
         },
         selectedDataInfo: {
-          selectedDataSet: this.selected_dataset_project,
+          selectedDataSet: this.selected_dataset_project_key,
           selectedDataProvider: this.selected_provider.name,
           selectedDatatype: this.selected_provider_sub_dataset.name
         },
