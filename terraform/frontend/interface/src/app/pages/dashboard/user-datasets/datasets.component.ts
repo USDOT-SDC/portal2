@@ -271,11 +271,11 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     // console.log('select_dataset_project starts');
     const value = event.target.value;
     const [projectName,workflowKey] = value.split('|');
-    console.log('projectName: ',projectName);
+    // console.log('projectName: ',projectName);
+    // console.log('workflowKey: ',workflowKey);
     this.selected_dataset_project = value;
     this.selected_dataset_project_name = projectName;
     const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project_name) return d; });
-    //const project = this.combined_export_workflow_test.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
     this.selected_dataset_project_key = workflowKey;
 
     this.export_workflows = [];
