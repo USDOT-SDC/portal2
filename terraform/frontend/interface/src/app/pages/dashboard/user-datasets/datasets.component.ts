@@ -243,8 +243,11 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   // Export Request Module Functions
 
+  public objectKeys = Object.keys;
 
+  public selected_dataset_project_name: any;
   public selected_dataset_project: any;
+  public selected_dataset_project_key: any;
   public selected_provider: any;
   public request_name: any;
   public request_email: any;
@@ -266,8 +269,14 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
   public select_dataset_project(event: any): void {
     // console.log('select_dataset_project starts');
-    this.selected_dataset_project = event.target.value;
-    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project) return d; });
+    const value = event.target.value;
+    const [projectName,workflowKey] = value.split('|');
+    // console.log('projectName: ',projectName);
+    // console.log('workflowKey: ',workflowKey);
+    this.selected_dataset_project = value;
+    this.selected_dataset_project_name = projectName;
+    const project = this.sdc_datasets.find((d: any) => { console.log(d); if (d.Name == this.selected_dataset_project_name) return d; });
+    this.selected_dataset_project_key = workflowKey;
 
     this.export_workflows = [];
     this.export_workflows_datasets = [];
@@ -299,7 +308,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
   public is_request_valid(): boolean {
     const type = this.request_type;
 
-    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
+    // console.log({ request_type: this.request_type, dataset: this.selected_dataset_project_key, justification: this.request_justification, export_table_name: this.request_type == 'edge-databases' ? this.export_table_name : undefined, export_table_additional_sources: this.request_type == 'edge-databases' ? this.export_table_additional_sources : undefined, });
     if (this.request_name == undefined) return false;
     if (this.request_email == undefined) return false;
     if (this.request_address == undefined) return false;
@@ -330,6 +339,8 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     this.export_workflows = [];
     this.export_workflows_datasets = [];
     this.selected_dataset_project = undefined;
+    this.selected_dataset_project_key = undefined;
+    this.selected_dataset_project_name = undefined;
     this.selected_provider = undefined;
     this.selected_provider_sub_dataset = undefined;
     this.request_type = undefined;
@@ -379,7 +390,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
 
     var payload: any = {
       request_type: this.request_type,
-      project: this.selected_dataset_project,
+      project: this.selected_dataset_project_key,
       provider: this.selected_provider.name,
       dataset: this.selected_provider_sub_dataset.name,
       justification: this.request_justification,
@@ -429,7 +440,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
         //   trustedRequestReason: this.request_justification,
         // },
         selectedDataInfo: {
-          selectedDataSet: this.selected_dataset_project,
+          selectedDataSet: this.selected_dataset_project_key,
           selectedDataProvider: this.selected_provider.name,
           selectedDatatype: this.selected_provider_sub_dataset.name
         }
