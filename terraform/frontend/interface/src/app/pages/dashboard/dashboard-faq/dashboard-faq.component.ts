@@ -63,15 +63,10 @@ export class DashboardFaqComponent implements OnInit {
   private inactivityTimer() {
     let sessionTimer: any;
     let warningTimer: any;
-    let sessionStart: number;
     // const sessionTimeout = 1800000; // 30 minutes in milliseconds
     const sessionTimeout = 60000; // one minute in milliseconds
     // const warningTime = 1680000; // 28 minutes in milliseconds
     const warningTime = 40000; // forty seconds in milliseconds
-
-    const isSessionExpired = () => {
-      return Date.now() - sessionStart > sessionTimeout;
-    };
 
     const startSessionTimer = () => {
       sessionTimer = setTimeout(() => {
@@ -83,10 +78,6 @@ export class DashboardFaqComponent implements OnInit {
     const showWarningAlert = () => {
       warningTimer = setTimeout(() => {
         this.warning_modal_open();
-
-        // if (isSessionExpired()) {
-        //   this.refreshPage();
-        // }
       }, warningTime);
     };
 
@@ -97,7 +88,6 @@ export class DashboardFaqComponent implements OnInit {
       showWarningAlert();
     };
 
-    sessionStart = Date.now();
     startSessionTimer();
     showWarningAlert();
 
@@ -106,10 +96,6 @@ export class DashboardFaqComponent implements OnInit {
         resetTimers();
       }
     });
-  }
-
-  refreshPage() {
-    window.location.reload(); // Refresh the page
   }
 
   ngOnInit(): void {
