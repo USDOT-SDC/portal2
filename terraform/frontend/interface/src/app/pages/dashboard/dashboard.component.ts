@@ -82,8 +82,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let sessionTimer: any;
     let warningTimer: any;
     let sessionStart: number;
-    const sessionTimeout = 1800000; // 30 minutes in milliseconds
-    const warningTime = 1680000; // 28 minutes in milliseconds
+    // const sessionTimeout = 1800000; // 30 minutes in milliseconds
+    const sessionTimeout = 60000; // one minute in milliseconds
+    // const warningTime = 1680000; // 28 minutes in milliseconds
+    const warningTime = 40000; // forty seconds in milliseconds
 
     const isSessionExpired = () => {
       return Date.now() - sessionStart > sessionTimeout;
@@ -109,6 +111,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const resetTimers = () => {
       clearTimeout(sessionTimer);
       clearTimeout(warningTimer);
+      startSessionTimer();
+      showWarningAlert();
     };
 
     sessionStart = Date.now();
@@ -117,8 +121,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        clearTimeout(sessionTimer);
-        clearTimeout(warningTimer);
         resetTimers();
       }
     });
