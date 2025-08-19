@@ -81,13 +81,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private inactivityTimer() {
     let sessionTimer: any;
     let warningTimer: any;
-    let sessionStart: number;
     const sessionTimeout = 1800000; // 30 minutes in milliseconds
+    // const sessionTimeout = 60000; // one minute in milliseconds
     const warningTime = 1680000; // 28 minutes in milliseconds
-
-    const isSessionExpired = () => {
-      return Date.now() - sessionStart > sessionTimeout;
-    };
+    // const warningTime = 40000; // forty seconds in milliseconds
 
     const startSessionTimer = () => {
       sessionTimer = setTimeout(() => {
@@ -99,33 +96,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const showWarningAlert = () => {
       warningTimer = setTimeout(() => {
         this.warning_modal_open();
-
-        // if (isSessionExpired()) {
-        //   this.refreshPage();
-        // }
       }, warningTime);
     };
 
     const resetTimers = () => {
       clearTimeout(sessionTimer);
       clearTimeout(warningTimer);
+      startSessionTimer();
+      showWarningAlert();
     };
 
-    sessionStart = Date.now();
     startSessionTimer();
     showWarningAlert();
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        clearTimeout(sessionTimer);
-        clearTimeout(warningTimer);
         resetTimers();
       }
     });
-  }
-
-  refreshPage() {
-    window.location.reload(); // Refresh the page
   }
 
   ngOnInit(): void {
