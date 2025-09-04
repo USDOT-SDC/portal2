@@ -22,7 +22,7 @@ export class SdcDatasetsComponent implements OnInit {
   public request_justification: any;
   public is_loading: boolean = false;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private api: ApiService) { }
 
   public select_dataset_to_request(dataset: any): void {
     this.selected_dataset = dataset;
@@ -41,16 +41,23 @@ export class SdcDatasetsComponent implements OnInit {
   public submit_data_access_request(): void {
     this.is_loading = true;
 
+    console.log(this.selected_dataset)
+
     var payload: any = {
       dataset: this.selected_dataset,
-      us_dot_email: this.request_dot_email
+      us_dot_email: this.request_dot_email,
+      approver_email: JSON.stringify(this.find_key(this.selected_dataset["exportWorkflow"], "ListOfPOC"))
     };
-    const user = this.auth.current_user.getValue();
+    const user = this.auth.user_info.getValue();
 
     console.log("SUBMITTING REQUEST", { user, payload });
 
+    const req_message = `User: ${user} is requesting access to dataset: ${this.selected_dataset["Name"]} which you are an approver for. Please update their access or notify them if access will not be granted.
+    
+    User email: ${this.request_dot_email}`
+
     // API CALL . . . .
-    // this.api.send_email_request(user.email, message = {} ).subscribe((response: any) => { console.log(response); });
+    this.api.send_email_request(this.request_dot_email, req_message, JSON.stringify(this.find_key(this.selected_dataset["exportWorkflow"], "ListOfPOC"))).subscribe((response: any) => { console.log(response); });
 
     setTimeout(() => {
       this.is_loading = false;
@@ -66,5 +73,16 @@ export class SdcDatasetsComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  find_key(obj: object, key: string) {
+  const ret: any[] = [];
+  JSON.stringify(obj, (_, nested) => {
+    if (nested && nested[key]) {
+      ret.push(nested[key]);
+    }
+    return nested;
+  });
+  return ret;
+};
 
 }
