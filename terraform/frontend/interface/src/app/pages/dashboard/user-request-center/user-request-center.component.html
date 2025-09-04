@@ -68,7 +68,11 @@
                         <option [value]="undefined">- Select Project or Dataset -</option>
                         <ng-container *ngIf="sdc_datasets.length > 0">
                             <ng-container *ngFor="let project of sdc_datasets">
-                                <option [value]="project.Name">{{project.Name}}</option>
+                                <ng-container *ngIf="project.exportWorkflow">
+                                    <ng-container *ngFor="let key of objectKeys(project.exportWorkflow)">
+                                        <option [value]="project.Name + '|' + key">{{ key }}</option>
+                                    </ng-container>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
                     </select>
@@ -202,7 +206,11 @@
                         <option [value]="undefined">- Select Project or Dataset -</option>
                         <ng-container *ngIf="sdc_datasets.length > 0">
                             <ng-container *ngFor="let project of sdc_datasets">
-                                <option [value]="project.Name">{{project.Name}}</option>
+                                <ng-container *ngIf="project.exportWorkflow">
+                                    <ng-container *ngFor="let key of objectKeys(project.exportWorkflow)">
+                                        <option [value]="project.Name + '|' + key">{{ key }}</option>
+                                    </ng-container>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
                     </select>

@@ -19,7 +19,7 @@ terraform {
     }
     git = {
       source  = "metio/git"
-      version = "~> 2025.6"
+      version = "~> 2025.7"
     }
     time = {
       source = "hashicorp/time"
