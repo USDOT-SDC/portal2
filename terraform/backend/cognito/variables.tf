@@ -2,6 +2,7 @@ variable "module_name" {}
 variable "module_slug" {}
 variable "common" {}
 variable "fqdn" {}
+variable "route_53" {}
 locals {
   external_id = "DesperateZebraFlops" # just a random string
   common_tags = {

@@ -56,7 +56,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_TRUSTED_USERS       = local.tablename_trusted_users
         TABLENAME_AUTOEXPORT_USERS    = local.tablename_autoexport_users
@@ -69,7 +69,7 @@ locals {
       environment_variables = {
         RESTAPIID                     = aws_api_gateway_rest_api.portal.id
         AUTHORIZERID                  = aws_api_gateway_authorizer.portal.id
-        TABLENAME_USER_STACKS       = local.tablename_user_stacks
+        TABLENAME_USER_STACKS         = local.tablename_user_stacks
         TABLENAME_AVAILABLE_DATASET   = local.tablename_available_dataset
         TABLENAME_EXPORT_FILE_REQUEST = local.tablename_export_file_request
         ALLOW_ORIGIN_URL              = local.allow_origin_url
@@ -127,6 +127,7 @@ locals {
     manage_workstation_size = {
       http_method = "GET"
       environment_variables = {
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_MANAGE_USER       = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
         TABLENAME_USER_STACKS       = local.tablename_user_stacks
@@ -263,7 +264,6 @@ module "cognito" {
   common                       = var.common
   user_pool_name               = "portal"
   mfa_enabled                  = true
-  sms_authentication_message   = "Your authentication code is {####}."
   email_authentication_message = "Your authentication code is {####}."
   verification_message_template = {
     email_message         = "Your verification code is {####}."
@@ -273,6 +273,11 @@ module "cognito" {
     sms_message           = "Your verification code is {####}."
   }
   fqdn = var.fqdn
+  route_53 = {
+    zone = { 
+      public = data.aws_route53_zone.public
+    }
+  }
 }
 
 module "ddb_crud" {

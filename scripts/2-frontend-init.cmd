@@ -13,12 +13,16 @@ goto end
 :normal_start
 cls
 set env=%1
-set command1=npm install
+if "%env%"=="dev" (set npm_cmd=update --include=dev) else (set npm_cmd=install)
+set command1=npm %npm_cmd%
+if "%env%"=="dev" (set npm_audit_cmd=npm audit fix)
+if "%env%"=="dev" (set command2=%npm_audit_cmd%)
 if "%env%"=="dev" (set ng_build_config=development) else (set ng_build_config=production)
-set command2=ng build --configuration %ng_build_config%
+set command3=ng build --configuration %ng_build_config%
 echo.
 echo %command1%
-echo %command2%
+if "%env%"=="dev" (echo %command2%)
+echo %command3%
 echo.
 echo Would you like to execute the above commands to build the frontend?
 echo Press Y for Yes, or C to Cancel.
@@ -32,9 +36,12 @@ pushd ..\terraform\frontend\interface
 echo.
 echo %command1%
 call %command1%
+if "%env%"=="dev" (echo.)
+if "%env%"=="dev" (echo %command2%)
+if "%env%"=="dev" (call %command2%)
 echo.
-echo %command2%
-call %command2%
+echo %command3%
+call %command3%
 popd ..\..\..\scripts
 goto end
 

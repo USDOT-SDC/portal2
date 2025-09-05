@@ -1,10 +1,10 @@
 export const environment = {
   production: false,
   stage: 'dev',
-  build: '1.0.6',
-  buildDateTime: '2025-06-24 20:45 EST',
+  build: '2.0.6',
+  buildDateTime: '2025-09-05 07:45 EST',
   resource_urls: {
-    portal: 'sub1.sdc-dev.dot.gov',
+    portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
     guacamole: 'guacamole.sdc-dev.dot.gov',
     sftp: 'sftp.sdc-dev.dot.gov',
@@ -20,5 +20,5 @@ export const environment = {
     responseType: 'code'
   },
 
-  logout_url: 'https://usdot-sdc-dev.auth.us-east-1.amazoncognito.com/logout?client_id=hvac1g2q751nd3bvn02nu55v0&logout_uri=' + window.location.origin + '/index.html'
+  logout_url: 'https://auth.portal.sdc-dev.dot.gov/logout?client_id=hvac1g2q751nd3bvn02nu55v0&logout_uri=' + window.location.origin + '/index.html'
 };
