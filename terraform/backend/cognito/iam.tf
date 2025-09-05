@@ -64,11 +64,11 @@ resource "aws_iam_role_policy" "pre_sign_up_lambda_allow_cognito" {
 }
 
 resource "aws_iam_role_policies_exclusive" "pre_sign_up_lambda" {
-  role_name    = aws_iam_role.pre_sign_up_lambda.name
+  role_name = aws_iam_role.pre_sign_up_lambda.name
   policy_names = [
     aws_iam_role_policy.pre_sign_up_lambda_allow_logging.name,
     aws_iam_role_policy.pre_sign_up_lambda_allow_cognito.name
-    ]
+  ]
 }
 
 # === Pre-auth Up ===
@@ -115,27 +115,6 @@ resource "aws_iam_role_policy" "pre_auth_lambda_allow_logging" {
   )
 }
 
-resource "aws_iam_role_policy" "pre_auth_lambda_allow_cognito" {
-  name = "allow_cognito"
-  role = aws_iam_role.pre_auth_lambda.id
-  policy = jsonencode(
-    {
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Effect = "Allow"
-          Action = [
-            "cognito-idp:ListUsers",
-            "cognito-idp:AdminLinkProviderForUser",
-            "cognito-idp:AdminUpdateUserAttributes"
-          ]
-          Resource = aws_cognito_user_pool.this.arn
-        }
-      ]
-    }
-  )
-}
-
 resource "aws_iam_role_policy" "pre_auth_lambda_allow_ddb" {
   name = "allow_ddb"
   role = aws_iam_role.pre_auth_lambda.id
@@ -144,12 +123,9 @@ resource "aws_iam_role_policy" "pre_auth_lambda_allow_ddb" {
       Version = "2012-10-17"
       Statement = [
         {
-          Effect = "Allow"
-          Action = [
-            "dynamodb:GetItem",
-            "dynamodb:PutItem",
-          ]
-          Resource = aws_dynamodb_table.failed_login_attempts.arn
+          Effect   = "Allow"
+          Action   = "dynamodb:*"
+          Resource = aws_dynamodb_table.login_attempts.arn
         }
       ]
     }
@@ -157,10 +133,9 @@ resource "aws_iam_role_policy" "pre_auth_lambda_allow_ddb" {
 }
 
 resource "aws_iam_role_policies_exclusive" "pre_auth_lambda" {
-  role_name    = aws_iam_role.pre_auth_lambda.name
+  role_name = aws_iam_role.pre_auth_lambda.name
   policy_names = [
     aws_iam_role_policy.pre_auth_lambda_allow_logging.name,
-    aws_iam_role_policy.pre_auth_lambda_allow_cognito.name,
     aws_iam_role_policy.pre_auth_lambda_allow_ddb.name
-    ]
+  ]
 }

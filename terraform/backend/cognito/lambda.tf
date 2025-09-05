@@ -45,4 +45,3 @@ resource "aws_lambda_permission" "pre_auth_lambda_allow_cognito" {
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.this.arn
 }
-

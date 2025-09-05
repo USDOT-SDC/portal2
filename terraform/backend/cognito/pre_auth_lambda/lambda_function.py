@@ -8,7 +8,7 @@ now = datetime.now().isoformat()
 
 def lambda_handler(event, context):
     username = event["userName"]
-    table_name = "portal_failed_login_attempts"
+    table_name = "portal_login_attempts"
 
     try:
         # Fetch user record
@@ -19,26 +19,28 @@ def lambda_handler(event, context):
         user = response.get("Item", {})
 
         # Initialize or update failed attempts
-        failed_attempts = int(user.get("failed_attempts", {}).get("N", 0))
-        last_attempt = user.get("last_failed_attempt", {}).get("S", now)
+        attempts = int(user.get("attempts", {}).get("N", 0))
+        last_attempt = user.get("last_attempt", {}).get("S", now)
         last_attempt = datetime.strptime(last_attempt, "%Y-%m-%dT%H:%M:%S.%f")
 
         # Reset counter if 15 min have passed
         if last_attempt and datetime.now() - last_attempt > timedelta(minutes=lockout_minutes):
-            failed_attempts = 0
+            attempts = 0
 
         # Increment counter or block user
-        failed_attempts += 1
-        if failed_attempts > attempts_allowed:
+        attempts += 1
+        if attempts > attempts_allowed:
+            print(f"User {username} is blocked due to repeated failed login attempts: {attempts}")
             raise Exception("User is blocked due to repeated failed login attempts.")
 
         # Update DynamoDB
+        print(f"Login attempts for user {username}: {attempts}")
         dynamodb.put_item(
             TableName=table_name,
             Item={
                 "username": {"S": username},
-                "failed_attempts": {"N": str(failed_attempts)},
-                "last_failed_attempt": {"S": now},
+                "attempts": {"N": str(attempts)},
+                "last_attempt": {"S": now},
             },
         )
 
