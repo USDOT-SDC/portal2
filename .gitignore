@@ -11,7 +11,7 @@
 **/terraform/**/*.conf
 
 # Terraform Lambda deployment packages
-**/lambda_deployment_package.zip
+**/*lambda_deployment_package.zip
 
 # Lambda deployment packages
 terraform/backend/**/deployment/*.zip
