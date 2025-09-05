@@ -32,7 +32,8 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   lambda_config {
-    pre_sign_up = aws_lambda_function.pre_sign_up_lambda.arn
+    pre_sign_up        = aws_lambda_function.pre_sign_up_lambda.arn
+    # pre_authentication = aws_lambda_function.pre_sign_up_lambda.arn
   }
 
   mfa_configuration = var.mfa_enabled ? "ON" : "OFF"
