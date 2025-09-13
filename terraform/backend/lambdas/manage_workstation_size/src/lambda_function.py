@@ -261,6 +261,8 @@ def lambda_handler(event, context):
         logger.setLevel("INFO")
         paramsString = unquote(event['queryStringParameters']['wsrequest'])
         logging.info("Received request {}".format(paramsString))
+
+        # String concat necessary as currently curly braces can't be passed in AWS through a URL
         params = json.loads("{" + paramsString + "}")
         response = {}
         # this is necessary since .get only inserts a default value if the key is absent, not if the value is None
