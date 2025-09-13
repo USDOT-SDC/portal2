@@ -194,7 +194,7 @@ locals {
       }
     }
     send_email = {
-      http_method = "POST"
+      http_method = "GET"
       environment_variables = {
         RECEIVER_EMAIL   = local.receiver_email
         ALLOW_ORIGIN_URL = local.allow_origin_url
