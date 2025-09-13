@@ -1,12 +1,13 @@
 import logging
 import simplejson as json
 import boto3
+from botocore.exceptions import ClientError, ParamValidationError
 import time
 from datetime import date, datetime
 import os
 from boto3.dynamodb.conditions import Key, Attr
 import uuid
-
+from urllib.parse import unquote
 
 TABLENAME_MANAGE_USER_INDEX = os.getenv("TABLENAME_MANAGE_USER_INDEX")
 TABLENAME_MANAGE_USER = os.getenv("TABLENAME_MANAGE_USER")
@@ -15,50 +16,57 @@ ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")
 
 
 logger = logging.getLogger()
-
+# logger.setLevel(logging.INFO)
 
 def get_ec2_instance_state(params):
     instance_id = params['instance_id']
+    if not instance_id:
+        raise ValueError("Missing instance_id in params")
     ec2 = boto3.resource('ec2', region_name='us-east-1')
     instance = ec2.Instance(instance_id)
     return instance.state['Name']
 
 
 def ec2_instance_stop(instance_id):
-    print("stopping instance_id: " + instance_id)  
+    logger.info("stopping instance_id: " + instance_id)  
     client = boto3.client('ec2',region_name='us-east-1')
 
     # Stop the instance
     client.stop_instances(InstanceIds=[instance_id])
-
+    logger.info(f"Successfully initiated stop for instance {instance_id}")
 
 def ec2_instance_start(params):
     instance_id = params['instance_id']
-    print("Starting instance_id: " + instance_id)
+    if not instance_id:
+        raise ValueError("Missing instance_id in params")
+    logger.info("Starting instance_id: " + instance_id)
     client = boto3.client('ec2',region_name='us-east-1')
 
     # Start the instance
     try:
         client.start_instances(InstanceIds=[instance_id])
+        logger.info(f"Successfully initiated start for instance {instance_id}")
     except ClientError as e:
-        print(e)
+        logger.error(e)
 
 
 def modify_instance(instance_id, request_instance_type):
-    print("Modifying instance_id: " + instance_id + " to " + request_instance_type)  
+    logger.info("Modifying instance_id: " + instance_id + " to " + request_instance_type)  
     client = boto3.client('ec2',region_name='us-east-1')
     try:
         client.modify_instance_attribute(InstanceId=instance_id,Attribute='instanceType', Value=request_instance_type)
+        logger.info(f"Successfully modified instance {instance_id}")
     except ClientError as e:
         print(e)   
 
 
-def format_date(date):
-    yyyy = date[0:4]
-    mm = date[5:7]
-    dd = date[8:10]
-    formated_date = str(mm)+'/'+str(dd)+'/'+str(yyyy)
-    return formated_date
+def format_date(date_str):
+    yyyy = date_str[0:4]
+    mm = date_str[5:7]
+    dd = date_str[8:10]
+    formatted_date = f"{mm}/{dd}/{yyyy}"
+    logger.debug(f"Formatted date: {date_str} to {formatted_date}")
+    return formatted_date
 
 
 def manage_workstation_send_email(email,subject,body_text):
@@ -99,6 +107,7 @@ def manage_workstation_send_email(email,subject,body_text):
             },
             Source=SENDER,
         )
+        logger.info(f"Email sent to {email}. Message ID: {response['MessageId']}")
     # Display an error if something goes wrong.     
     except ClientError as e:
         print(e.response['Error']['Message'])
@@ -131,16 +140,19 @@ def resize_workstation(params):
         state=get_ec2_instance_state(params)
         instance_id = params['instance_id']
         requested_instance_type = params['requested_instance_type']
-        print(state)
+        logger.info(f"Instance {instance_id} current state: {state}")
+
         if state == "running":
            ec2_instance_stop(instance_id)
         while state != "stopped":
-            state=get_ec2_instance_state(params)  
-        else: 
-            modify_instance(instance_id, requested_instance_type)
             time.sleep(5)
+            state = get_ec2_instance_state(params)
+            logger.debug(f"Waiting for instance {instance_id} to stop, current state: {state}")
+        
+        modify_instance(instance_id, requested_instance_type)
         ### send email
         workstation_instance_request_notification(params)
+        logger.info(f"Successfully resized workstation {instance_id}")
 
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
@@ -169,8 +181,7 @@ def insert_request_to_table(params):
             ExpressionAttributeValues={':active': active })
 
     try:
-        request_date = datetime.now()
-        request_date = str(request_date)
+        request_date = str(datetime.now())
         table.put_item(
             Item={
                     'RequestId': str(uuid.uuid4()),
@@ -186,12 +197,13 @@ def insert_request_to_table(params):
                     'is_active': True
                 }
             )
+        logger.info(f"Successfully inserted request for user {username}")
     except ClientError as e:
         logging.exception("Error: Failed to insert record into Dynamo Db Table with exception - {}".format(e))
 
 
 def update_configuration_type_to_table(params):
-    print(params)
+    logger.info(params)
     vcpu = params['vcpu']
     memory = params['memory']
     instance_id = params['instance_id']
@@ -222,30 +234,41 @@ def update_configuration_type_to_table(params):
                 ':conf': current_configuration,
                 ':type': current_instance_type
             })
+        logger.info(f"Successfully updated configuration for user {username}")
     except ClientError as e:
         logging.exception("Error: Failed to update record into Dynamo Db Table with exception - {}".format(e))
 
 
 def user_requests_process(params):
+
     startAfterResize = params['startAfterResize']
-    print(startAfterResize)
+    logger.info(f"Processing user request with startAfterResize: {startAfterResize}")
+
     resize_workstation(params)
     insert_request_to_table(params)
     update_configuration_type_to_table(params)
-    if startAfterResize == True:
-        state=get_ec2_instance_state(params)
+
+    if startAfterResize:
+        state = get_ec2_instance_state(params)
         if state != "running":
          ec2_instance_start(params)
+    
+    logger.info("Successfully processed user request")
 
 
 def lambda_handler(event, context):
-    paramsQuery = event['queryStringParameters']
-    paramsString = paramsQuery['wsrequest']
-    logger.setLevel("INFO")
-    logging.info("Received request {}".format(paramsString))
-    params = json.loads(paramsString)
-    response = {}
     try:
+        logger.setLevel("INFO")
+        paramsString = unquote(event['queryStringParameters']['wsrequest'])
+        logging.info("Received request {}".format(paramsString))
+
+        # String concat necessary as currently curly braces can't be passed in AWS through a URL
+        params = json.loads("{" + paramsString + "}")
+        response = {}
+        # this is necessary since .get only inserts a default value if the key is absent, not if the value is None
+        if not params.get("workstation_schedule_to_date", None): 
+            params["workstation_schedule_to_date"] = "2099-12-31"       
+            
         user_requests_process(params)
     except BaseException as be:
         logging.exception("Error: Failed to process export request" + str(be))
@@ -257,8 +280,8 @@ def lambda_handler(event, context):
         'headers':{
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Origin': ALLOW_ORIGIN_URL,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
-                'Content-Type': 'application/json'
+                'Access-Control-Allow-Methods': 'OPTIONS,GET',
+                'Content-Type': 'text/plain'
         }, 
         'body':json.dumps(response)
     }
