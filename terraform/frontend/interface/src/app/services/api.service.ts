@@ -47,7 +47,7 @@ export class ApiService {
     return this.http.get(`${this.BASE_URI}/manage_workstation_size?wsrequest=${JSON.stringify(payload).slice(1,-1)}`, { headers: this.auth_header });
   }
 
-  public send_email_request(sender: string, message: any): Observable<any> { return this.http.get(`${this.BASE_URI}/send_email?sender=${sender}&message=${JSON.stringify(message)}`, { headers: this.auth_header }); }
+  public send_email_request(message: string, recipient?: string): Observable<any> { console.log(message); if (typeof recipient !== undefined) {return this.http.get(`${this.BASE_URI}/send_email?message=${message}&recipient=${recipient}`, { headers: this.auth_header });} return this.http.get(`${this.BASE_URI}/send_email?message=${message}`, { headers: this.auth_header }); }
 
   public send_export_table_request(message: any): Observable<any> { console.log("api.send_export_table_request – message: ", message); return this.http.post(`${this.BASE_URI}/export_table`, { message: JSON.stringify(message) }, { headers: this.auth_header }); }
 
