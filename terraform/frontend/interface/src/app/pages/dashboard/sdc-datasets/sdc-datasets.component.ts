@@ -48,16 +48,19 @@ export class SdcDatasetsComponent implements OnInit {
       us_dot_email: this.request_dot_email,
       approver_email: JSON.stringify(this.find_key(this.selected_dataset["exportWorkflow"], "ListOfPOC"))
     };
-    const user = this.auth.user_info.getValue();
+
+    // Grab relevant user information for the message
+    const user = this.auth.user_info.getValue().name;
+    const researcher_email = this.request_dot_email === undefined ? this.auth.user_info.getValue().email : this.request_dot_email
 
     console.log("SUBMITTING REQUEST", { user, payload });
 
-    const req_message = `User: ${user} is requesting access to dataset: ${this.selected_dataset["Name"]} which you are an approver for. Please update their access or notify them if access will not be granted.
+    const req_message = `User: ${user} is requesting access to dataset: ${this.selected_dataset["Name"]}, which you are an approver for. Please update their access or notify them if access will not be granted.
     
-    User email: ${this.request_dot_email}`
+    User email: ${researcher_email}`
 
     // API CALL . . . .
-    this.api.send_email_request(this.request_dot_email, req_message, JSON.stringify(this.find_key(this.selected_dataset["exportWorkflow"], "ListOfPOC"))).subscribe((response: any) => { console.log(response); });
+    this.api.send_email_request(req_message, JSON.stringify(this.find_key(this.selected_dataset["exportWorkflow"], "ListOfPOC"))).subscribe((response: any) => { console.log(response); });
 
     setTimeout(() => {
       this.is_loading = false;

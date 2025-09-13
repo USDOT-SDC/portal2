@@ -10,25 +10,27 @@ ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")
 
 
 logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
     ses_client = boto3.client('ses')
 
-    params = json.loads(unquote(event['body']))
-    if not params or "sender" not in params or "message" not in params:
-        logger.error("The query parameters 'sender' or 'message' is missing")
-        raise BadRequestError("The query parameters 'sender' or 'message' is missing")
-    sender = RECEIVER
-    message = params['message']
-    # other_recipient = set(email_addr for group in params.get("recipient", [[""]]) for email_addr in group)
-    # all_recipients = other_recipient.add(sender)
-    all_recipients = set(email for email in params.get("recipient", []) if len(email)==1)
+    try:
+        message = unquote(event['queryStringParameters']['message'])
+        logger.info(f"Recipient: {unquote(event['queryStringParameters']['recipient'])}")
+        recipient = json.loads(unquote(event['queryStringParameters']['recipient'])) if 'recipient' in event['queryStringParameters'] else [[RECEIVER]]
+        sender = RECEIVER
+        all_recipients = set(email for emails in recipient for email in emails)
 
-    # testing:
-    logger.info(all_recipients)
+        # testing:
+        logger.info(all_recipients)
+        # all_recipients = set(["nathaniel.martin.ctr@dot.gov"])
 
-    all_recipients = set(["nathaniel.martin.ctr@dot.gov"])
+    except KeyError as ke:
+        raise KeyError(f"One or more fields is missing: {ke}")
+    except BaseException as be:
+        logging.exception(f"Failed as {be}")
 
     try:
         response = ses_client.send_email(
@@ -59,7 +61,7 @@ def lambda_handler(event, context):
         )
     except BaseException as ke:
         logging.exception("Failed to send email "+ str(ke) )
-        raise NotFoundError("Failed to send email")
+        raise Exception("Failed to send email")
     
     return {
         'isBase64Encoded': False, 
