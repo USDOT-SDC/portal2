@@ -257,12 +257,12 @@ def user_requests_process(params):
 
 
 def lambda_handler(event, context):
-    logger.setLevel("INFO")
-    paramsString = unquote(event['queryStringParameters']['wsrequest'])
-    logging.info("Received request {}".format(paramsString))
-    params = json.loads(paramsString)
-    response = {}
     try:
+        logger.setLevel("INFO")
+        paramsString = unquote(event['queryStringParameters']['wsrequest'])
+        logging.info("Received request {}".format(paramsString))
+        params = json.loads("{" + paramsString + "}")
+        response = {}
         # this is necessary since .get only inserts a default value if the key is absent, not if the value is None
         if not params.get("workstation_schedule_to_date", None): 
             params["workstation_schedule_to_date"] = "2099-12-31"       
@@ -278,8 +278,8 @@ def lambda_handler(event, context):
         'headers':{
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Origin': ALLOW_ORIGIN_URL,
-                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
-                'Content-Type': 'application/json'
+                'Access-Control-Allow-Methods': 'OPTIONS,GET',
+                'Content-Type': 'text/plain'
         }, 
         'body':json.dumps(response)
     }
