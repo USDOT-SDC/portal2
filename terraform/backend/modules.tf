@@ -130,6 +130,7 @@ locals {
         TABLENAME_USER_STACKS       = local.tablename_user_stacks
         TABLENAME_MANAGE_USER       = local.tablename_manage_user
         TABLENAME_MANAGE_USER_INDEX = local.tablename_manage_user_index
+        TABLENAME_USER_STACKS       = local.tablename_user_stacks
         ALLOW_ORIGIN_URL            = local.allow_origin_url
       }
       timeout = 300
