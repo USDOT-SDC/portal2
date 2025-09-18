@@ -109,8 +109,9 @@ provider "registry.terraform.io/hashicorp/time" {
 
 provider "registry.terraform.io/metio/git" {
   version     = "2025.9.12"
-  constraints = "~> 2025.8"
+  constraints = "~> 2025.9"
   hashes = [
+    "h1:BrzjAKpuSMtQ99vrxEsBD4N5avS4slkgi4WzVOFULdo=",
     "h1:tFU5hTtMCx4iYAsI9iDo5aavAFPnsFF7x9I3jd47uiQ=",
     "zh:0a8c7030784ba5490c7349d03949d5b2497b11a420734597f1230b1c919e8997",
     "zh:152acc7152f411e229a18a788406b5376fb54cb5f7541221ae8bef31236dac45",
