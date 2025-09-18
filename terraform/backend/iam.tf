@@ -104,5 +104,6 @@ resource "aws_iam_role_policies_exclusive" "portal_lambdas" {
     aws_iam_role_policy.portal_lambdas_allow_logs.name,
     aws_iam_role_policy.portal_lambdas_api_handler.name,
     aws_iam_role_policy.portal_lambdas_reset_temp_password.name,
+    "AWSGlueServiceRole"
     ]
 }
