@@ -99,10 +99,15 @@ resource "aws_iam_role_policy" "portal_lambdas_reset_temp_password" {
 }
 
 resource "aws_iam_role_policies_exclusive" "portal_lambdas" {
-  role_name    = aws_iam_role.portal_lambdas.name
+  role_name = aws_iam_role.portal_lambdas.name
   policy_names = [
     aws_iam_role_policy.portal_lambdas_allow_logs.name,
     aws_iam_role_policy.portal_lambdas_api_handler.name,
     aws_iam_role_policy.portal_lambdas_reset_temp_password.name,
-    ]
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "portal_lambdas_glue" {
+  role       = aws_iam_role.portal_lambdas.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
