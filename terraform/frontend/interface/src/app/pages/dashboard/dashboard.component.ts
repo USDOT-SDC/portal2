@@ -42,8 +42,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public toggle_theme_mode(): void {
     const body = document.body;
     body.dataset['bsTheme'] = body.dataset['bsTheme'] == 'dark' ? 'light' : 'dark';
+    console.log("body.dataset['bsTheme']: ",  body.dataset['bsTheme']);
     localStorage.setItem('sdc_ui_theme', body.dataset['bsTheme']);
     this.is_dark_mode = body.dataset['bsTheme'] == 'dark';
+    console.log('this.is_dark_mode: ', this.is_dark_mode)
   }
 
   private set_user_as_approver(): void {
@@ -123,8 +125,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const body = document.body;
     const theme = localStorage.getItem('sdc_ui_theme');
     if (theme) {
-      body.dataset['bsTheme'] = theme;
+      body.dataset['bsTheme'] =theme;
+      console.log("dashboard=body.dataset: ",body.dataset['bsTheme']);
       this.is_dark_mode = body.dataset['bsTheme'] == 'dark';
+      console.log("dashboard=this.is_dark_mode: ",this.is_dark_mode);
     }
 
     this.auth.isLoggedIn().then(() => {

@@ -3,7 +3,7 @@
         <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || (dataset.status == '-' || dataset.status == 'Submitted'|| dataset.status =='Rejected')" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
     </div>
     <div class="col-6 text-truncate">
-        <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="dataset.status == 'Approved' ? 'text-dark' : 'text-muted'"><b>{{ dataset.filename }}</b></label>
+        <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="{'text-dark': (is_dark_mode == 'false') && dataset.status === 'Approved','text-light': (is_dark_mode == 'true') && dataset.status === 'Approved','text-muted': dataset.status !== 'Approved'}"><b>{{ dataset.filename }}</b></label>
     </div>
     <div class="col-2">
         <div class="d-flex align-items-center justify-content-center w-100">

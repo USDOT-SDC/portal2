@@ -11,6 +11,7 @@ export class UserDatasetComponent implements OnInit {
 
   @Input() location: any;
   @Input() dataset: any;
+  @Input() is_dark_mode: any;
 
   @Output() emit_action: EventEmitter<any> = new EventEmitter(undefined);
 
