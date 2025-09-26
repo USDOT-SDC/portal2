@@ -13,11 +13,12 @@ resource "aws_cloudfront_distribution" "portal" {
   # AWS Managed Caching Policy (CachingDisabled)
   default_cache_behavior {
     # Using the CachingDisabled managed policy ID:
-    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods         = ["GET", "HEAD", "OPTIONS"]
-    viewer_protocol_policy = "redirect-to-https"
-    target_origin_id       = local.s3_origin_id
+    cache_policy_id            = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+    allowed_methods            = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods             = ["GET", "HEAD", "OPTIONS"]
+    viewer_protocol_policy     = "redirect-to-https"
+    target_origin_id           = local.s3_origin_id
+    response_headers_policy_id = "67f7725c-6f97-4210-82d7-5512b31e9d03"
   }
 
   http_version        = "http2and3"
