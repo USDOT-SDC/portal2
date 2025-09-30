@@ -212,7 +212,7 @@
                 <div class="card-header">Acceptable Use Policy</div>
                 <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
                     <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
-                        <code class="text-dark" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
+                        <code class="text-dark-conditional" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
                     </ng-container>
                     <ng-template #NoDatasetProjectSelected>
                         <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
