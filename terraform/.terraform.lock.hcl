@@ -111,6 +111,7 @@ provider "registry.terraform.io/metio/git" {
   version     = "2025.9.26"
   constraints = "~> 2025.9"
   hashes = [
+    "h1:fS0I3s1jrrEUME1JC3yPnJeIg+OeO3WywX9eVu8eGz4=",
     "h1:mAxpiQG/exnofOHGX71l/y465rjcr0uk8ndrF2RTX3o=",
     "zh:0affcfb5af2e66e274b9f2004b2019bec9a2c1be5a067166a541dc1770bc598a",
     "zh:251b68ae54f23fcfd8a45b276851dc236832c91e71feee4fcea1772d95dde7f5",
