@@ -2,6 +2,22 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+[data-bs-theme="dark"] {
+.btn-outline-light {
+    border-color: #212529; // Darker border for hiding in dark theme (dark button on dark background)
+    color: #212529; // Darker text for hiding in dark theme 
+    visibility: hidden;
+  }
+}
+
+[data-bs-theme="light"] {
+  .btn-outline-light {
+    border-color: #fff; // Lighter border for hiding in light theme (white button on white background)
+    color: #fff; // Lighter text for hiding in light theme
+    visibility: hidden;
+   }
+}
+
 html,
 body {
     /* font-family: "Roboto", sans-serif;
@@ -39,4 +55,18 @@ body {
         text-align: justify;
         font-size: small;
     }
+}
+
+.text-dark-conditional {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-dark-rgb, 33, 37, 41), var(--bs-text-opacity)) !important;
+
+  [data-bs-theme="dark"] & {
+    color: rgba(var(--bs-light-rgb, 255, 255, 255), var(--bs-text-opacity)) !important;
+  }
+
+  [data-bs-theme="light"] {
+  //--bs-code-color: rgba(var(--bs-dark-rgb, 33, 37, 41), 1) !important;
+  color: rgba(var(--bs-dark-rgb, 33, 37, 41), var(--bs-text-opacity)) !important;
+  }
 }
