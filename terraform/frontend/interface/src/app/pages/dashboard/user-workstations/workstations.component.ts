@@ -184,6 +184,7 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.Modal_ResizeWorkstation.close();
     this.selected_workstation = undefined;
     this.selected_instance_type = undefined;
+    window.location.reload();
   }
 
   // :: Schedule Workstation Modal
