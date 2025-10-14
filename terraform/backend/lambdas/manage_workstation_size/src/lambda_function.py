@@ -60,81 +60,6 @@ def modify_instance(instance_id, request_instance_type):
         print(e)   
 
 
-def format_date(date_str):
-    yyyy = date_str[0:4]
-    mm = date_str[5:7]
-    dd = date_str[8:10]
-    formatted_date = f"{mm}/{dd}/{yyyy}"
-    logger.debug(f"Formatted date: {date_str} to {formatted_date}")
-    return formatted_date
-
-
-def manage_workstation_send_email(email,subject,body_text):
-    SENDER = "SDC Support <sdc-support@dot.gov>"
-    RECIPIENT = email
-    AWS_REGION = "us-east-1"
-
-    # The subject line for the email.
-    SUBJECT = subject
-    # The email body for recipients with non-HTML email clients.
-    BODY_TEXT = body_text
-
-    # The character encoding for the email.
-    CHARSET = "UTF-8"
-
-    # Create a new SES resource and specify a region.
-    client = boto3.client('ses',region_name=AWS_REGION)
-
-    # Try to send the email.
-    try: #Provide the contents of the email.
-        response = client.send_email(
-            Destination={
-                'ToAddresses': [
-                    RECIPIENT,
-                ],
-            },
-            Message={
-                'Body': {
-                    'Text': {
-                        'Charset': CHARSET,
-                        'Data': BODY_TEXT,
-                    },
-                },
-                'Subject': {
-                    'Charset': CHARSET,
-                    'Data': SUBJECT,
-                },
-            },
-            Source=SENDER,
-        )
-        logger.info(f"Email sent to {email}. Message ID: {response['MessageId']}")
-    # Display an error if something goes wrong.     
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:"),
-        print(response['MessageId'])
-
-
-def workstation_instance_request_notification(params):
-
-    subject = 'SDC: New instance type for your workstation has been Scheduled'
-    email = params['user_email']
-    instance_type = params['requested_instance_type']
-    schedule_from_date = format_date(params['workstation_schedule_from_date'])
-    schedule_to_date = format_date(params['workstation_schedule_to_date'])
-
-    BL0 = "Dear SDC User \r\n\n"
-    BL1 = "You just requested " + instance_type + " instance type as your new workstation." 
-    BL2 = "Your request has been scheduled from " + str(schedule_from_date) + " to " +  str(schedule_to_date) + ". "
-    BL3 = "You will receive an email two days before your schedule expires."
-    BL4 = "Please reach out to the SDC Support Team if you have any questions."
-    BL5 = "\n\nThank you,\n SDC Support Team"
-
-    body_text = (BL0 + "\r\n" + BL1 + "\n" + BL2 + "\n" + BL3 + "\n" + BL4 + BL5)
-    manage_workstation_send_email(email,subject,body_text)
-
-
 def resize_workstation(params):
     try:
         state=get_ec2_instance_state(params)
@@ -150,8 +75,6 @@ def resize_workstation(params):
             logger.debug(f"Waiting for instance {instance_id} to stop, current state: {state}")
         
         modify_instance(instance_id, requested_instance_type)
-        ### send email
-        workstation_instance_request_notification(params)
         logger.info(f"Successfully resized workstation {instance_id}")
 
     except ClientError as e:
@@ -192,8 +115,6 @@ def insert_request_to_table(params):
                     'requested_instance_type': params['requested_instance_type'],
                     'operating_system': params['operating_system'],
                     'request_date': request_date,
-                    'schedule_from_date': params['workstation_schedule_from_date'],
-                    'schedule_to_date': params['workstation_schedule_to_date'],
                     'is_active': True
                 }
             )
@@ -265,9 +186,6 @@ def lambda_handler(event, context):
         # String concat necessary as currently curly braces can't be passed in AWS through a URL
         params = json.loads("{" + paramsString + "}")
         response = {}
-        # this is necessary since .get only inserts a default value if the key is absent, not if the value is None
-        if not params.get("workstation_schedule_to_date", None): 
-            params["workstation_schedule_to_date"] = "2099-12-31"       
             
         user_requests_process(params)
     except BaseException as be:
