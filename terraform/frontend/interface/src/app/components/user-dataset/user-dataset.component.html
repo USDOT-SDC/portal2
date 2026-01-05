@@ -2,7 +2,7 @@
     <div class="col-1">
         <input class="form-check-input mb-0" type="checkbox" [id]="'check_' + dataset.filename | lowercase" [disabled]="is_loading == true || (dataset.status == '-' || dataset.status == 'Submitted'|| dataset.status =='Rejected')" (change)="checkbox_selected()" [(ngModel)]="dataset.selected">
     </div>
-    <div class="col-6 text-truncate">
+    <div class="col-5 text-truncate">
         <label class="form-label m-0" [for]="'check_' + dataset.filename | lowercase" [ngClass]="{'text-dark': (is_dark_mode == 'false') && dataset.status === 'Approved','text-light': (is_dark_mode == 'true') && dataset.status === 'Approved','text-muted': dataset.status !== 'Approved'}"><b>{{ dataset.filename }}</b></label>
     </div>
     <div class="col-2">
@@ -12,10 +12,16 @@
             </button>
         </div>
     </div>
-    <div class="col-3 text-center">
+    <div class="col-2 text-center">
         <ng-container *ngIf="is_loading == true; else DisplayElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
         <ng-template #DisplayElem>
             <p class="m-0" [ngClass]="{'text-muted' : dataset.status == 'Submitted', 'text-success' : dataset.status == 'Approved', 'text-danger' : dataset.status == 'Rejected'}"><b>{{ dataset.status || '-'}}</b></p>
+        </ng-template>
+    </div>
+    <div class="col-2 text-center">
+        <ng-container *ngIf="is_loading == true; else DateElem"> <i class="fa-solid fa-spinner fa-spin me-2"></i> <small>loading...</small> </ng-container>
+        <ng-template #DateElem>
+            <p class="m-0">{{ dataset.date.toLocaleString() }}</p>
         </ng-template>
     </div>
 </div>

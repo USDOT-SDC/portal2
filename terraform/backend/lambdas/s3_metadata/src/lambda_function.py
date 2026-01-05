@@ -50,6 +50,8 @@ def lambda_handler(event, context):
         else: 
             response["Metadata"]["requestReviewStatus"] = "-1"
         
+        # Add modification date to metadata
+        response["Metadata"]["LastModified"] = str(response["LastModified"])
 
     except BaseException as be:
         logging.exception("Error: Failed to get S3 metadata" + str(be))

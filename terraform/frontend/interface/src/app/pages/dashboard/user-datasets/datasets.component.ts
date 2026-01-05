@@ -40,7 +40,7 @@ export class DatasetsComponent implements OnInit, OnDestroy {
     const user_name = this.current_user.username;
     const user_data_api = this.api.get_user_uploaded_data(this.current_user_upload_bucket, user_name).subscribe((response: any) => {
       this.user_datasets_algorithms = response
-        .map((file: string) => { return { filename: file, status: false } })
+        .map((file: string) => { return { filename: file, status: false, date: false} })
         .filter((file: any) => { if (this.file_is_folder(file.filename) == false) return file });
       console.log('refresh_user_uploads_this.user_datasets_algorithms: ', this.user_datasets_algorithms);
       user_data_api.unsubscribe();
@@ -64,6 +64,8 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       case 2: this.user_datasets_algorithms = this.user_datasets_algorithms.sort(sortByName_desc); break
       case 3: this.user_datasets_algorithms = this.user_datasets_algorithms.sort(sortByStatus_asc); break
       case 4: this.user_datasets_algorithms = this.user_datasets_algorithms.sort(sortByStatus_desc); break
+      case 5: this.user_datasets_algorithms = this.user_datasets_algorithms.sort(sortByModifiedDate_asc); break
+      case 6: this.user_datasets_algorithms = this.user_datasets_algorithms.sort(sortByModifiedDate_desc); break
     }
 
     function sortByName_asc(a: any, b: any) {
@@ -95,6 +97,20 @@ export class DatasetsComponent implements OnInit, OnDestroy {
       let statusA: any = a.status, statusB: any = b.status;
       // Use the predefined order to compare statuses
       return statusOrder[statusB] - statusOrder[statusA];
+    }
+
+    function sortByModifiedDate_asc(a: any, b:any) {
+      let dateA = a.date, dateB = b.date;
+      if (dateA < dateB) return -1;
+      if (dateA > dateB) return 1;
+      return 0; // same date
+    }
+
+    function sortByModifiedDate_desc(a: any, b:any) {
+      let dateA = a.date, dateB = b.date;
+      if (dateA > dateB) return -1;
+      if (dateA < dateB) return 1;
+      return 0; // same date
     }
   }
 
@@ -502,6 +518,9 @@ export class DatasetsComponent implements OnInit, OnDestroy {
           this.current_user_upload_bucket = user.upload_locations[0].split('/')[0];
           // console.log('ngOnInit calls refresh_user_uploads');
           this.refresh_user_uploads();
+          // kludge to start off a default sort, rather than having to wait for an event emitted by the sort dropdown
+          const sort_target = {target: {value: 6}};
+          setTimeout(() => this.sort_ds_and_alg(sort_target), 2500);
         }
       })
     );
