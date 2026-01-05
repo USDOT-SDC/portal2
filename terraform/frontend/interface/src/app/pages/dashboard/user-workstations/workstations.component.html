@@ -144,7 +144,8 @@
     <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_resize_workstation_modal()">Close</button>
-            <button class="btn btn-primary" [disabled]="selected_instance_type == undefined" (click)="submit_resize_workstation()">Submit Resize Request</button>
+            <ng-container *ngIf="loading_resize == true; else SubmitButton"><i class="fa-solid fa-spinner fa-spin me-2"></i></ng-container>
+            <ng-template #SubmitButton><button class="btn btn-primary" [disabled]="selected_instance_type == undefined" (click)="submit_resize_workstation()">Submit Resize Request</button></ng-template>
         </div>
     </ng-container>
 </app-modal>

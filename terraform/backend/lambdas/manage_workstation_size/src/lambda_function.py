@@ -185,7 +185,7 @@ def lambda_handler(event, context):
 
         # String concat necessary as currently curly braces can't be passed in AWS through a URL
         params = json.loads("{" + paramsString + "}")
-        response = {}
+        response = "Workstation resized."
             
         user_requests_process(params)
     except BaseException as be:

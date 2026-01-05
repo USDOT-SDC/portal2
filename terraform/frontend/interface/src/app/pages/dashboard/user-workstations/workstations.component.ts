@@ -150,8 +150,10 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public select_instance_type(instance: any) { this.selected_instance_type = instance; }
 
+  public loading_resize = false;
   // Submit Resize Workstation Form
   public submit_resize_workstation(): void {
+    this.loading_resize = true;
     const user = {
       username: this.user_info.username,
       user_email: this.user_info.email
@@ -171,6 +173,7 @@ export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     const API = this.api.send_resize_instance_request(user, workstation, instance_params).subscribe((response: any) => {
+      if (response === "Workstation resized.") this.loading_resize = false;
       console.log(response);
       this.selected_workstation.status = false;
       this.close_modal_resize_workstation_modal();
