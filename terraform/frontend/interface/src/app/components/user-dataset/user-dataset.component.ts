@@ -16,7 +16,7 @@ export class UserDatasetComponent implements OnInit {
   @Output() emit_action: EventEmitter<any> = new EventEmitter(undefined);
 
   public is_loading: boolean = false;
-  public meta_data: { "publish": boolean; "download": boolean; "export": boolean; "requestReviewStatus": string; } | any;
+  public meta_data: { "publish": boolean; "download": boolean; "export": boolean; "requestReviewStatus": string; "date": Date} | any;
 
   constructor(private api: ApiService) { }
 
@@ -34,6 +34,7 @@ export class UserDatasetComponent implements OnInit {
       this.meta_data = response;
       this.dataset.status = this.meta_data.requestReviewStatus == "-1" ? '-' : this.meta_data.requestReviewStatus;
       // console.log("userdataset...this: ", this);
+      this.dataset.date = new Date(this.meta_data.LastModified);
       init_api.unsubscribe();
     })
   }

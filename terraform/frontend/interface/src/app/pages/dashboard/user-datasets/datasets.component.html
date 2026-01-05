@@ -16,11 +16,13 @@
                     <div class="input-group">
                         <label class="input-group-text" for="inputGroupSelect01">Sort</label>
                         <select class="form-select" id="inputGroupSelect01" (change)="sort_ds_and_alg($event)">
-                            <option selected>- Sort Files -</option>
+                            <!-- <option selected>- Sort Files -</option> -->
                             <option value="1">FileName: A to Z</option>
                             <option value="2">FileName: Z to A</option>
                             <option value="3">Status: Z to A</option>
                             <option value="4">Status: A to Z</option>
+                            <option value="5">Modified: Old to New</option>
+                            <option selected value="6">Modified: New to Old</option>
                         </select>
                     </div>
                 </div>
@@ -34,9 +36,10 @@
                 <div class="col-1">
                     <input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)">
                 </div>
-                <div class="col-6"><b>Filename</b></div>
+                <div class="col-5"><b>Filename</b></div>
                 <div class="col-2 text-center"><b>Request Data Export</b></div>
-                <div class="col-3 text-center"><b>Export Request Status</b></div>
+                <div class="col-2 text-center"><b>Export Request Status</b></div>
+                <div class="col-2 text-center"><b>Last Modified</b></div>
             </div>
         </div>
         <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
