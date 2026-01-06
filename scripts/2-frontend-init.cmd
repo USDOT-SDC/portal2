@@ -11,6 +11,28 @@ echo Example: 2-frontend-init prod
 goto end
 
 :normal_start
+
+REM --- Check Node.js version ---
+for /f "tokens=1 delims=." %%A in ('node --version 2^>nul') do (
+    set NODE_MAJOR=%%A
+)
+
+REM Remove leading "v"
+set NODE_MAJOR=%NODE_MAJOR:v=%
+
+if "%NODE_MAJOR%"=="" (
+    echo ERROR: Node.js is not installed or not available in PATH.
+    exit /b 1
+)
+
+if %NODE_MAJOR% LSS 24 (
+    echo ERROR: Node.js version 24 or higher is required.
+    echo Detected version: %NODE_MAJOR%
+    exit /b 1
+)
+
+REM --- Continue script ---
+
 cls
 set env=%1
 @REM if "%env%"=="dev" (set npm_cmd=update --include=dev) else (set npm_cmd=install)
