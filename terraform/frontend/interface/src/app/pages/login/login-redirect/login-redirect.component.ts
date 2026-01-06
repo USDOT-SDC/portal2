@@ -5,9 +5,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 
 @Component({
-  selector: 'app-login-redirect',
-  templateUrl: './login-redirect.component.html',
-  styleUrls: ['./login-redirect.component.less']
+    selector: 'app-login-redirect',
+    templateUrl: './login-redirect.component.html',
+    styleUrls: ['./login-redirect.component.less'],
+    standalone: false
 })
 export class LoginRedirectComponent implements OnInit {
 

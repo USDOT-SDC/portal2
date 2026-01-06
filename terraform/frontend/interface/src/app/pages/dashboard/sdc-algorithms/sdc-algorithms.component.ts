@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-sdc-algorithms',
-  templateUrl: './sdc-algorithms.component.html',
-  styleUrls: ['./sdc-algorithms.component.less']
+    selector: 'app-sdc-algorithms',
+    templateUrl: './sdc-algorithms.component.html',
+    styleUrls: ['./sdc-algorithms.component.less'],
+    standalone: false
 })
 export class SdcAlgorithmsComponent implements OnInit {
 

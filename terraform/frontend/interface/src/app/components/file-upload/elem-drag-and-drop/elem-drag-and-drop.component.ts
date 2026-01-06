@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-elem-drag-and-drop',
-  templateUrl: './elem-drag-and-drop.component.html',
-  styleUrls: ['./elem-drag-and-drop.component.less']
+    selector: 'app-elem-drag-and-drop',
+    templateUrl: './elem-drag-and-drop.component.html',
+    styleUrls: ['./elem-drag-and-drop.component.less'],
+    standalone: false
 })
 export class ElemDragAndDropComponent implements OnInit {
 

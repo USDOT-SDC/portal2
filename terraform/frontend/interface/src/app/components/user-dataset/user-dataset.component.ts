@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-user-dataset',
-  templateUrl: './user-dataset.component.html',
-  styleUrls: ['./user-dataset.component.less']
+    selector: 'app-user-dataset',
+    templateUrl: './user-dataset.component.html',
+    styleUrls: ['./user-dataset.component.less'],
+    standalone: false
 })
 export class UserDatasetComponent implements OnInit {
 

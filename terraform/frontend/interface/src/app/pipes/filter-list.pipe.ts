@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filterList'
+    name: 'filterList',
+    standalone: false
 })
 export class FilterListPipe implements PipeTransform {
   transform(items: Array<any>, search_for: string, search_in: string): Array<any> {

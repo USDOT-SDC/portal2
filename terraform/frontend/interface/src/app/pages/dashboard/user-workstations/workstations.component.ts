@@ -8,9 +8,10 @@ import { environment } from 'src/environments/environment';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-workstations',
-  templateUrl: './workstations.component.html',
-  styleUrls: ['./workstations.component.less']
+    selector: 'app-workstations',
+    templateUrl: './workstations.component.html',
+    styleUrls: ['./workstations.component.less'],
+    standalone: false
 })
 export class WorkstationsComponent implements OnInit, AfterViewInit, OnDestroy {
 

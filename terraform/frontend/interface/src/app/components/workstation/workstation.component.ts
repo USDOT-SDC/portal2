@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-workstation',
-  templateUrl: './workstation.component.html',
-  styleUrls: ['./workstation.component.less']
+    selector: 'app-workstation',
+    templateUrl: './workstation.component.html',
+    styleUrls: ['./workstation.component.less'],
+    standalone: false
 })
 export class WorkstationComponent implements OnInit {
 

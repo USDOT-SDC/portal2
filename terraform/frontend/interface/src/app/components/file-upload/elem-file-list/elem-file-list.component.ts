@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-elem-file-list',
-  templateUrl: './elem-file-list.component.html',
-  styleUrls: ['./elem-file-list.component.less']
+    selector: 'app-elem-file-list',
+    templateUrl: './elem-file-list.component.html',
+    styleUrls: ['./elem-file-list.component.less'],
+    standalone: false
 })
 export class ElemFileListComponent implements OnInit {
 

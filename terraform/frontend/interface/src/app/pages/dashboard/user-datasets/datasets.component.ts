@@ -6,9 +6,10 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-datasets',
-  templateUrl: './datasets.component.html',
-  styleUrls: ['./datasets.component.less']
+    selector: 'app-datasets',
+    templateUrl: './datasets.component.html',
+    styleUrls: ['./datasets.component.less'],
+    standalone: false
 })
 export class DatasetsComponent implements OnInit, OnDestroy {
 

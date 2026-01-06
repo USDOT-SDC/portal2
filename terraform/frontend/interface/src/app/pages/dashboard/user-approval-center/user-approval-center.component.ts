@@ -7,9 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-user-approval-center',
-  templateUrl: './user-approval-center.component.html',
-  styleUrls: ['./user-approval-center.component.less']
+    selector: 'app-user-approval-center',
+    templateUrl: './user-approval-center.component.html',
+    styleUrls: ['./user-approval-center.component.less'],
+    standalone: false
 })
 export class UserApprovalCenterComponent implements OnInit, OnDestroy, AfterViewInit {
 

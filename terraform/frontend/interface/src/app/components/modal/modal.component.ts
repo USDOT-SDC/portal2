@@ -95,9 +95,10 @@ export interface ModalComponent {
 }
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.less']
+    selector: 'app-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.less'],
+    standalone: false
 })
 export class ModalComponent {
 
