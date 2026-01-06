@@ -1,20 +1,18 @@
 <div class="dropzone" [ngClass]="{ 'p-1': files.length > 0 }">
 
-    {{ "" // File Input Element }}
-    <input type="file" #FileElemRef id="FileElemRef" [accept]="accept_file_types" [multiple]="true" (change)="add_files($event)">
+  {{ "" // File Input Element }}
+  <input type="file" #FileElemRef id="FileElemRef" [accept]="accept_file_types" [multiple]="true" (change)="add_files($event)">
 
-    <ng-container *ngIf="files.length == 0; else UploadMoreInput">
-        <ng-container *ngIf="mini_loader; else DefaultLoaderText">
-            <label for="FileElemRef"><i class="fas fa-file-upload m-0 mr-2"></i>Browser for Files</label>
-        </ng-container>
-        <ng-template #DefaultLoaderText>
-            <i class="fas fa-file-upload fa-3x"></i>
-            <h3>Drag and Drop File here</h3>
-            <h3>Or</h3>
-            <label for="FileElemRef">Browser for Files</label>
-        </ng-template>
-    </ng-container>
-    <ng-template #UploadMoreInput>
-        <label for="FileElemRef"><i class="fas fa-file-upload fa-1x m-0"></i>&nbsp;&nbsp;Upload More Files</label>
-    </ng-template>
+  @if (files.length == 0) {
+    @if (mini_loader) {
+      <label for="FileElemRef"><i class="fas fa-file-upload m-0 mr-2"></i>Browser for Files</label>
+    } @else {
+      <i class="fas fa-file-upload fa-3x"></i>
+      <h3>Drag and Drop File here</h3>
+      <h3>Or</h3>
+      <label for="FileElemRef">Browser for Files</label>
+    }
+  } @else {
+    <label for="FileElemRef"><i class="fas fa-file-upload fa-1x m-0"></i>&nbsp;&nbsp;Upload More Files</label>
+  }
 </div>
