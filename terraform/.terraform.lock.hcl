@@ -48,7 +48,7 @@ provider "registry.terraform.io/hashicorp/aws" {
 
 provider "registry.terraform.io/hashicorp/local" {
   version     = "2.6.1"
-  constraints = "~> 2.5"
+  constraints = "~> 2.6"
   hashes = [
     "h1:Ey2jPUGfuahWUs8w82yeZKBMYqh9SM3e6J+EQt7QTKk=",
     "h1:LLCV9xJzraiG2LNjAdnpdX7epmWec988ZyvZ47CONEw=",
@@ -111,6 +111,7 @@ provider "registry.terraform.io/metio/git" {
   version     = "2025.12.12"
   constraints = "~> 2025.9"
   hashes = [
+    "h1:NrImlR1OXv1rTcH2JGDTDqEqrRMyZklXIxEIhXBtZoI=",
     "h1:sC8jmxDxUSKcJq3xU6aIzW4MUaJ+7xmpzimqQffrjdI=",
     "zh:013786e1f4fd3ecaab5c2b436f68eeaf1f83ce2a54bdc5a18114c81f0a6297e0",
     "zh:113e004266da96c988f64ef4a515cbd03955570b24fc4f876ad44d711698e191",

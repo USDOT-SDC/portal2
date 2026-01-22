@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "Bruno",
+  "name": "SDC Portal 2",
   "type": "collection",
   "ignore": [
     "node_modules",

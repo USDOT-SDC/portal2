@@ -1,43 +1,43 @@
 <div class="card h-100" id="file-list-wrapper">
-    <ul class="list-group list-group-flush">
-        <ng-container *ngFor="let file of files; let file_index = index;">
-            <li class="list-group-item p-2">
-                <div class="d-flex align-items-start justify-content-between">
-                    <div class="d-flex align-items-center justify-content-between gap-3 flex-grow-1">
-                        <div class="thumbnail">
-                            <!-- <ng-container *ngIf="file.file_thumb; else NoThumbnailToShow">
-                                <picture>
-                                    <img class="img-thumbnail" [src]="file.file_thumb" alt="">
-                                </picture>
-                            </ng-container>
-                            <ng-template #NoThumbnailToShow>
-                                <div class="img-thumbnail bg-light-subtle">
-                                    <i class="fa-solid fa-file-lines fa-2x"></i>
-                                </div>
-                            </ng-template> -->
-                            <div class="img-thumbnail bg-light-subtle">
-                                <i class="fa-solid fa-file-lines fa-2x"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="text-truncate mb-2" style="max-width: 280px;" [title]="file.file_name">{{file.file_name}}</h6>
-                            <p class="m-0 text-nowrap"><small>File Size: {{formatBytes(file.file_size)}}</small></p>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-end justify-content-end">
-                        <button class="btn btn-sm btn-outline-dark px-2 py-1 mb-2" (click)="remove_file(file_index)">
-                            <!-- <i class="fa-solid fa-trash-can"></i> -->
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="form-check form-switch form-check-reverse m-0">
-                                <input class="form-check-input" type="checkbox" role="switch" [id]="'file_toggle_0' + file_index">
-                                <label class="form-check-label text-info-emphasis" [for]="'file_toggle_0' + file_index"><small><b><i class="fa-solid fa-circle-exclamation me-1" data-bs-toggle="tooltip" data-bs-title="Please Toggle this if this file contains CBI or PII" title="Please Toggle this if this file contains CBI or PII"></i>Contains PII/CBI</b></small></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ng-container>
-    </ul>
+  <ul class="list-group list-group-flush">
+    @for (file of files; track file; let file_index = $index) {
+      <li class="list-group-item p-2">
+        <div class="d-flex align-items-start justify-content-between">
+          <div class="d-flex align-items-center justify-content-between gap-3 flex-grow-1">
+            <div class="thumbnail">
+              <!-- <ng-container *ngIf="file.file_thumb; else NoThumbnailToShow">
+              <picture>
+                <img class="img-thumbnail" [src]="file.file_thumb" alt="">
+              </picture>
+            </ng-container>
+            <ng-template #NoThumbnailToShow>
+              <div class="img-thumbnail bg-light-subtle">
+                <i class="fa-solid fa-file-lines fa-2x"></i>
+              </div>
+            </ng-template> -->
+            <div class="img-thumbnail bg-light-subtle">
+              <i class="fa-solid fa-file-lines fa-2x"></i>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="text-truncate mb-2" style="max-width: 280px;" [title]="file.file_name">{{file.file_name}}</h6>
+            <p class="m-0 text-nowrap"><small>File Size: {{formatBytes(file.file_size)}}</small></p>
+          </div>
+        </div>
+        <div class="d-flex flex-column align-items-end justify-content-end">
+          <button class="btn btn-sm btn-outline-dark px-2 py-1 mb-2" (click)="remove_file(file_index)">
+            <!-- <i class="fa-solid fa-trash-can"></i> -->
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="form-check form-switch form-check-reverse m-0">
+              <input class="form-check-input" type="checkbox" role="switch" [id]="'file_toggle_0' + file_index">
+              <label class="form-check-label text-info-emphasis" [for]="'file_toggle_0' + file_index"><small><b><i class="fa-solid fa-circle-exclamation me-1" data-bs-toggle="tooltip" data-bs-title="Please Toggle this if this file contains CBI or PII" title="Please Toggle this if this file contains CBI or PII"></i>Contains PII/CBI</b></small></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  }
+</ul>
 </div>

@@ -5,6 +5,8 @@
 <app-footer></app-footer>
 
 
-<div *ngIf="stage != 'prod'" class="version">
-  <p>{{stage}} - {{version}} - {{ buildDateTime }}</p>
-</div>
+@if (stage != 'prod') {
+  <div class="version">
+    <p>{{stage}} - {{version}} - {{ buildDateTime }}</p>
+  </div>
+}

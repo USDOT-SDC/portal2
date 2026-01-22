@@ -1,10 +1,10 @@
 <div class="file-upload-wrapper">
 
-    <app-elem-drag-and-drop [files]="files_to_upload"></app-elem-drag-and-drop>
+  <app-elem-drag-and-drop [files]="files_to_upload"></app-elem-drag-and-drop>
 
-    <ng-container *ngIf="files_to_upload.length > 0">
-        <hr>
-        <app-elem-file-list [files]="files_to_upload"></app-elem-file-list>
-    </ng-container>
+  @if (files_to_upload.length > 0) {
+    <hr>
+      <app-elem-file-list [files]="files_to_upload"></app-elem-file-list>
+    }
 
-</div>
+  </div>

@@ -4,9 +4,10 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-sdc-datasets',
-  templateUrl: './sdc-datasets.component.html',
-  styleUrls: ['./sdc-datasets.component.less']
+    selector: 'app-sdc-datasets',
+    templateUrl: './sdc-datasets.component.html',
+    styleUrls: ['./sdc-datasets.component.less'],
+    standalone: false
 })
 export class SdcDatasetsComponent implements OnInit {
 

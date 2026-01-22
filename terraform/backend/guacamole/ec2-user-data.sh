@@ -193,7 +193,6 @@ setsebool -P tomcat_can_network_connect_db 1
 echo_to_log "Setting Tomcat as the owner of Guacamole configurations and configuring SElinux permissions: Done!"
 
 echo_to_log "Remove other Tomcat webapps:..."
-# TODO: Put this back after everything is dialed in
 yes | rm -rf $TOMCAT_HOME/webapps/docs/
 yes | rm -rf $TOMCAT_HOME/webapps/examples/
 yes | rm -rf $TOMCAT_HOME/webapps/host-manager/

@@ -1,190 +1,200 @@
 <div id="my-workstations">
-    <h3> My Workstations <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data."></i></sup> </h3>
-    <hr>
+  <h3> My Workstations <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Workstations are Windows or linux Virtual Machines (VMs), which provide a mechanism for SDC users to access the datasets assigned to them or their own datasets, and perform analytics on the data."></i></sup> </h3>
+  <hr>
 
     <div class="workstation-wrapper">
-        <ng-container *ngIf="loading; else DefaultElemWrapper">
-            <div class="no-workstations">
-                <h5><i class="fa-solid fa-spinner"></i> Loading Workstations...</h5>
-            </div>
-        </ng-container>
-        <ng-template #DefaultElemWrapper>
-            <ng-container *ngIf="workstations.length > 0; else NoWorkStationsElem">
-                <ng-container *ngFor="let workstation of workstations; trackBy: WorkstationTrackBy">
-                    <app-workstation [workstation]="workstation" (action)="handle_workstation_action($event)"></app-workstation>
-                </ng-container>
-            </ng-container>
-            <ng-template #NoWorkStationsElem>
-                <div class="no-workstations">
-                    <h5>No Workstations</h5>
-                </div>
-            </ng-template>
-        </ng-template>
-    </div>
-</div>
-
-
-<!-- Modal: Shutdown Workstation -->
-<app-modal #Modal_ShutDownWorkstation [size]="'md'">
-    <ng-container modal-header>
-        <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"><i class="fa-solid fa-power-off me-2"></i>Shutdown Workstation</h5>
+      @if (loading) {
+        <div class="no-workstations">
+          <h5><i class="fa-solid fa-spinner"></i> Loading Workstations...</h5>
         </div>
+      } @else {
+        @if (workstations.length > 0) {
+          @for (workstation of workstations; track WorkstationTrackBy($index, workstation)) {
+            <app-workstation [workstation]="workstation" (action)="handle_workstation_action($event)"></app-workstation>
+          }
+        } @else {
+          <div class="no-workstations">
+            <h5>No Workstations</h5>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+
+  <!-- Modal: Shutdown Workstation -->
+  <app-modal #Modal_ShutDownWorkstation [size]="'md'">
+    <ng-container modal-header>
+      <div class="d-flex align-items-center justify-content-start p-2">
+        <h5 class="m-0"><i class="fa-solid fa-power-off me-2"></i>Shutdown Workstation</h5>
+      </div>
     </ng-container>
     <ng-container modal-body>
-        <div class="p-2">
-            <h5 class="text-center mb-3">Are you sure you to shutdown this Workstation?</h5>
-            <div class="card card-body bg-light-subtle mb-3">
-                <h3 class="text-center">{{ selected_workstation?.display_name }}</h3>
-                <!-- <h6 class="text-center m-0"><small>Running Since: 00/00/000 - 14:00:00</small></h6> -->
-            </div>
-            <p style="text-align: justify;">You will be logged out and the workstation will be stopped. Please Make sure your work is saved prior to shutting down, as this will cause all your unsaved changes on this workstation to be lost.</p>
+      <div class="p-2">
+        <h5 class="text-center mb-3">Are you sure you to shutdown this Workstation?</h5>
+        <div class="card card-body bg-light-subtle mb-3">
+          <h3 class="text-center">{{ selected_workstation?.display_name }}</h3>
+          <!-- <h6 class="text-center m-0"><small>Running Since: 00/00/000 - 14:00:00</small></h6> -->
         </div>
+        <p style="text-align: justify;">You will be logged out and the workstation will be stopped. Please Make sure your work is saved prior to shutting down, as this will cause all your unsaved changes on this workstation to be lost.</p>
+      </div>
     </ng-container>
     <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" [disabled]="shutting_down_workstation==true" (click)="close_shutdown_workstation_modal()">Close</button>
-            <button class="btn btn-danger" [disabled]="shutting_down_workstation==true" (click)="shutdown_workstation()">
-                <ng-container *ngIf="shutting_down_workstation==true; else DefaultShutdownButton;"><i class="fa-solid fa-circle-notch fa-spin me-2"></i>Shuting down...</ng-container>
-                <ng-template #DefaultShutdownButton>Shutdown Workstation</ng-template>
-            </button>
-        </div>
+      <div class="d-flex align-items-center justify-content-between w-100">
+        <button class="btn btn-secondary" [disabled]="shutting_down_workstation==true" (click)="close_shutdown_workstation_modal()">Close</button>
+        <button class="btn btn-danger" [disabled]="shutting_down_workstation==true" (click)="shutdown_workstation()">
+          @if (shutting_down_workstation==true) {
+            <i class="fa-solid fa-circle-notch fa-spin me-2"></i>Shuting down...
+          } @else {
+            Shutdown Workstation
+          }
+        </button>
+      </div>
     </ng-container>
-</app-modal>
+  </app-modal>
 
-<!-- Modal: Resize Workstation -->
-<app-modal #Modal_ResizeWorkstation [size]="'md'">
+  <!-- Modal: Resize Workstation -->
+  <app-modal #Modal_ResizeWorkstation [size]="'md'">
     <ng-container modal-header>
-        <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> <i class="fa-solid fa-up-right-and-down-left-from-center me-2"></i>Resize Workstation</h5>
-        </div>
+      <div class="d-flex align-items-center justify-content-start p-2">
+        <h5 class="m-0"> <i class="fa-solid fa-up-right-and-down-left-from-center me-2"></i>Resize Workstation</h5>
+      </div>
     </ng-container>
-    <ng-container modal-body *ngIf="selected_workstation">
+    @if (selected_workstation) {
+      <ng-container modal-body>
         <div class="p-2">
-            <p><b>Please submit your desired CPU and RAM to retrieve available instance type(s).</b></p>
-            <p class="m-0">Your current workstation configuration is {{ selected_workstation.machine.cpu }} CPU and {{ selected_workstation.machine.ram }} GB RAM.</p>
-            <hr>
+          <p><b>Please submit your desired CPU and RAM to retrieve available instance type(s).</b></p>
+          <p class="m-0">Your current workstation configuration is {{ selected_workstation.machine.cpu }} CPU and {{ selected_workstation.machine.ram }} GB RAM.</p>
+          <hr>
             <div class="row">
-                <div class="col-6">
-                    <label for="resize_cpu_elem" class="form-label">Desired CPU</label>
-                    <select class="form-select" id="resize_cpu_elem" [(ngModel)]="resize_params.cpu" (change)="gather_instance_types()">
-                        <option selected [value]="undefined">- Select Desired CPU -</option>
-                        <ng-container *ngFor="let cpu_opt of CPU_options">
-                            <option [value]="cpu_opt"> {{cpu_opt}} </option>
-                        </ng-container>
-                    </select>
-                </div>
-                <div class="col-6">
-                    <label for="resize_ram_elem" class="form-label">Desired Memory (RAM)</label>
-                    <select class="form-select" id="resize_ram_elem" [(ngModel)]="resize_params.ram" (change)="gather_instance_types()">
-                        <option selected [value]="undefined">- Select Desired RAM -</option>
-                        <ng-container *ngFor="let ram_opt of RAM_options">
-                            <option [value]="ram_opt"> {{ram_opt}} GB</option>
-                        </ng-container>
-                    </select>
-                </div>
+              <div class="col-6">
+                <label for="resize_cpu_elem" class="form-label">Desired CPU</label>
+                <select class="form-select" id="resize_cpu_elem" [(ngModel)]="resize_params.cpu" (change)="gather_instance_types()">
+                  <option selected [value]="undefined">- Select Desired CPU -</option>
+                  @for (cpu_opt of CPU_options; track cpu_opt) {
+                    <option [value]="cpu_opt"> {{cpu_opt}} </option>
+                  }
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="resize_ram_elem" class="form-label">Desired Memory (RAM)</label>
+                <select class="form-select" id="resize_ram_elem" [(ngModel)]="resize_params.ram" (change)="gather_instance_types()">
+                  <option selected [value]="undefined">- Select Desired RAM -</option>
+                  @for (ram_opt of RAM_options; track ram_opt) {
+                    <option [value]="ram_opt"> {{ram_opt}} GB</option>
+                  }
+                </select>
+              </div>
             </div>
             <hr>
-            <label for="instance_type_elem" class="form-label">Select Instance Type</label>
-            <div class="card">
-                <ng-container *ngIf="loading_instance_types == true; else InstanceSelectionElem">
-                    <div class="card-body py-5 d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-spinner fa-4x fa-spin"></i>
+              <label for="instance_type_elem" class="form-label">Select Instance Type</label>
+              <div class="card">
+                @if (loading_instance_types == true) {
+                  <div class="card-body py-5 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-spinner fa-4x fa-spin"></i>
+                  </div>
+                } @else {
+                  @if (resize_instance_type.length > 0) {
+                    <div class="card-header p-2">
+                      <div class="row">
+                        <div class="col-auto"><input type="radio" class="form-check-input invisible" readonly disabled></div>
+                        <div class="col-5 text-truncate"> Instance Name</div>
+                        <div class="col-2 text-center"> CPU </div>
+                        <div class="col-2 text-center"> RAM </div>
+                        <div class="col-2 text-end"> PRICE </div>
+                      </div>
                     </div>
-                </ng-container>
-                <ng-template #InstanceSelectionElem>
-                    <ng-container *ngIf="resize_instance_type.length > 0; else NoInstancesFoundElem">
-                        <div class="card-header p-2">
-                            <div class="row">
-                                <div class="col-auto"><input type="radio" class="form-check-input invisible" readonly disabled></div>
-                                <div class="col-5 text-truncate"> Instance Name</div>
-                                <div class="col-2 text-center"> CPU </div>
-                                <div class="col-2 text-center"> RAM </div>
-                                <div class="col-2 text-end"> PRICE </div>
+                    <ul class="list-group list-group-flush" style="max-height: 250px; overflow-y: auto;">
+                      @for (instance of resize_instance_type; track instance; let i = $index) {
+                        <li class="list-group-item px-1">
+                          <div class="row">
+                            <div class="col-auto"> <input type="radio" class="form-check-input" name="instance_selection" [id]="'instance' + i" (change)="select_instance_type(instance)"> </div>
+                            <div class="col-5 text-truncate">
+                              <label [for]="'instance' + i">
+                                <strong>{{ instance.instanceType }} </strong>
+                                @if (instance.recommended == true) {
+                                  <span class="ms-3 badge rounded-pill text-bg-primary"><small>RECOMMENDED</small></span>
+                                }
+                              </label>
                             </div>
-                        </div>
-                        <ul class="list-group list-group-flush" style="max-height: 250px; overflow-y: auto;">
-                            <ng-container *ngFor="let instance of resize_instance_type; let i = index;">
-                                <li class="list-group-item px-1">
-                                    <div class="row">
-                                        <div class="col-auto"> <input type="radio" class="form-check-input" name="instance_selection" [id]="'instance' + i" (change)="select_instance_type(instance)"> </div>
-                                        <div class="col-5 text-truncate">
-                                            <label [for]="'instance' + i">
-                                                <strong>{{ instance.instanceType }} </strong>
-                                                <span *ngIf="instance.recommended == true" class="ms-3 badge rounded-pill text-bg-primary"><small>RECOMMENDED</small></span>
-                                            </label>
-                                        </div>
-                                        <div class="col-2 text-center"> {{ instance.vcpu }} Cores </div>
-                                        <div class="col-2 text-center"> {{ instance.memory }} </div>
-                                        <div class="col-2 text-end"> <strong>${{ instance.cost }}/hr</strong> </div>
-                                    </div>
-                                </li>
-                            </ng-container>
-                        </ul>
-                    </ng-container>
-                    <ng-template #NoInstancesFoundElem>
-                        <div class="card-body text-center py-5">
-                            <h5 class="text-muted">No Instances Found with these Configurations</h5>
-                            <p class="text-muted m-0"><span *ngIf="resize_params.cpu">CPU: {{ resize_params.cpu }}</span> <span *ngIf="resize_params.ram">- RAM: {{ resize_params.ram }}</span></p>
-                        </div>
-                    </ng-template>
-                </ng-template>
-            </div>
-            <hr>
-
-            <div class="mb-3">
-                <div class="form-check form-switch">
+                            <div class="col-2 text-center"> {{ instance.vcpu }} Cores </div>
+                            <div class="col-2 text-center"> {{ instance.memory }} </div>
+                            <div class="col-2 text-end"> <strong>${{ instance.cost }}/hr</strong> </div>
+                          </div>
+                        </li>
+                      }
+                    </ul>
+                  } @else {
+                    <div class="card-body text-center py-5">
+                      <h5 class="text-muted">No Instances Found with these Configurations</h5>
+                      <p class="text-muted m-0">@if (resize_params.cpu) {
+                        <span>CPU: {{ resize_params.cpu }}</span>
+                        } @if (resize_params.ram) {
+                        <span>- RAM: {{ resize_params.ram }}</span>
+                      }</p>
+                    </div>
+                  }
+                }
+              </div>
+              <hr>
+                <div class="mb-3">
+                  <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="StartAfterResizeElem" [(ngModel)]="start_after_resize">
                     <label class="form-check-label" for="StartAfterResizeElem">Start the workstation after resizing to the new configuration?</label>
+                  </div>
                 </div>
+                <small class="text-muted">Note: Make sure your work is saved. Your workstation will be stopped while resizing.</small>
+              </div>
+            </ng-container>
+          }
+          <ng-container modal-footer>
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <button class="btn btn-secondary" (click)="close_modal_resize_workstation_modal()">Close</button>
+              @if (loading_resize == true) {
+                <i class="fa-solid fa-spinner fa-spin me-2"></i>
+              } @else {
+                <button class="btn btn-primary" [disabled]="selected_instance_type == undefined" (click)="submit_resize_workstation()">Submit Resize Request</button>
+              }
             </div>
-            <small class="text-muted">Note: Make sure your work is saved. Your workstation will be stopped while resizing.</small>
-        </div>
-    </ng-container>
-    <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="close_modal_resize_workstation_modal()">Close</button>
-            <button class="btn btn-primary" [disabled]="selected_instance_type == undefined" (click)="submit_resize_workstation()">Submit Resize Request</button>
-        </div>
-    </ng-container>
-</app-modal>
+          </ng-container>
+        </app-modal>
 
-<!-- Modal: Schedule Workstation -->
-<app-modal #Modal_ScheduleWorkstation [size]="'sm'">
-    <ng-container modal-header>
-        <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> <i class="fa-solid fa-calendar-week me-2"></i>Schedule Up-Time </h5>
-        </div>
-    </ng-container>
-    <ng-container modal-body>
-        <div class="p-2">
+        <!-- Modal: Schedule Workstation -->
+        <app-modal #Modal_ScheduleWorkstation [size]="'sm'">
+          <ng-container modal-header>
+            <div class="d-flex align-items-center justify-content-start p-2">
+              <h5 class="m-0"> <i class="fa-solid fa-calendar-week me-2"></i>Schedule Up-Time </h5>
+            </div>
+          </ng-container>
+          <ng-container modal-body>
+            <div class="p-2">
 
-        </div>
-    </ng-container>
-    <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="close_modal_schedule_workstation_modal()">Close</button>
-            <button class="btn btn-primary" (click)="submit_schedule_workstation()">Submit Schedule Request</button>
-        </div>
-    </ng-container>
-</app-modal>
+            </div>
+          </ng-container>
+          <ng-container modal-footer>
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <button class="btn btn-secondary" (click)="close_modal_schedule_workstation_modal()">Close</button>
+              <button class="btn btn-primary" (click)="submit_schedule_workstation()">Submit Schedule Request</button>
+            </div>
+          </ng-container>
+        </app-modal>
 
-<!-- Modal: Add to Workstation Storage -->
-<app-modal #Modal_AddToWorkstationStorage [size]="'sm'">
-    <ng-container modal-header>
-        <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> <i class="fa-solid fa-hard-drive me-2"></i>Add Storage </h5>
-        </div>
-    </ng-container>
-    <ng-container modal-body>
-        <div class="p-2">
+        <!-- Modal: Add to Workstation Storage -->
+        <app-modal #Modal_AddToWorkstationStorage [size]="'sm'">
+          <ng-container modal-header>
+            <div class="d-flex align-items-center justify-content-start p-2">
+              <h5 class="m-0"> <i class="fa-solid fa-hard-drive me-2"></i>Add Storage </h5>
+            </div>
+          </ng-container>
+          <ng-container modal-body>
+            <div class="p-2">
 
-        </div>
-    </ng-container>
-    <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="close_modal_add_to_workstation_storage_modal()">Close</button>
-            <button class="btn btn-primary" (click)="submit_add_to_workstation()">Submit Storage Request</button>
-        </div>
-    </ng-container>
-</app-modal>
+            </div>
+          </ng-container>
+          <ng-container modal-footer>
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <button class="btn btn-secondary" (click)="close_modal_add_to_workstation_storage_modal()">Close</button>
+              <button class="btn btn-primary" (click)="submit_add_to_workstation()">Submit Storage Request</button>
+            </div>
+          </ng-container>
+        </app-modal>

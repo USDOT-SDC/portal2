@@ -1,0 +1,15 @@
+meta {
+  name: manage_workstation_size
+  type: http
+  seq: 19
+}
+
+get {
+  url: https://portal-api.sdc-dev.dot.gov/v1/manage_workstation_size?wsrequest={%22manageWorkstation%22:true,%22username%22:%22jussing%22,%22user_email%22:%22jeff.ussing.ctr@dot.gov%22,%22default_instance_type%22:%22t3a.xlarge%22,%22instance_id%22:%22i-0ea40269f4a0e68e0%22,%22operating_system%22:%22Windows%22,%22startAfterResize%22:false,%22requested_instance_type%22:%22c6a.2xlarge%22,%22vcpu%22:8,%22memory%22:16,%22workstation_schedule_from_date%22:%222025-09-11T17:27:59.535Z%22,%22workstation_schedule_to_date%22:null}
+  body: none
+  auth: none
+}
+
+params:query {
+  wsrequest: {"manageWorkstation":true,"username":"jussing","user_email":"jeff.ussing.ctr@dot.gov","default_instance_type":"t3a.xlarge","instance_id":"i-0ea40269f4a0e68e0","operating_system":"Windows","startAfterResize":false,"requested_instance_type":"c6a.2xlarge","vcpu":8,"memory":16,"workstation_schedule_from_date":"2025-09-11T17:27:59.535Z","workstation_schedule_to_date":null}
+}

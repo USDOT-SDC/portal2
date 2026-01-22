@@ -1,293 +1,298 @@
 <div id="my-datasets">
-    <h3> My Data <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They are not available to anyone else unless you publish the dataset. Learn more on how to upload your datasets / algorithms and publish them for other users."></i></sup> </h3>
-    <hr>
+  <h3> My Data <sup><i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="This section displays the list of datasets / algorithms that are uploaded by you to the SDC system. They are not available to anyone else unless you publish the dataset. Learn more on how to upload your datasets / algorithms and publish them for other users."></i></sup> </h3>
+  <hr>
 
     <div class="card">
-        <div class="card-header p-2">
-            <div class="row">
-                <div class="col">
-                    <div class="input-group">
-                        <button class="btn btn-outline-secondary" type="button" (click)="clear_search_filter()">Clear</button>
-                        <input type="text" class="form-control" placeholder="Search Files..." [(ngModel)]="file_upload_search_term">
-                        <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button> -->
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="input-group">
-                        <label class="input-group-text" for="inputGroupSelect01">Sort</label>
-                        <select class="form-select" id="inputGroupSelect01" (change)="sort_ds_and_alg($event)">
-                            <option selected>- Sort Files -</option>
-                            <option value="1">FileName: A to Z</option>
-                            <option value="2">FileName: Z to A</option>
-                            <option value="3">Status: Z to A</option>
-                            <option value="4">Status: A to Z</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-outline-primary" (click)="modal_open_file_upload()"> <i class="fa-solid fa-upload me-2"></i> Upload </button>
-                </div>
+      <div class="card-header p-2">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <button class="btn btn-outline-secondary" type="button" (click)="clear_search_filter()">Clear</button>
+              <input type="text" class="form-control" placeholder="Search Files..." [(ngModel)]="file_upload_search_term">
+              <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button> -->
             </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <label class="input-group-text" for="inputGroupSelect01">Sort</label>
+              <select class="form-select" id="inputGroupSelect01" (change)="sort_ds_and_alg($event)">
+                <!-- <option selected>- Sort Files -</option> -->
+                <option value="1">FileName: A to Z</option>
+                <option value="2">FileName: Z to A</option>
+                <option value="3">Status: Z to A</option>
+                <option value="4">Status: A to Z</option>
+                <option value="5">Modified: Old to New</option>
+                <option selected value="6">Modified: New to Old</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-outline-primary" (click)="modal_open_file_upload()"> <i class="fa-solid fa-upload me-2"></i> Upload </button>
+          </div>
         </div>
-        <div class="card-header">
-            <div class="row">
-                <div class="col-1">
-                    <input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)">
-                </div>
-                <div class="col-6"><b>Filename</b></div>
-                <div class="col-2 text-center"><b>Request Data Export</b></div>
-                <div class="col-3 text-center"><b>Export Request Status</b></div>
-            </div>
+      </div>
+      <div class="card-header">
+        <div class="row">
+          <div class="col-1">
+            <input class="form-check-input mb-0" type="checkbox" id="select-all-files" [disabled]="user_datasets_algorithms.length == 0" (change)="toggle_select_files($event)">
+          </div>
+          <div class="col-5"><b>Filename</b></div>
+          <div class="col-2 text-center"><b>Request Data Export</b></div>
+          <div class="col-2 text-center"><b>Export Request Status</b></div>
+          <div class="col-2 text-center"><b>Last Modified</b></div>
         </div>
-        <ng-container *ngIf="user_datasets_algorithms.length > 0; else NoUserDatasetsOrAlgorithms">
-            <div class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
-                <ng-container *ngFor="let item of user_datasets_algorithms | filterList: file_upload_search_term : 'filename'">
-                    <app-user-dataset class="list-group-item" [location]="current_user_upload_bucket" [dataset]="item" (emit_action)="handle_file_action($event)"></app-user-dataset>
-                </ng-container>
-            </div>
-        </ng-container>
-        <ng-template #NoUserDatasetsOrAlgorithms>
-            <div class="card-body p-4">
-                <div class="d-flex align-items-center justify-content-center">
-                    <p class="m-0 text-body-secondary">No Datasets or Algorithms Found</p>
-                </div>
-            </div>
-        </ng-template>
-        <div class="card-footer border-top-none">
-            <div class="d-flex align-items-center justify-content-end">
-                <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0" (click)="download_files()">
-                    <i class="fa-solid fa-download me-2"></i>
-                    <ng-container *ngIf="selected_files.length > 0; else DefaultDownloadElem"> Download {{selected_files.length}} Selected Files</ng-container>
-                    <ng-template #DefaultDownloadElem> Download Selected </ng-template>
-                </button>
-            </div>
+      </div>
+      @if (user_datasets_algorithms.length > 0) {
+        <div class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
+          @for (item of user_datasets_algorithms | filterList: file_upload_search_term : 'filename'; track item) {
+            <app-user-dataset class="list-group-item" [location]="current_user_upload_bucket" [dataset]="item" (emit_action)="handle_file_action($event)"></app-user-dataset>
+          }
         </div>
+      } @else {
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-center">
+            <p class="m-0 text-body-secondary">No Datasets or Algorithms Found</p>
+          </div>
+        </div>
+      }
+      <div class="card-footer border-top-none">
+        <div class="d-flex align-items-center justify-content-end">
+          <button class="btn btn-outline-primary" [disabled]="selected_files.length == 0" (click)="download_files()">
+            <i class="fa-solid fa-download me-2"></i>
+            @if (selected_files.length > 0) {
+              Download {{selected_files.length}} Selected Files
+            } @else {
+              Download Selected
+            }
+          </button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- :: FILE UPLOAD MODALS :: -->
-<!-- :: FILE UPLOAD MODALS :: -->
-<app-modal #Modal_UploadFiles [size]="'md'">
+  <!-- :: FILE UPLOAD MODALS :: -->
+  <!-- :: FILE UPLOAD MODALS :: -->
+  <app-modal #Modal_UploadFiles [size]="'md'">
     <ng-container modal-header>
-        <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0">Upload files to SDC platform TESTING </h5>
-        </div>
+      <div class="d-flex align-items-center justify-content-start p-2">
+        <h5 class="m-0">Upload files to SDC platform TESTING </h5>
+      </div>
     </ng-container>
     <ng-container modal-body>
-        <div class="p-2">
-            <div class="row align-items-end">
-                <div class="col">
-                    <label class="form-label"> Upload Location </label>
-                    <select class="form-select" [(ngModel)]="file_upload_bucket">
-                        <option selected [value]="undefined"> - Select Upload Location - </option>
-                        <ng-container *ngFor="let location of current_user_upload_locations">
-                            <option [value]="location.path">{{location.path}}</option>
-                        </ng-container>
-                    </select>
-                </div>
-                <div class="col">
-                    <label for="new_prefix_input" class="form-label">Append a new prefix</label>
-                    <input type="text" class="form-control" id="new_prefix_input" placeholder="Set a sub folder or directory to upload to..." [(ngModel)]="file_upload_bucket_prefix">
-                </div>
-            </div>
-            <hr>
+      <div class="p-2">
+        <div class="row align-items-end">
+          <div class="col">
+            <label class="form-label"> Upload Location </label>
+            <select class="form-select" [(ngModel)]="file_upload_bucket">
+              <option selected [value]="undefined"> - Select Upload Location - </option>
+              @for (location of current_user_upload_locations; track location) {
+                <option [value]="location.path">{{location.path}}</option>
+              }
+            </select>
+          </div>
+          <div class="col">
+            <label for="new_prefix_input" class="form-label">Append a new prefix</label>
+            <input type="text" class="form-control" id="new_prefix_input" placeholder="Set a sub folder or directory to upload to..." [(ngModel)]="file_upload_bucket_prefix">
+          </div>
+        </div>
+        <hr>
 
-            <app-file-upload #file_uploader></app-file-upload>
+          <app-file-upload #file_uploader></app-file-upload>
 
         </div>
-    </ng-container>
-    <ng-container modal-footer>
+      </ng-container>
+      <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
-            <button class="btn btn-success" [disabled]="file_uploader.files_to_upload.length == 0 || file_upload_bucket == undefined || uploading_files == true" (click)="upload_files()">
-                <ng-container *ngIf="uploading_files == true; else DefaultNonLoadingStatus">
-                    <i class="fa-solid fa-spinner fa-spin me-2"></i>Uploading File(s)...
-                </ng-container>
-                <ng-template #DefaultNonLoadingStatus>
-                    <ng-container *ngIf="file_uploader.files_to_upload.length > 0; else DefaultUploadStatus">
-                        <i class="fa-solid fa-upload me-2"></i>Upload {{file_uploader.files_to_upload.length}} File(s)
-                    </ng-container>
-                    <ng-template #DefaultUploadStatus>
-                        <i class="fa-solid fa-upload me-2"></i>Upload File(s)
-                    </ng-template>
-                </ng-template>
-            </button>
+          <button class="btn btn-secondary" (click)="modal_close_file_upload()">Close</button>
+          <button class="btn btn-success" [disabled]="file_uploader.files_to_upload.length == 0 || file_upload_bucket == undefined || uploading_files == true" (click)="upload_files()">
+            @if (uploading_files == true) {
+              <i class="fa-solid fa-spinner fa-spin me-2"></i>Uploading File(s)...
+            } @else {
+              @if (file_uploader.files_to_upload.length > 0) {
+                <i class="fa-solid fa-upload me-2"></i>Upload {{file_uploader.files_to_upload.length}} File(s)
+              } @else {
+                <i class="fa-solid fa-upload me-2"></i>Upload File(s)
+              }
+            }
+          </button>
         </div>
-    </ng-container>
-</app-modal>
-<!-- :: FILE UPLOAD MODALS :: -->
-<!-- :: FILE UPLOAD MODALS :: -->
+      </ng-container>
+    </app-modal>
+    <!-- :: FILE UPLOAD MODALS :: -->
+    <!-- :: FILE UPLOAD MODALS :: -->
 
 
-<!-- :: Request Export Data MODAL :: -->
-<!-- :: Request Export Data MODAL :: -->
-<app-modal #Modal_RequestExportData [size]="'md'">
-    <ng-container modal-header>
+    <!-- :: Request Export Data MODAL :: -->
+    <!-- :: Request Export Data MODAL :: -->
+    <app-modal #Modal_RequestExportData [size]="'md'">
+      <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> Request to Export Data </h5>
+          <h5 class="m-0"> Request to Export Data </h5>
         </div>
-    </ng-container>
-    <ng-container modal-body>
+      </ng-container>
+      <ng-container modal-body>
         <div class="container px-2 py-3">
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
-                    <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
-                        <option [value]="undefined">- Select Project or Dataset -</option>
-                        <ng-container *ngIf="sdc_datasets.length > 0">
-                            <ng-container *ngFor="let project of sdc_datasets">
-                                <ng-container *ngIf="project.exportWorkflow">
-                                    <ng-container *ngFor="let key of objectKeys(project.exportWorkflow)">
-                                        <option [value]="project.Name + '|' + key">{{ key }}</option>
-                                    </ng-container>
-                                </ng-container>
-                            </ng-container>
-                        </ng-container>
-                    </select>
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider <span *ngIf="selected_dataset_project">(required)</span></label>
-                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
-                        <option [value]="undefined">- Select Data Provider -</option>
-                        <ng-container *ngIf="export_workflows.length > 0">
-                            <ng-container *ngFor="let provider of export_workflows">
-                                <option [value]="provider.name">{{provider.name}}</option>
-                            </ng-container>
-                        </ng-container>
-                    </select>
-
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type <span *ngIf="export_workflows_datasets.length > 0 && selected_provider != undefined">(required)</span></label>
-                    <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
-                        <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
-                        <ng-container *ngIf="export_workflows_datasets.length > 0">
-                            <ng-container *ngFor="let dataset of export_workflows_datasets">
-                                <option [value]="dataset.name">{{dataset.name}}</option>
-                            </ng-container>
-                        </ng-container>
-                    </select>
-                </div>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <label class="form-label" for="dataset_to_request_trusted_status">For Which Project/Dataset </label>
+              <select class="form-select" id="dataset_to_request_trusted_status" (change)="select_dataset_project($event)" required [(ngModel)]="selected_dataset_project">
+                <option [value]="undefined">- Select Project or Dataset -</option>
+                @if (sdc_datasets.length > 0) {
+                  @for (project of sdc_datasets; track project) {
+                    @if (project.exportWorkflow) {
+                      @for (key of objectKeys(project.exportWorkflow); track key) {
+                        <option [value]="project.Name + '|' + key">{{ key }}</option>
+                      }
+                    }
+                  }
+                }
+              </select>
             </div>
-            
-            <div class="row">
-                <div class="col-6 mb-3">
-                    <label class="form-label" for="request_name">Name (required)</label>
-                    <input type="text" id="request_name" class="form-control" required [(ngModel)]="request_name">
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label" for="request_email">Email (required)</label>
-                    <input type="email" id="request_email" class="form-control" required [(ngModel)]="request_email">
-                </div>
-                <div class="col-6 mb-3">
-                    <label class="form-label" for="request_address">Address (required)</label>
-                    <input type="text" id="request_address" class="form-control" required [(ngModel)]="request_address">
-                </div>
-                <div class="col-3 mb-3">
-                    <label class="form-label" for="request_city">City (required)</label>
-                    <input type="text" id="request_city" class="form-control" required [(ngModel)]="request_city">
-                </div>
-                <div class="col-3 mb-3">
-                    <label class="form-label" for="request_state">State (required)</label>
-                    <input type="text" id="request_state" class="form-control" required [(ngModel)]="request_state">
-                </div>
-                <div class="col-3 mb-3">
-                    <label class="form-label" for="request_zipcode">Zipcode (required)</label>
-                    <input type="text" id="request_zipcode" class="form-control" required [(ngModel)]="request_zipcode">
-                </div>
-                <div class="col-9 mb-3">
-                    <label class="form-label" for="request_additional_data_sources">Additional Data Sources (optional)</label>
-                    <input type="text" id="request_additional_data_sources" class="form-control" [(ngModel)]="request_additional_data_sources">
-                </div>
+            <div class="col-6 mb-3">
+              <label class="form-label" for="dataset_to_request_trusted_status_provider">Data Provider @if (selected_dataset_project) {
+                <span>(required)</span>
+              }</label>
+              <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="!selected_dataset_project" [required]="selected_dataset_project" (change)="select_dataset_provider($event)">
+                <option [value]="undefined">- Select Data Provider -</option>
+                @if (export_workflows.length > 0) {
+                  @for (provider of export_workflows; track provider) {
+                    <option [value]="provider.name">{{provider.name}}</option>
+                  }
+                }
+              </select>
+
             </div>
-
-
-
-            <div class="mb-3">
-                <label class="form-label" for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
-                <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
+            <div class="col-6 mb-3">
+              <label class="form-label" for="dataset_to_request_trusted_status_provider">Sub-Dataset/Data Type @if (export_workflows_datasets.length > 0 && selected_provider != undefined) {
+                <span>(required)</span>
+              }</label>
+              <select class="form-select" id="dataset_to_request_trusted_status" [disabled]="export_workflows_datasets.length == 0 && selected_provider == undefined " [required]="export_workflows_datasets.length > 0 && selected_provider != undefined" (change)="select_dataset_provider_sub_dataset($event)">
+                <option [value]="undefined">- Select Sub-Dataset/Data Type -</option>
+                @if (export_workflows_datasets.length > 0) {
+                  @for (dataset of export_workflows_datasets; track dataset) {
+                    <option [value]="dataset.name">{{dataset.name}}</option>
+                  }
+                }
+              </select>
             </div>
-            <hr>
+          </div>
+
+          <div class="row">
+            <div class="col-6 mb-3">
+              <label class="form-label" for="request_name">Name (required)</label>
+              <input type="text" id="request_name" class="form-control" required [(ngModel)]="request_name">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label" for="request_email">Email (required)</label>
+              <input type="email" id="request_email" class="form-control" required [(ngModel)]="request_email">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label" for="request_address">Address (required)</label>
+              <input type="text" id="request_address" class="form-control" required [(ngModel)]="request_address">
+            </div>
+            <div class="col-3 mb-3">
+              <label class="form-label" for="request_city">City (required)</label>
+              <input type="text" id="request_city" class="form-control" required [(ngModel)]="request_city">
+            </div>
+            <div class="col-3 mb-3">
+              <label class="form-label" for="request_state">State (required)</label>
+              <input type="text" id="request_state" class="form-control" required [(ngModel)]="request_state">
+            </div>
+            <div class="col-3 mb-3">
+              <label class="form-label" for="request_zipcode">Zipcode (required)</label>
+              <input type="text" id="request_zipcode" class="form-control" required [(ngModel)]="request_zipcode">
+            </div>
+            <div class="col-9 mb-3">
+              <label class="form-label" for="request_additional_data_sources">Additional Data Sources (optional)</label>
+              <input type="text" id="request_additional_data_sources" class="form-control" [(ngModel)]="request_additional_data_sources">
+            </div>
+          </div>
+
+
+
+          <div class="mb-3">
+            <label class="form-label" for="dataset_to_request_trusted_status_justification">Justification for Request (required)</label>
+            <textarea id="dataset_to_request_trusted_status_justification" class="form-control" placeholder="Please justify your request." required [disabled]="!selected_dataset_project" [(ngModel)]="request_justification"></textarea>
+          </div>
+          <hr>
             <div class="card bg-light-subtle">
-                <div class="card-header">Acceptable Use Policy</div>
-                <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
-                    <ng-container *ngIf="selected_provider !== undefined; else NoDatasetProjectSelected">
-                        <code class="text-dark-conditional" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
-                    </ng-container>
-                    <ng-template #NoDatasetProjectSelected>
-                        <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
-                    </ng-template>
+              <div class="card-header">Acceptable Use Policy</div>
+              <div class="card-body" style="overflow: auto;" [ngStyle]="{ 'height': selected_dataset_project ? '100px' : 'auto' }">
+                @if (selected_provider !== undefined) {
+                  <code class="text-dark-conditional" style="text-align: justify;" [innerHTML]="selected_provider.UsagePolicyDesc"></code>
+                } @else {
+                  <h5 class="text-muted text-center">Please select a Project or Dataset</h5>
+                }
+              </div>
+              <div class="card-footer">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [disabled]="!selected_dataset_project" [(ngModel)]="request_policy_agreement">
+                  <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
                 </div>
-                <div class="card-footer">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="AcceptedUsePolicy" required [disabled]="!selected_dataset_project" [(ngModel)]="request_policy_agreement">
-                        <label class="form-check-label" for="AcceptedUsePolicy">I have read and accept the Acceptable Use Policy </label>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    </ng-container>
-    <ng-container modal-footer>
-        <div class="d-flex align-items-center justify-content-between w-100">
+          </div>
+        </ng-container>
+        <ng-container modal-footer>
+          <div class="d-flex align-items-center justify-content-between w-100">
             <button class="btn btn-secondary" (click)="close_modal_export_request()">Close</button>
             <button class="btn btn-primary px-3" [disabled]="!is_request_valid()" (click)="submit_request()">
-                <ng-container *ngIf="is_loading == true; else DefaultButtonState">
-                    <i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Request...
-                </ng-container>
-                <ng-template #DefaultButtonState>
-                    Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i>
-                </ng-template>
+              @if (is_loading == true) {
+                <i class="fa-solid fa-spinner fa-spin me-2"></i> Submitting Request...
+              } @else {
+                Submit Request <i class="ms-2 fa-solid fa-square-arrow-up-right"></i>
+              }
             </button>
-        </div>
-    </ng-container>
-    
-    
-    
-    
-    <!-- <ng-container modal-header>
+          </div>
+        </ng-container>
+
+
+
+
+        <!-- <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0"> Request to Export Data TESTING</h5>
+          <h5 class="m-0"> Request to Export Data TESTING</h5>
         </div>
-    </ng-container>
-    <ng-container modal-body>
+      </ng-container>
+      <ng-container modal-body>
         <div class="p-2">
 
-            {{ selected_data_for_export | json }}
+          {{ selected_data_for_export | json }}
 
         </div>
-    </ng-container>
-    <ng-container modal-footer>
+      </ng-container>
+      <ng-container modal-footer>
         <div class="d-flex align-items-center justify-content-between w-100">
-            <button class="btn btn-secondary" (click)="modal_close_request_export_data()">Close</button>
-            <button class="btn btn-primary" (click)="submit_request_export_data()">Submit Request</button>
+          <button class="btn btn-secondary" (click)="modal_close_request_export_data()">Close</button>
+          <button class="btn btn-primary" (click)="submit_request_export_data()">Submit Request</button>
         </div>
-    </ng-container> -->
-</app-modal>
-<!-- :: Request Export Data MODAL :: -->
-<!-- :: Request Export Data MODAL :: -->
+      </ng-container> -->
+    </app-modal>
+    <!-- :: Request Export Data MODAL :: -->
+    <!-- :: Request Export Data MODAL :: -->
 
-<!-- :: AUTH RENEW MODAL :: -->
-<!-- :: AUTH RENEW MODAL :: -->
-<app-modal #AuthRenewModal [size]="'md'">
-    <ng-container modal-header>
+    <!-- :: AUTH RENEW MODAL :: -->
+    <!-- :: AUTH RENEW MODAL :: -->
+    <app-modal #AuthRenewModal [size]="'md'">
+      <ng-container modal-header>
         <div class="d-flex align-items-center justify-content-start p-2">
-            <h5 class="m-0">Session Expired</h5>
+          <h5 class="m-0">Session Expired</h5>
         </div>
-    </ng-container>
-    <ng-container modal-body>
+      </ng-container>
+      <ng-container modal-body>
         <div class="d-flex align-items-center justify-content-between p-2">
-            <div>
-                <p class="modal-text">Your session has expired, please log back in.</p>
-            </div>
-            <div>
-                <button class="nav-item">
-                    <a class="nav-link" href="/login">LOGIN</a>
-                </button>
-            </div>
+          <div>
+            <p class="modal-text">Your session has expired, please log back in.</p>
+          </div>
+          <div>
+            <button class="nav-item">
+              <a class="nav-link" href="/login">LOGIN</a>
+            </button>
+          </div>
         </div>
-    </ng-container>
-    <!-- <ng-container modal-footer> -->
+      </ng-container>
+      <!-- <ng-container modal-footer> -->
     <!-- </ng-container> -->
-</app-modal>
-<!-- :: AUTH RENEW MODAL :: -->
-<!-- :: AUTH RENEW MODAL :: -->
+  </app-modal>
+  <!-- :: AUTH RENEW MODAL :: -->
+  <!-- :: AUTH RENEW MODAL :: -->

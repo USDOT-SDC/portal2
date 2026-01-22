@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-error',
-  templateUrl: './error.component.html',
-  styleUrls: ['./error.component.less']
+    selector: 'app-error',
+    templateUrl: './error.component.html',
+    styleUrls: ['./error.component.less'],
+    standalone: false
 })
 export class ErrorComponent implements OnInit {
 
