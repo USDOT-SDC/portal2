@@ -4,9 +4,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-login-sync',
-  templateUrl: './login-sync.component.html',
-  styleUrls: ['./login-sync.component.less']
+    selector: 'app-login-sync',
+    templateUrl: './login-sync.component.html',
+    styleUrls: ['./login-sync.component.less'],
+    standalone: false
 })
 export class LoginSyncComponent implements OnInit {
 

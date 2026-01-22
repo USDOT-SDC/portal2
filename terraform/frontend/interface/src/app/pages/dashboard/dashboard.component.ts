@@ -9,9 +9,10 @@ import { Router, NavigationStart } from '@angular/router';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.less']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.less'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 

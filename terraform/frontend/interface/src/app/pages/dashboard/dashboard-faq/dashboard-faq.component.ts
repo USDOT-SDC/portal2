@@ -4,9 +4,10 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-dashboard-faq',
-  templateUrl: './dashboard-faq.component.html',
-  styleUrls: ['./dashboard-faq.component.less']
+    selector: 'app-dashboard-faq',
+    templateUrl: './dashboard-faq.component.html',
+    styleUrls: ['./dashboard-faq.component.less'],
+    standalone: false
 })
 export class DashboardFaqComponent implements OnInit {
 

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-about-datasets',
-  templateUrl: './about-datasets.component.html',
-  styleUrls: ['./about-datasets.component.less']
+    selector: 'app-about-datasets',
+    templateUrl: './about-datasets.component.html',
+    styleUrls: ['./about-datasets.component.less'],
+    standalone: false
 })
 export class AboutDatasetsComponent implements OnInit {
 

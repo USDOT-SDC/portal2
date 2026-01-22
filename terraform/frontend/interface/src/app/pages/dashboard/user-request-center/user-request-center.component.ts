@@ -5,9 +5,10 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-user-request-center',
-  templateUrl: './user-request-center.component.html',
-  styleUrls: ['./user-request-center.component.less']
+    selector: 'app-user-request-center',
+    templateUrl: './user-request-center.component.html',
+    styleUrls: ['./user-request-center.component.less'],
+    standalone: false
 })
 export class UserRequestCenterComponent implements OnInit, OnDestroy {
 
