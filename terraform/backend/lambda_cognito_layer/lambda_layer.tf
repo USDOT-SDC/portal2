@@ -2,7 +2,7 @@ locals {
   layer_name      = "lambda_cognito_layer"
   description     = "Lambda layer that includes all the packages needed to link accounts in the web portal"
   runtime_name    = "python"
-  runtime_version = "3.13"
+  runtime_version = "3.14"
   runtime         = "${local.runtime_name}${local.runtime_version}"
   src_path        = "backend\\lambda_cognito_layer\\src"
   packages_path   = "${local.src_path}\\python\\lib\\${local.runtime}\\site-packages"

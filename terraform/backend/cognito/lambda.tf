@@ -10,7 +10,7 @@ resource "aws_lambda_function" "pre_sign_up_lambda" {
   source_code_hash = data.archive_file.pre_sign_up_lambda.output_base64sha256
   role             = aws_iam_role.pre_sign_up_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.13"
+  runtime          = "python3.14"
   timeout          = 30
 }
 
@@ -34,7 +34,7 @@ resource "aws_lambda_function" "pre_auth_lambda" {
   source_code_hash = data.archive_file.pre_auth_lambda.output_base64sha256
   role             = aws_iam_role.pre_auth_lambda.arn
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.13"
+  runtime          = "python3.14"
   timeout          = 30
 }
 
