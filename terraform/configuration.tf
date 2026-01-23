@@ -1,9 +1,9 @@
 terraform {
-  required_version = ">= 1.13"
+  required_version = ">= 1.14"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.100"
+      version = "~> 6.28"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -19,7 +19,7 @@ terraform {
     }
     git = {
       source  = "metio/git"
-      version = "~> 2025.9"
+      version = "~> 2025.12"
     }
     time = {
       source = "hashicorp/time"
