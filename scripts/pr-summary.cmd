@@ -31,6 +31,13 @@ if "%~2"=="" (
 set SOURCE_BRANCH=%~1
 set TARGET_BRANCH=%~2
 
+:: Set PR prompt style based on target branch
+if /i "%TARGET_BRANCH%"=="main" (
+    set PR_PROMPT=Based on these git diff files, write a comprehensive GitHub PR summary
+) else (
+    set PR_PROMPT=Based on these git diff files, write a concise GitHub PR summary
+)
+
 :: Check for uncommitted changes
 echo Checking for uncommitted changes...
 git diff --quiet
@@ -153,29 +160,82 @@ echo [1/13] Collecting branch information...
 :: 2. Version Analysis
 :: ============================================================================
 echo [2/13] Analyzing version tags...
+
+:: Read config versions from both branches
+git show %TARGET_BRANCH%:terraform/config_version.txt > "%OUTPUT_SUBDIR%\temp-target-version.txt" 2>nul
+git show %SOURCE_BRANCH%:terraform/config_version.txt > "%OUTPUT_SUBDIR%\temp-source-version.txt" 2>nul
+
+set TARGET_CONFIG_VERSION=N/A
+set SOURCE_CONFIG_VERSION=N/A
+
+if exist "%OUTPUT_SUBDIR%\temp-target-version.txt" (
+    set /p TARGET_CONFIG_VERSION=<"%OUTPUT_SUBDIR%\temp-target-version.txt"
+)
+
+if exist "%OUTPUT_SUBDIR%\temp-source-version.txt" (
+    set /p SOURCE_CONFIG_VERSION=<"%OUTPUT_SUBDIR%\temp-source-version.txt"
+)
+
 (
     echo ============================================================================
     echo VERSION ANALYSIS
     echo ============================================================================
     echo.
-    
+
+    :: Display config versions
+    echo --- Config Version Information ---
+    echo Target Branch ^(%TARGET_BRANCH%^) config_version.txt: !TARGET_CONFIG_VERSION!
+    echo Source Branch ^(%SOURCE_BRANCH%^) config_version.txt: !SOURCE_CONFIG_VERSION!
+    echo.
+
+    :: Analyze config version changes
+    if "!TARGET_CONFIG_VERSION!"=="!SOURCE_CONFIG_VERSION!" (
+        if "!TARGET_CONFIG_VERSION!"=="N/A" (
+            echo NOTE: No config_version.txt file found in either branch
+        ) else (
+            echo WARNING: Config version is UNCHANGED between branches
+            echo Both branches show version: !TARGET_CONFIG_VERSION!
+            echo Consider updating config_version.txt if this merge introduces changes
+        )
+    ) else if "!TARGET_CONFIG_VERSION!"=="N/A" (
+        echo NOTE: config_version.txt exists in source but not in target
+        echo This merge will introduce version: !SOURCE_CONFIG_VERSION!
+    ) else if "!SOURCE_CONFIG_VERSION!"=="N/A" (
+        echo WARNING: config_version.txt exists in target but not in source
+        echo This merge will remove the version file
+    ) else (
+        echo Config version change: !TARGET_CONFIG_VERSION! -^> !SOURCE_CONFIG_VERSION!
+
+        :: Simple backwards check (works for semantic versions)
+        :: This is a basic string comparison - may need refinement for complex version schemes
+        if "!SOURCE_CONFIG_VERSION!" LSS "!TARGET_CONFIG_VERSION!" (
+            echo.
+            echo WARNING: Version appears to be GOING BACKWARDS
+            echo Target: !TARGET_CONFIG_VERSION!
+            echo Source: !SOURCE_CONFIG_VERSION!
+            echo This is unusual - verify this is intentional
+        )
+    )
+    echo.
+
     :: Get tag on HEAD of target branch
     git describe --exact-match --tags %TARGET_BRANCH% > "%OUTPUT_SUBDIR%\temp-tag.txt" 2>nul
-    
+
     if exist "%OUTPUT_SUBDIR%\temp-tag.txt" (
         set /p CURRENT_TAG=<"%OUTPUT_SUBDIR%\temp-tag.txt"
-        
+
         if defined CURRENT_TAG (
-            echo Current Version on %TARGET_BRANCH%: !CURRENT_TAG!
+            echo --- Git Tag Analysis ---
+            echo Current Git Tag on %TARGET_BRANCH%: !CURRENT_TAG!
             echo.
-            
+
             :: Get change statistics for version suggestion
             git rev-list --count %TARGET_BRANCH%..%SOURCE_BRANCH% > "%OUTPUT_SUBDIR%\temp-commit-count.txt"
             set /p COMMIT_COUNT=<"%OUTPUT_SUBDIR%\temp-commit-count.txt"
-            
+
             git diff %TARGET_BRANCH%...%SOURCE_BRANCH% --shortstat > "%OUTPUT_SUBDIR%\temp-shortstat.txt"
             set /p CHANGE_STAT=<"%OUTPUT_SUBDIR%\temp-shortstat.txt"
-            
+
             echo Commits to be merged: !COMMIT_COUNT!
             echo Changes: !CHANGE_STAT!
             echo.
@@ -186,7 +246,7 @@ echo [2/13] Analyzing version tags...
             echo - !COMMIT_COUNT! commit^(s^)
             echo - !CHANGE_STAT!
             echo.
-            
+
             :: Simple heuristic for suggestion narrative
             if !COMMIT_COUNT! GTR 20 (
                 echo This is a substantial merge with many commits. Consider a MINOR version bump
@@ -201,19 +261,25 @@ echo [2/13] Analyzing version tags...
                 echo features, a PATCH bump is likely appropriate.
             )
             echo.
-            
+
             del "%OUTPUT_SUBDIR%\temp-commit-count.txt" 2>nul
             del "%OUTPUT_SUBDIR%\temp-shortstat.txt" 2>nul
         ) else (
+            echo --- Git Tag Analysis ---
             echo No version tag found on HEAD of %TARGET_BRANCH%
         )
-        
+
         del "%OUTPUT_SUBDIR%\temp-tag.txt" 2>nul
     ) else (
+        echo --- Git Tag Analysis ---
         echo No version tag found on HEAD of %TARGET_BRANCH%
     )
     echo.
 ) > "%OUTPUT_SUBDIR%\02-version-analysis.txt"
+
+:: Cleanup temp version files
+del "%OUTPUT_SUBDIR%\temp-target-version.txt" 2>nul
+del "%OUTPUT_SUBDIR%\temp-source-version.txt" 2>nul
 
 :: ============================================================================
 :: 3. Commit Log (One-line)
@@ -367,7 +433,7 @@ echo [13/13] Generating README for AI...
     echo ============================================================================
     echo.
     echo 01-branch-info.txt          - Current branch state and remote tracking
-    echo 02-version-analysis.txt     - Version tag analysis and bump suggestions
+    echo 02-version-analysis.txt     - Config versions and git tag analysis with bump suggestions
     echo 03-commits-oneline.txt      - One-line commit history
     echo 04-commits-detailed.txt     - Detailed commit messages with bodies
     echo 05-file-stats.txt           - File change statistics (insertions/deletions)
@@ -385,12 +451,13 @@ echo [13/13] Generating README for AI...
     echo ============================================================================
     echo.
     echo 1. Upload all .txt files to AI
-    echo 2. Ask: "Based on these git diff files, write a comprehensive GitHub PR summary"
+    echo 2. Ask: "!PR_PROMPT!"
     echo 3. AI will analyze:
     echo    - What changed (from file stats and commit messages)
     echo    - Why it changed (from detailed commit messages)
     echo    - Impact of changes (from file types and statistics)
     echo    - Testing completed (from commit messages)
+    echo    - Config version changes (from terraform/config_version.txt in both branches)
     echo    - Version recommendations (from version analysis)
     echo.
     echo 4. AI will generate:
@@ -429,7 +496,7 @@ echo ===========================================================================
 echo.
 echo 1. Review the files in: %OUTPUT_SUBDIR%
 echo 2. Upload all .txt files to AI
-echo 3. Ask AI to write the PR summary
+echo 3. Ask: "!PR_PROMPT!"
 echo.
 echo Quick preview of changes:
 echo.
