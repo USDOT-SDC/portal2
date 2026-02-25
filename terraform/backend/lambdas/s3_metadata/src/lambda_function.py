@@ -91,6 +91,8 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         etag: str = response["ETag"]
         print(f"S3 object metadata: {metadata}")
 
+        metadata["LastModified"] = str(response["LastModified"])
+
         latest_request = _get_latest_export_request(file_name)
 
         if latest_request is None:
@@ -100,14 +102,8 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
             metadata["requestReviewStatus"] = latest_request["RequestReviewStatus"]
         else:
             print(f"ETag mismatch: {etag} != {latest_request['S3KeyHash']}")
-            return _build_response(200, {
-                "download": "false",
-                "export": "true",
-                "publish": "false",
-                "requestReviewStatus": "-1",
-            })
+            metadata["requestReviewStatus"] = "-1"
 
-        metadata["LastModified"] = str(response["LastModified"])
 
     except s3_client.exceptions.NoSuchKey:
         print(f"Error: S3 object not found - bucket: {bucket_name}, key: {file_name}")
@@ -118,4 +114,11 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         return _build_response(500, {"error": "Failed to get S3 metadata"})
 
     print(f"Response metadata: {metadata}")
-    return _build_response(200, metadata)
+    return _build_response(200,{
+    "download": metadata.get("download", "false"),
+    "export": metadata.get("export", "false"),
+    "publish": metadata.get("publish", "false"),
+    "requestReviewStatus": metadata["requestReviewStatus"],
+    "LastModified": metadata["LastModified"],
+})
+
