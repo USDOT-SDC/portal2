@@ -54,7 +54,7 @@
 				"path": "C:\\PortableApps\\jdk\\OpenJDK-23",
 			},
 		],
-		"java.configuration.updateBuildConfiguration": "interactive",
+		"xml.java.home": "C:\\PortableApps\\jdk\\OpenJDK-13",
 		"cSpell.words": [
 			"metio",
 			"OICD",
