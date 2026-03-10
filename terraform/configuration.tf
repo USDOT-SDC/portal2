@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.31"
+      version = "~> 6.35"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -11,7 +11,7 @@ terraform {
     }
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.6"
+      version = "~> 2.7"
     }
     template = {
       source  = "hashicorp/template"

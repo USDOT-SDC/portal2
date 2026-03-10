@@ -200,6 +200,34 @@ yes | rm -rf $TOMCAT_HOME/webapps/manager/
 yes | rm -rf $TOMCAT_HOME/webapps/ROOT/
 echo_to_log "Remove other Tomcat webapps: Done!"
 
+echo_to_log "Hardening Tomcat for production:..."
+# Disable the TCP shutdown listener — port 8005 is a remote attack surface
+sed -i 's/port="8005" shutdown="SHUTDOWN"/port="-1" shutdown="DISABLED"/' $TOMCAT_HOME/conf/server.xml
+
+# Remove Tomcat version string from the HTTP Server response header
+sed -i 's|<Connector port="8080"|<Connector port="8080" server=" "|' $TOMCAT_HOME/conf/server.xml
+
+# Strip Tomcat version and stack traces from all error pages (404, 500, etc.)
+sed -i 's|</Host>|  <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false"/>\n      </Host>|' $TOMCAT_HOME/conf/server.xml
+
+echo === === === === server.xml === === === ===
+cat $TOMCAT_HOME/conf/server.xml
+echo === === === === server.xml === === === ===
+echo_to_log "Hardening Tomcat for production: Done!"
+
+echo_to_log "Creating minimal ROOT webapp:..."
+# Redirect bare HTTP hits to Guacamole instead of serving a blank 404
+mkdir -p $TOMCAT_HOME/webapps/ROOT
+cat <<'EOF' >$TOMCAT_HOME/webapps/ROOT/index.html
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="refresh" content="0;url=/guacamole"></head>
+<body></body>
+</html>
+EOF
+chown -R tomcat:tomcat $TOMCAT_HOME/webapps/ROOT
+echo_to_log "Creating minimal ROOT webapp: Done!"
+
 echo_to_log "Starting tomcat and guacd:..."
 systemctl daemon-reload
 systemctl start tomcat
