@@ -6,13 +6,22 @@ goto normal_start
 
 :print_help
 echo Parameter one is environment (dev ^| prod)
-echo Parameter two sets an alternate AWS profile (e.g., scd-dev ^| scd-prod). If not provided, the AWS profile will default to the environment name.
-echo Example: tfinit dev scd-dev
-echo Example: tfinit prod scd-prod
-echo Example: tfinit dev default
+echo Parameter two sets an alternate AWS profile. If not provided, defaults to sdc-{env}.
+echo Example: 1-tfinit dev
+echo Example: 1-tfinit prod
+echo Example: 1-tfinit dev sdc-dev
+echo Example: 1-tfinit prod sdc-prod
 goto end
 
 :normal_start
+
+REM --- Validate environment ---
+if /I "%1"=="dev" goto env_ok
+if /I "%1"=="prod" goto env_ok
+echo ERROR: Invalid environment "%1". Must be dev or prod.
+exit /b 1
+
+:env_ok
 
 REM --- Check Python version ---
 for /f "tokens=2 delims= " %%A in ('python --version 2^>nul') do (
@@ -45,8 +54,7 @@ REM --- Continue script ---
 
 cls
 set env=%1
-if "%2"=="" set AWS_PROFILE=%env%
-if not "%2"=="" set AWS_PROFILE=%2
+if "%2"=="" (set AWS_PROFILE=sdc-%env%) else (set AWS_PROFILE=%2)
 echo Your active AWS profile is: %AWS_PROFILE%
 set bucket=%env%.sdc.dot.gov.platform.terraform
 if "%env%"=="dev" (set options=-upgrade -reconfigure) else (set options=-reconfigure)
@@ -64,7 +72,7 @@ goto end
 :execute
 pushd ..\terraform
 %command%
-popd ..\scripts
+popd
 goto end
 
 :no_execute
