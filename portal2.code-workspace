@@ -63,10 +63,12 @@
 		"cSpell.words": [
 			"guice",
 			"javax",
+			"jvmargs",
 			"metio",
 			"multibindings",
 			"nimbusds",
 			"OICD",
+			"PKGS",
 			"redeployments",
 			"rolename"
 		],
