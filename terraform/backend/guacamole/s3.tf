@@ -1,8 +1,7 @@
 locals {
   tomcat_version           = "9.0.115"
   guac_version             = "1.6.0"
-  guac_auth_header_version = "0.9.14"
-  mysql_connector_version  = "9.3.0"
+  mysql_connector_version  = "9.6.0"
 }
 data "template_file" "user_data" {
   template = file("${path.module}/ec2-user-data.sh")
@@ -22,8 +21,8 @@ data "template_file" "user_data" {
     guac_version             = local.guac_version
     guac_war_key             = aws_s3_object.files["guacamole-${local.guac_version}.war"].key
     guac_auth_jdbc_mysql_key = aws_s3_object.files["guacamole-auth-jdbc-mysql-${local.guac_version}.jar"].key
-    guac_auth_header_version = local.guac_auth_header_version
-    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-${local.guac_auth_header_version}.jar"].key
+    guac_auth_header_version = local.guac_version
+    guac_auth_header_key     = aws_s3_object.files["guacamole-auth-header-${local.guac_version}.jar"].key
     mysql_connector_version  = local.mysql_connector_version
     mysql_connector_key      = aws_s3_object.files["mysql-connector-j-${local.mysql_connector_version}.jar"].key
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket

@@ -34,7 +34,8 @@
 		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.startOnNewLine": true,
 		"autoDocstring.guessTypes": true,
-		"java.jdt.ls.java.home": "C:\\PortableApps\\jdk\\OpenJDK-13",
+		"java.jdt.ls.java.home": "C:\\PortableApps\\jdk\\OpenJDK-25",
+		"java.import.gradle.java.home": "C:\\PortableApps\\jdk\\OpenJDK-25",
 		"java.configuration.runtimes": [
 			{
 				"name": "JavaSE-1.8",
@@ -53,10 +54,18 @@
 				"name": "JavaSE-23",
 				"path": "C:\\PortableApps\\jdk\\OpenJDK-23",
 			},
+			{
+				"name": "JavaSE-25",
+				"path": "C:\\PortableApps\\jdk\\OpenJDK-25",
+			},
 		],
-		"xml.java.home": "C:\\PortableApps\\jdk\\OpenJDK-13",
+		"xml.java.home": "C:\\PortableApps\\jdk\\OpenJDK-25",
 		"cSpell.words": [
+			"guice",
+			"javax",
 			"metio",
+			"multibindings",
+			"nimbusds",
 			"OICD",
 			"redeployments",
 			"rolename"
@@ -64,7 +73,9 @@
 		"cSpell.ignorePaths": [
 			"*.json",
 			"*.code-workspace"
-		]
+		],
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"java.compile.nullAnalysis.mode": "automatic"
 	},
 	"extensions": {
 		"recommendations": [
