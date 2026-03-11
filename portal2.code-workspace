@@ -1,6 +1,7 @@
 {
 	"folders": [
 		{
+			"name": "Portal 2",
 			"path": "."
 		}
 	],
@@ -14,11 +15,14 @@
 		"editor.fontLigatures": true,
 		"editor.tabSize": 4,
 		"diffEditor.ignoreTrimWhitespace": false,
+		"python.defaultInterpreterPath": "C:\\Program Files\\Python314\\python.exe",
+		"python.analysis.typeCheckingMode": "standard",
+		"python.experiments.enabled": false,
 		"python.analysis.autoFormatStrings": true,
 		"python.analysis.completeFunctionParens": true,
 		"python.analysis.inlayHints.functionReturnTypes": true,
 		"python.analysis.inlayHints.variableTypes": true,
-		"python.languageServer": "Jedi",
+		"python.languageServer": "Pylance",
 		"[python]": {
 			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
@@ -50,7 +54,7 @@
 				"path": "C:\\PortableApps\\jdk\\OpenJDK-23",
 			},
 		],
-		"java.configuration.updateBuildConfiguration": "interactive",
+		"xml.java.home": "C:\\PortableApps\\jdk\\OpenJDK-13",
 		"cSpell.words": [
 			"metio",
 			"OICD",

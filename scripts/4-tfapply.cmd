@@ -1,41 +1,55 @@
 @echo off
-setlocal EnableDelayedExpansion
 if "%1"=="-help" goto print_help
 if "%1"=="--help" goto print_help
 goto normal_start
 
 :print_help
-echo You must run tfplan.cmd to create a Terraform execution plan before running tfapply.cmd
+echo You must run 3-tfplan.cmd to create a Terraform execution plan before running 4-tfapply.cmd
 goto end
 
 :normal_start
 cls
+
+REM --- Validate required session variables ---
+if "%env%"=="" (
+    echo ERROR: Environment not set. Run 1-tfinit.cmd first.
+    exit /b 1
+)
+if "%AWS_PROFILE%"=="" (
+    echo ERROR: AWS_PROFILE not set. Run 1-tfinit.cmd first.
+    exit /b 1
+)
+if "%plan_id%"=="" (
+    echo ERROR: No plan ID found. Run 3-tfplan.cmd first.
+    exit /b 1
+)
+
+REM --- Validate plan file exists ---
 set plan_file="tfplans/%config_version%_%env%_%plan_id%"
+set plan_path=..\terraform\tfplans\%config_version%_%env%_%plan_id%
+if not exist "%plan_path%" (
+    echo ERROR: Plan file not found: %plan_path%
+    echo Run 3-tfplan.cmd to generate a plan before applying.
+    exit /b 1
+)
+
 set command=terraform apply %plan_file%
 echo Your active AWS profile is: %AWS_PROFILE%
+echo Environment: %env%
+echo Plan file:   %plan_path%
 echo.
 echo %command%
 echo.
-echo Would you like to execute the above command to apply a Terraform execution plan?
-echo Press Y for Yes, or C to Cancel.
-CHOICE /N /C YC /T 15 /D C
-if "%ERRORLEVEL%"=="1" goto execute
-if "%ERRORLEVEL%"=="2" goto no_execute
-goto end
+echo WARNING: This will apply infrastructure changes to the %env% environment.
+echo.
+set /p confirm=Type YES to confirm, or anything else to cancel:
+if /I "%confirm%"=="yes" goto execute
+goto no_execute
 
 :execute
 pushd ..\terraform
 %command%
-popd ..\scripts
-@REM for /F "tokens=*" %%t in ('git tag --points-at HEAD') do (set current_tag=%%t)
-@REM for /F %%b in ('git branch --show-current') do (set branch=%%b)
-@REM if %config_version% NEQ %current_tag% (
-@REM     git tag -f %config_version%
-@REM     git push --set-upstream origin %branch%
-@REM     git push -u origin
-@REM     git push --delete origin %config_version%
-@REM     git push -f origin %config_version%
-@REM )
+popd
 goto end
 
 :no_execute
