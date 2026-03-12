@@ -37,14 +37,35 @@ aws ec2 create-tags --resources $INSTANCE_ID --tags Key=Name,Value=guacamole-$ip
 echo_to_log "Setting hostname to guacamole-$ip3-$ip4.${environment}.sdc.dot.gov: Done!"
 
 # === Installs ===
+# PackageKit auto-starts at boot and holds its own DNF lock independently of the RPM lock.
+# Stop it first, then wait for any remaining dnf process and the RPM lock to clear.
+echo_to_log "Waiting for package manager lock:..."
+systemctl stop packagekit 2>/dev/null || true
+systemctl disable packagekit 2>/dev/null || true
+while pgrep -x dnf > /dev/null 2>&1; do
+    echo "dnf process running, waiting 5s..."
+    sleep 5
+done
+while ! flock -n /var/lib/rpm/.rpm.lock true 2>/dev/null; do
+    echo "RPM lock held, waiting 5s..."
+    sleep 5
+done
+echo_to_log "Waiting for package manager lock: Done!"
+
 echo_to_log "Installing EPEL:..."
 # disable the subscription manager that we don't have a subscription for
-sed -i '/enabled=/c\enabled=0' /etc/yum/pluginconf.d/subscription-manager.conf
+sed -i '/enabled=/c\enabled=0' /etc/dnf/plugins/subscription-manager.conf
 
-rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-dnf config-manager --set-enabled codeready-builder-for-rhel-8-rhui-rpms
-dnf install epel-release -y
+aws s3 cp s3://${terraform_bucket}/${epel_gpg_key} /tmp/RPM-GPG-KEY-EPEL
+rpm --import /tmp/RPM-GPG-KEY-EPEL
+rm -f /tmp/RPM-GPG-KEY-EPEL
+aws s3 cp s3://${terraform_bucket}/${epel_rpm_key} /tmp/epel-release.rpm
+dnf install -y /tmp/epel-release.rpm
+rm -f /tmp/epel-release.rpm
+dnf config-manager --set-enabled codeready-builder-for-rhel-9-rhui-rpms
+# Flush stale DNF metadata and cache now that all repos are registered.
+# Prevents [Errno 2] cache-path misses on subsequent installs.
+dnf clean all
 echo_to_log "Installing EPEL: Done!"
 export JAVA_HOME=/usr/lib/jvm/java
 export TOMCAT_HOME=/opt/tomcat
@@ -53,7 +74,7 @@ export GUACAMOLE_HOME=/opt/guacamole
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-21-openjdk-devel >/dev/null
+dnf install -y java-25-openjdk-devel >/dev/null
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
@@ -228,6 +249,26 @@ EOF
 chown -R tomcat:tomcat $TOMCAT_HOME/webapps/ROOT
 echo_to_log "Creating minimal ROOT webapp: Done!"
 
+echo_to_log "Configuring Firewall:..."
+systemctl enable firewalld
+systemctl start firewalld
+# RHEL 9 on EC2 may bind eth0 to the 'drop' zone (FMS/Bigfix managed).
+# Explicitly move eth0 to 'public' and set public as the default zone so
+# subsequent --zone=public rules actually apply to inbound traffic.
+firewall-cmd --set-default-zone=public
+firewall-cmd --zone=public --change-interface=eth0
+firewall-cmd --permanent --zone=public --add-port=8080/tcp
+firewall-cmd --permanent --zone=public --add-port=443/tcp
+firewall-cmd --permanent --zone=public --add-port=4822/tcp
+firewall-cmd --permanent --zone=public --add-port=52311/tcp
+firewall-cmd --permanent --zone=public --add-port=52311/udp
+firewall-cmd --reload
+echo === === === === firewalld config === === === ===
+firewall-cmd --list-all
+firewall-cmd --list-all --zone=drop
+echo === === === === firewalld config === === === ===
+echo_to_log "Configuring Firewall: Done!"
+
 echo_to_log "Starting tomcat and guacd:..."
 systemctl daemon-reload
 systemctl start tomcat
@@ -275,30 +316,19 @@ crontab current_crontab
 rm current_crontab
 echo_to_log "Setting up the disk monitor alert: Done!"
 
-# === Configure the Firewall ===
-echo_to_log "Configuring Firewall:..."
-systemctl stop firewalld
-firewall-offline-cmd --zone=public --add-port=8080/tcp
-firewall-offline-cmd --zone=public --add-port=443/tcp
-firewall-offline-cmd --zone=public --add-port=4822/tcp
-firewall-offline-cmd --zone=public --add-port=52311/tcp
-firewall-offline-cmd --zone=public --add-port=52311/udp
-sleep 2 # Add a 2-second delay
-systemctl start firewalld
-firewall-cmd --reload
-echo === === === === firewalld config === === === ===
-firewall-cmd --list-all
-echo === === === === firewalld config === === === ===
-echo_to_log "Configuring Firewall: Done!"
-
 # === Run a Full System Update ===
 echo_to_log "Running System update:..."
 dnf update -y
 echo_to_log "Running System update: Done!"
 
-# ensure that we can still use ssh keys to connect w/o a password
-echo_to_log "Delete password for ec2-user:..."
-passwd -delete ec2-user
-echo_to_log "Delete password for ec2-user: Done!"
-
-echo_to_log "User Data Script Complete!"
+# Reboot if a new kernel was installed
+RUNNING_KERNEL=$(uname -r)
+LATEST_KERNEL=$(rpm -q --last kernel | head -1 | awk '{print $1}' | sed 's/kernel-//')
+if [ "$RUNNING_KERNEL" != "$LATEST_KERNEL" ]; then
+    echo_to_log "Kernel updated ($RUNNING_KERNEL → $LATEST_KERNEL) — rebooting to apply..."
+    echo_to_log "User Data Script Complete!"
+    reboot
+else
+    echo_to_log "No kernel update — reboot not required."
+    echo_to_log "User Data Script Complete!"
+fi
