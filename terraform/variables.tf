@@ -22,9 +22,9 @@ locals {
     time = {
       rotating = {
         hours = {
-          8  = time_rotating._8hours.id
-          12 = time_rotating._12hours.id
-          24 = time_rotating._24hours.id
+          # 8  = time_rotating._8hours.id
+          # 12 = time_rotating._12hours.id
+          # 24 = time_rotating._24hours.id
         }
         days = {
           7  = time_rotating._7days.id
