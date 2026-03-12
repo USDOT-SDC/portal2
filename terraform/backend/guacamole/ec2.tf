@@ -216,7 +216,7 @@ resource "aws_vpc_security_group_egress_rule" "guacamole_instance_allow_all" {
 }
 
 resource "aws_instance" "guacamole" {
-  ami                  = data.aws_ssm_parameter.dot_rhel8_ami.value
+  ami                  = data.aws_ssm_parameter.dot_rhel9_ami.value
   availability_zone    = data.aws_subnet.four.availability_zone
   iam_instance_profile = aws_iam_instance_profile.ec2.name
   # iam_instance_profile = "SDC-Power-User-Role"

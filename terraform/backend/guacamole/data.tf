@@ -1,10 +1,10 @@
-data "aws_ssm_parameter" "dot_rhel8_ami" {
-  name = "/dot/latest/prod/rhel8-linux-ami"
-}
-
-# data "aws_ssm_parameter" "dot_rhel9_ami" {
-#   name = "/dot/latest/prod/rhel9-linux-ami"
+# data "aws_ssm_parameter" "dot_rhel8_ami" {
+#   name = "/dot/latest/prod/rhel8-linux-ami"
 # }
+
+data "aws_ssm_parameter" "dot_rhel9_ami" {
+  name = "/dot/latest/prod/rhel9-linux-ami"
+}
 
 data "aws_subnet" "four" {
   id = var.common.vpc.subnet_four.id

@@ -12,3 +12,4 @@
 *.war binary
 *.bin binary
 *.lock binary
+*.rpm binary

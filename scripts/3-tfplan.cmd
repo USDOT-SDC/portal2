@@ -43,9 +43,12 @@ echo Plan file:      %plan_file%
 echo.
 echo %command%
 echo.
-set /p confirm=Press Y to execute, or anything else to cancel:
-if /I "%confirm%"=="y" goto execute
-goto no_execute
+echo Would you like to execute the above command?
+echo Press Y to execute, or C to cancel.
+CHOICE /N /C YC /T 15 /D C
+if "%ERRORLEVEL%"=="1" goto execute
+if "%ERRORLEVEL%"=="2" goto no_execute
+goto end
 
 :execute
 pushd ..\terraform
