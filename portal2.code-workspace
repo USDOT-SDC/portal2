@@ -67,7 +67,9 @@
 			"metio",
 			"multibindings",
 			"nimbusds",
+			"noarch",
 			"OICD",
+			"packagekit",
 			"PKGS",
 			"redeployments",
 			"rolename"
