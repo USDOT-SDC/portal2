@@ -24,12 +24,9 @@
 		"python.analysis.inlayHints.variableTypes": true,
 		"python.languageServer": "Pylance",
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.black-formatter"
+			"editor.defaultFormatter": "charliermarsh.ruff"
 		},
-		"black-formatter.args": [
-			"--line-length",
-			"139"
-		],
+		"ruff.lineLength": 139,
 		"autoDocstring.docstringFormat": "google",
 		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.startOnNewLine": true,
