@@ -1,10 +1,10 @@
 locals {
-  tomcat_version          = "9.0.115"
+  tomcat_version          = "9.0.118"
   guac_version            = "1.6.0"
   mysql_connector_version = "9.6.0"
 
   # Bump epel_fetch_version to force Terraform to re-fetch EPEL files from Fedora on next apply.
-  epel_fetch_version    = "2026-03-11"
+  epel_fetch_version    = "2026-05-28"
   epel_rpm_filename     = "epel-release-latest-9.noarch.rpm"
   epel_gpg_filename     = "RPM-GPG-KEY-EPEL-9"
 }
