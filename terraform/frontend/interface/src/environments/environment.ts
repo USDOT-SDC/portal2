@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
   stage: 'dev',
-  build: '2.1.1',
-  buildDateTime: '2026-05-08 13:00 EST',
+  build: '2.1.2',
+  buildDateTime: '2026-05-28 18:00 EST',
   resource_urls: {
     portal: 'portal.sdc-dev.dot.gov',
     portal_api: 'portal-api.sdc-dev.dot.gov/v1',
