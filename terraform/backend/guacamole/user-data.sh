@@ -62,7 +62,8 @@ export GUACAMOLE_HOME=/opt/guacamole
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-21-openjdk-devel
+# java-25-openjdk-devel is blocked by the DOT gold AMI's repo policy.
+# It is bundled with the guacd RPMs in S3 and installed in the guacd step below.
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
