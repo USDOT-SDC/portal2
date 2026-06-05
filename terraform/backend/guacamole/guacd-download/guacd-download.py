@@ -260,9 +260,9 @@ def build_user_data(bucket: str, prefix: str) -> str:
         echo "=== Installing EPEL ==="
         dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
-        echo "=== Downloading guacd RPMs and all dependencies ==="
+        echo "=== Downloading guacd and Java 25 RPMs and all dependencies ==="
         mkdir -p /tmp/guacd-rpms
-        dnf download --resolve --destdir /tmp/guacd-rpms guacd libguac-client-rdp xfreerdp
+        dnf download --resolve --destdir /tmp/guacd-rpms guacd libguac-client-rdp xfreerdp java-25-openjdk-devel
 
         echo "=== Uploading RPMs to S3 ==="
         for f in /tmp/guacd-rpms/*.rpm; do
