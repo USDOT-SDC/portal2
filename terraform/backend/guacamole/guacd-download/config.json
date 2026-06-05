@@ -1,0 +1,12 @@
+{
+    "aws_profile": "sdc-dev",
+    "region": "us-east-1",
+    "guac_version": "1.6.0",
+    "terraform_bucket": "dev.sdc.dot.gov.platform.terraform",
+    "s3_tmp_prefix": "portal2/terraform/be/guacamole/tmp/guacd-rpms/",
+    "local_files_dir": "../files/guacd-rpms",
+    "rhel9_ami_owner": "309956199498",
+    "instance_type": "t3.medium",
+    "subnet_id": "subnet-091c9a1c2f73439c4",
+    "key_name": "ost-sdc-dev"
+}

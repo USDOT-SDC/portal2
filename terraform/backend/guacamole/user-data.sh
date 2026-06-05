@@ -52,21 +52,9 @@ while ! flock -n /var/lib/rpm/.rpm.lock true 2>/dev/null; do
 done
 echo_to_log "Waiting for package manager lock: Done!"
 
-echo_to_log "Installing EPEL:..."
-# disable the subscription manager that we don't have a subscription for
-sed -i '/enabled=/c\enabled=0' /etc/dnf/plugins/subscription-manager.conf
-
-aws s3 cp s3://${terraform_bucket}/${epel_gpg_key} /tmp/RPM-GPG-KEY-EPEL
-rpm --import /tmp/RPM-GPG-KEY-EPEL
-rm -f /tmp/RPM-GPG-KEY-EPEL
-aws s3 cp s3://${terraform_bucket}/${epel_rpm_key} /tmp/epel-release.rpm
-dnf install -y /tmp/epel-release.rpm
-rm -f /tmp/epel-release.rpm
+echo_to_log "Enabling CodeReady Builder:..."
 dnf config-manager --set-enabled codeready-builder-for-rhel-9-rhui-rpms
-# Flush stale DNF metadata and cache now that all repos are registered.
-# Prevents [Errno 2] cache-path misses on subsequent installs.
-dnf clean all
-echo_to_log "Installing EPEL: Done!"
+echo_to_log "Enabling CodeReady Builder: Done!"
 export JAVA_HOME=/usr/lib/jvm/java
 export TOMCAT_HOME=/opt/tomcat
 export GUACAMOLE_HOME=/opt/guacamole
@@ -74,7 +62,7 @@ export GUACAMOLE_HOME=/opt/guacamole
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-25-openjdk-devel >/dev/null
+dnf install -y java-21-openjdk-devel
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
@@ -168,10 +156,10 @@ echo === === === === guacamole.properties === === === ===
 echo_to_log "Creating Guacamole Client property file: Done!"
 
 echo_to_log "Guacamole Server and prerequisites:..."
-dnf install guacd-${guac_version} -y
-dnf install libguac-client-rdp -y
-# dnf install libguac-client-vnc -y
-dnf install xfreerdp -y
+mkdir -p /tmp/guacd-rpms
+aws s3 cp s3://${terraform_bucket}/${guacd_rpms_prefix} /tmp/guacd-rpms/ --recursive
+dnf install -y /tmp/guacd-rpms/*.rpm
+rm -rf /tmp/guacd-rpms
 echo_to_log "Guacamole Server and prerequisites: Done!"
 
 echo_to_log "Installing Guacamole extensions and MySQL Connector:..."
