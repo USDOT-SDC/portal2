@@ -1,0 +1,42 @@
+{
+    "Shyla": {
+        "email": "shyla.morisetty@dot.gov",
+        "github-handle": "ShylaMorisetty",
+        "reviewer": true
+    },
+    "Jeff": {
+        "email": "jeff.ussing.ctr@dot.gov",
+        "github-handle": "JeffUssing",
+        "reviewer": true
+    },
+    "Brandon": {
+        "email": "brandon.fitzpatrick.ctr@dot.gov",
+        "github-handle": "bfitz717",
+        "reviewer": true
+    },
+    "Cuong": {
+        "email": "cuong.vo.ctr@dot.gov",
+        "github-handle": "vocuong84",
+        "reviewer": false
+    },
+    "Matt": {
+        "email": "matthew.lee.ctr@dot.gov",
+        "github-handle": "MMattLeeE",
+        "reviewer": false
+    },
+    "Christine": {
+        "email": "c.m.fitzgerald.ctr@dot.gov",
+        "github-handle": "cfitzGw21",
+        "reviewer": false
+    },
+    "Steven": {
+        "email": "steven.vanhulle.ctr@dot.gov",
+        "github-handle": "stooshiev",
+        "reviewer": false
+    },
+    "Cam": {
+        "email": "cam.dang.ctr@dot.gov",
+        "github-handle": "camdang",
+        "reviewer": false
+    }
+}
