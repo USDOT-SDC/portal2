@@ -62,7 +62,7 @@ export GUACAMOLE_HOME=/opt/guacamole
 
 # === Install Tomcat and Prerequisites ===
 echo_to_log "Installing JDK:..."
-dnf install -y java-25-openjdk-devel >/dev/null
+dnf install -y java-21-openjdk-devel
 echo_to_log "Installing JDK: Done!"
 
 echo_to_log "Installing Tomcat:..."
