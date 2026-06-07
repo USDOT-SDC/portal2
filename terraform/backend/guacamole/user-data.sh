@@ -4,7 +4,7 @@
 exec > >(tee /tmp/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
 # AWS CLI is installed by the DOT gold AMI but not in PATH for user-data
-export PATH=/usr/local/bin:/usr/local/aws-cli/v2/current/bin:$PATH
+export PATH=/usr/local/aws-cli/v2/current/bin:/usr/local/bin:$PATH
 
 # Exactly what version of code is being run
 echo "config_version: ${config_version}"
