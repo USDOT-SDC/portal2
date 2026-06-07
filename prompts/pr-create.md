@@ -49,14 +49,14 @@ Note any version changes or warnings (unchanged version, version going backwards
 
 Extract all ticket IDs from the source branch name and commit messages
 (pattern: `[A-Z]+-\d+`, e.g. `DESK-704`, `SDC-1234`). For each unique ticket ID,
-fetch the issue using the MCP Atlassian tool (`mcp__claude_ai_Atlassian__getJiraIssue`).
+fetch the issue using the MCP Atlassian tool (`mcp__atlassian__getJiraIssue`).
 
-First call `mcp__claude_ai_Atlassian__getAccessibleAtlassianResources` once to get the
-`cloudId` (e.g. `ef1a4ac5-ba6e-4729-917b-e3187dc94ac2`), then call
-`mcp__claude_ai_Atlassian__getJiraIssue` for each ticket:
+You can pass the site hostname directly as `cloudId` (e.g. `securedatacommons.atlassian.net`)
+without needing to call `getAccessibleAtlassianResources` first. Call
+`mcp__atlassian__getJiraIssue` for each ticket:
 
 ```
-getJiraIssue(cloudId="<id>", issueIdOrKey="DESK-796", responseContentFormat="markdown")
+getJiraIssue(cloudId="securedatacommons.atlassian.net", issueIdOrKey="{TICKET_ID}", responseContentFormat="markdown")
 ```
 
 For each ticket retrieved, note: summary, status, issue type, parent/epic, and any
