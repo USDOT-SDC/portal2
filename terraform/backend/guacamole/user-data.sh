@@ -162,7 +162,7 @@ echo_to_log "Creating Guacamole Client property file: Done!"
 echo_to_log "Guacamole Server and prerequisites:..."
 mkdir -p /tmp/guacd-rpms
 aws s3 cp s3://${terraform_bucket}/${guacd_rpms_prefix} /tmp/guacd-rpms/ --recursive
-dnf install -y /tmp/guacd-rpms/*.rpm
+dnf install -y --nogpgcheck /tmp/guacd-rpms/*.rpm
 rm -rf /tmp/guacd-rpms
 echo_to_log "Guacamole Server and prerequisites: Done!"
 
