@@ -2,6 +2,7 @@ locals {
   tomcat_version          = "9.0.118"
   guac_version            = "1.6.0"
   mysql_connector_version = "9.6.0"
+  guacd_log_level         = var.common.environment == "prod" ? "info" : "debug"
 }
 
 data "template_file" "user_data" {
@@ -30,6 +31,7 @@ data "template_file" "user_data" {
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
     config_version           = var.common.config_version
     guacd_rpms_prefix        = "portal2/terraform/be/guacamole/files/guacd-rpms/"
+    guacd_log_level          = local.guacd_log_level
   }
 }
 

@@ -187,7 +187,7 @@ bind_host = localhost
 bind_port = 4822
 
 [daemon]
-log_level = debug
+log_level = ${guacd_log_level}
 EOF
 echo === === === === guacd.conf === === === ===
 cat $GUACAMOLE_HOME/guacd.conf
