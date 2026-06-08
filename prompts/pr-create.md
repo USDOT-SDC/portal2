@@ -69,7 +69,7 @@ If no tickets are found, proceed without Jira context and note it in the summary
 Using the diff data from Step 3 and the Jira context from Step 4, write a PR summary
 following the structure in `pull_request_template.md`. Guidelines:
 
-- Title format: `{SOURCE_BRANCH}->{TARGET_BRANCH}: {Description} ({parent} {child})` — use ticket IDs from Step 4; if none found, derive from branch names or commit messages; omit ticket suffix if none are identifiable
+- Title format: `{SOURCE_BRANCH}->{TARGET_BRANCH}: {Description} ({parent(s)} {child(ren)})` — use ticket IDs from Step 4; if none found, derive from branch names or commit messages; omit ticket suffix if none are identifiable
 - write a **concise** summary
 - Do not wrap prose lines — let each paragraph/bullet run as one continuous line
 - Flag version warnings prominently in the summary header

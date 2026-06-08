@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { map, Subscription, take } from 'rxjs';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { ApiService } from 'src/app/services/api.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 import { Router, NavigationStart } from '@angular/router';
 
 declare var bootstrap: any;

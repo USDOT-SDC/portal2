@@ -1,7 +1,7 @@
 import { Amplify } from 'aws-amplify';
 import { fetchAuthSession, CredentialsAndIdentityIdProvider, CredentialsAndIdentityId, GetCredentialsOptions, AuthTokens, } from 'aws-amplify/auth';
 import { CognitoIdentity } from '@aws-sdk/client-cognito-identity';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 const COGNITO_IDENTITY = new CognitoIdentity({ region: '<region-from-config>', });
 
