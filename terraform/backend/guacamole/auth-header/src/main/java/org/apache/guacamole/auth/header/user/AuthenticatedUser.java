@@ -1,76 +1,36 @@
 package org.apache.guacamole.auth.header.user;
 
+// GENERIC BOILERPLATE — no SDC-specific logic here.
+// Minimal AuthenticatedUser implementation: holds the username (lowercased)
+// and the original Credentials object. Constructed by Guice and initialized
+// by AuthenticationProviderService after a successful JWT validation.
+
 import com.google.inject.Inject;
 import org.apache.guacamole.net.auth.AbstractAuthenticatedUser;
 import org.apache.guacamole.net.auth.AuthenticationProvider;
 import org.apache.guacamole.net.auth.Credentials;
 
+public class AuthenticatedUser extends AbstractAuthenticatedUser {
 
+    @Inject
+    private AuthenticationProvider authProvider;
 
+    private Credentials credentials;
 
+    // Called by AuthenticationProviderService once the JWT is validated and
+    // the username has been extracted from the cognito:username claim.
+    public void init(String username, Credentials credentials) {
+        this.credentials = credentials;
+        setIdentifier(username.toLowerCase());
+    }
 
+    @Override
+    public AuthenticationProvider getAuthenticationProvider() {
+        return authProvider;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-public class AuthenticatedUser
-  extends AbstractAuthenticatedUser
-{
-  @Inject
-  private AuthenticationProvider authProvider;
-  private Credentials credentials;
-  
-  public void init(String username, Credentials credentials) {
-/* 57 */     this.credentials = credentials;
-/* 58 */     setIdentifier(username.toLowerCase());
-  }
-
-  
-  public AuthenticationProvider getAuthenticationProvider() {
-/* 63 */     return this.authProvider;
-  }
-
-  
-  public Credentials getCredentials() {
-/* 68 */     return this.credentials;
-  }
+    @Override
+    public Credentials getCredentials() {
+        return credentials;
+    }
 }
-
-
-/* Location:              C:\Users\Scott.Shugh\Documents\DoT\guacamole\guacamole-auth-header-0.9.14.jar!\org\apache\guacamole\auth\heade\\user\AuthenticatedUser.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       1.1.3
- */

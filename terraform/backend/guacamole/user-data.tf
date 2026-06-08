@@ -1,26 +1,8 @@
 locals {
-  tomcat_version          = "9.0.115"
+  tomcat_version          = "9.0.118"
   guac_version            = "1.6.0"
   mysql_connector_version = "9.6.0"
-
-  # Bump epel_fetch_version to force Terraform to re-fetch EPEL files from Fedora on next apply.
-  epel_fetch_version    = "2026-03-11"
-  epel_rpm_filename     = "epel-release-latest-9.noarch.rpm"
-  epel_gpg_filename     = "RPM-GPG-KEY-EPEL-9"
-}
-
-# Fetch EPEL RPM and GPG key from Fedora and upload directly to S3.
-# Re-runs only when epel_fetch_version is bumped.
-# Requires AWS credentials in the environment (AWS_PROFILE or equivalent).
-resource "terraform_data" "epel_files" {
-  triggers_replace = [local.epel_fetch_version]
-
-  provisioner "local-exec" {
-    command = join(" && ", [
-      "curl -fsSL https://dl.fedoraproject.org/pub/epel/${local.epel_rpm_filename} -o ${path.module}/files/${local.epel_rpm_filename}",
-      "curl -fsSL http://download.fedoraproject.org/pub/epel/${local.epel_gpg_filename} -o ${path.module}/files/${local.epel_gpg_filename}",
-    ])
-  }
+  guacd_log_level         = var.common.environment == "prod" ? "info" : "debug"
 }
 
 data "template_file" "user_data" {
@@ -48,10 +30,9 @@ data "template_file" "user_data" {
     disk_alert_script_bucket = var.common.disk_alert_linux_script.bucket
     disk_alert_script_key    = var.common.disk_alert_linux_script.key
     config_version           = var.common.config_version
-    epel_rpm_key             = aws_s3_object.files[local.epel_rpm_filename].key
-    epel_gpg_key             = aws_s3_object.files[local.epel_gpg_filename].key
+    guacd_rpms_prefix        = "portal2/terraform/be/guacamole/files/guacd-rpms/"
+    guacd_log_level          = local.guacd_log_level
   }
-  depends_on = [ terraform_data.epel_files ]
 }
 
 resource "aws_s3_object" "user_data" {
