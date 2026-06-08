@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 const AuthConfig = environment.auth_config;
 

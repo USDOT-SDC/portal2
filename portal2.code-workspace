@@ -66,10 +66,13 @@
 			"nimbusds",
 			"noarch",
 			"OICD",
+			"oneline",
 			"packagekit",
 			"PKGS",
 			"redeployments",
-			"rolename"
+			"rolename",
+			"securedatacommons",
+			"shortstat"
 		],
 		"cSpell.ignorePaths": [
 			"*.json",

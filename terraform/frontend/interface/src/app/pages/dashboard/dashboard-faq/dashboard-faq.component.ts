@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { AuthService } from 'src/app/services/auth.service';
+import { ModalComponent } from '../../../components/modal/modal.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-dashboard-faq',
