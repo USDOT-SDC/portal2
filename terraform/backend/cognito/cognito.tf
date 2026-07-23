@@ -99,8 +99,6 @@ resource "aws_cognito_user_pool_client" "this" {
     "http://localhost:4200/login/redirect",
     "http://localhost:5000",
     "http://localhost:5000/authorize",
-    "https://sub1.${var.fqdn}/dashboard",
-    "https://sub1.${var.fqdn}/login/redirect",
     "https://portal.${var.fqdn}/dashboard",
     "https://portal.${var.fqdn}/login/redirect",
     "https://guacamole.${var.fqdn}/guacamole",
@@ -128,7 +126,6 @@ resource "aws_cognito_user_pool_client" "this" {
   logout_urls = [
     "http://localhost:4200/index.html",
     "http://localhost:5000/index.html",
-    "https://sub1.${var.fqdn}/index.html",
     "https://portal.${var.fqdn}/index.html",
     "https://guacamole.${var.fqdn}/guacamole"
   ]

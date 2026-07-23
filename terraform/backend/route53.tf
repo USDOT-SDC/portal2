@@ -54,25 +54,3 @@ resource "aws_route53_record" "sftp" {
   ttl     = 300
   records = [local.transfer_server_url]
 }
-
-# ==== Test Subdomains ====
-# === Sub1 (Test Portal) Canonical Name Record ===
-resource "aws_route53_record" "sub1" {
-  name    = "sub1.${var.fqdn}"
-  type    = "CNAME"
-  zone_id = data.aws_route53_zone.public.zone_id
-  ttl     = 300
-  records = [aws_cloudfront_distribution.portal.domain_name]
-}
-
-# === Sub2 (Test Portal API) Address Record ===
-resource "aws_route53_record" "sub2" {
-  name    = "sub2.${var.fqdn}"
-  type    = "A"
-  zone_id = data.aws_route53_zone.public.zone_id
-  alias {
-    evaluate_target_health = true
-    name                   = aws_api_gateway_domain_name.sub2.cloudfront_domain_name
-    zone_id                = aws_api_gateway_domain_name.sub2.cloudfront_zone_id
-  }
-}
