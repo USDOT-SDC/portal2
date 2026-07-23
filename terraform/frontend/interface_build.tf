@@ -22,8 +22,6 @@ data "template_file" "environment_ts" {
     portal_api_url          = var.backend.resource_urls.portal_api
     guacamole_url           = var.backend.resource_urls.guacamole
     sftp_url                = var.backend.resource_urls.sftp
-    sub1_url                = var.backend.resource_urls.sub1
-    sub2_url                = var.backend.resource_urls.sub2
     user_pool_id            = var.backend.cognito.user_pool.id
     user_pool_domain        = var.backend.cognito.user_pool.domain
     user_pool_client_id     = var.backend.cognito.user_pool.client.id

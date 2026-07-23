@@ -7,7 +7,6 @@ resource "aws_cloudfront_distribution" "portal" {
   comment = "Portal 2"
   aliases = [
     "portal.${var.fqdn}",
-    "sub1.${var.fqdn}",
   ]
 
   # AWS Managed Caching Policy (CachingDisabled)
