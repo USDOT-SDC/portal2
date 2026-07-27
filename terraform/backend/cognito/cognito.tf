@@ -136,12 +136,6 @@ resource "aws_cognito_user_pool_client" "this" {
   depends_on                   = [aws_cognito_identity_provider.dot_piv]
 }
 
-locals {
-  client_id_dev  = "8bb2d24b-2e18-451a-8a5a-34f0ef3caaba"
-  client_id_prod = "9cfb5e72-7b26-4b73-a19d-d592c95acd72"
-  client_id      = var.common.environment == "dev" ? local.client_id_dev : local.client_id_prod
-}
-
 resource "aws_cognito_identity_provider" "dot_piv" {
   user_pool_id  = aws_cognito_user_pool.this.id
   provider_name = "DOT-PIV"
@@ -158,8 +152,8 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   # idp_identifiers = []
   provider_details = {
     # https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0/.well-known/openid-configuration
-    client_id                     = local.client_id
-    client_secret                 = var.common.client_secret
+    client_id                     = local.dot_piv_client_id
+    client_secret                 = local.dot_piv_client_secret
     authorize_scopes              = "email openid profile offline_access"
     attributes_request_method     = "GET"
     attributes_url_add_attributes = false
