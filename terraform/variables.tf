@@ -15,8 +15,6 @@ locals {
     disk_alert_linux_script     = data.terraform_remote_state.infrastructure.outputs.disk_alert_linux_script
     certificates                = data.terraform_remote_state.infrastructure.outputs.certificates
     app_slug                    = "portal2"
-    secrets_path                = "../../portal2-secrets"
-    client_secret               = file("../../portal2-secrets/backend/cognito/client_secret_${nonsensitive(data.aws_ssm_parameter.environment.value)}.txt")
     config_version              = var.config_version
     git_commit_head_sha1        = data.git_commit.head.sha1
     time = {
