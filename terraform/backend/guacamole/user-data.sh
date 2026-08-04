@@ -285,6 +285,11 @@ upgrade_type = security
 download_updates = yes
 apply_updates = yes
 network_online = 60
+
+# Never let automatic security patching touch guacd/freerdp - they are installed as a
+# matched set from guacd-download and an ABI mismatch between them segfaults guacd.
+[base]
+exclude=freerdp*,guacd*,libguac*
 EOF
 echo === === === === automatic.conf === === === ===
 cat /etc/dnf/automatic.conf
@@ -309,8 +314,10 @@ rm current_crontab
 echo_to_log "Setting up the disk monitor alert: Done!"
 
 # === Run a Full System Update ===
+# Exclude freerdp/guacd/libguac - they were just installed above as a matched set from
+# guacd-download. Letting this update touch them breaks the ABI match and segfaults guacd.
 echo_to_log "Running System update:..."
-dnf update -y
+dnf update -y --exclude=freerdp*,guacd*,libguac*
 echo_to_log "Running System update: Done!"
 
 # Reboot if a new kernel was installed
