@@ -1,5 +1,5 @@
 locals {
-  tomcat_version          = "9.0.118"
+  tomcat_version          = "9.0.120"
   guac_version            = "1.6.0"
   mysql_connector_version = "9.6.0"
   guacd_log_level         = var.common.environment == "prod" ? "info" : "debug"
