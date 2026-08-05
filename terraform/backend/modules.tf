@@ -1,7 +1,7 @@
 # API Resources
 locals {
+  # update to aws_route53_record.portal.name when ready to cut over
   allow_origin_url = "*"
-  # allow_origin_url = "https://${aws_route53_record.sub1.name}" # update to aws_route53_record.portal.name when ready to cut over
   api_resources = {
     data_dictionary = {
       http_method = "GET"
@@ -304,7 +304,5 @@ module "guacamole" {
   certificates = var.certificates
   cognito      = module.cognito.cognito
   fqdn         = var.fqdn
-  # TODO switch these for finial deployment
-  # portal_url   = aws_route53_record.portal.name
-  portal_url = aws_route53_record.sub1.name
+  portal_url   = aws_route53_record.portal.name
 }

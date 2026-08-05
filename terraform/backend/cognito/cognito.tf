@@ -99,8 +99,6 @@ resource "aws_cognito_user_pool_client" "this" {
     "http://localhost:4200/login/redirect",
     "http://localhost:5000",
     "http://localhost:5000/authorize",
-    "https://sub1.${var.fqdn}/dashboard",
-    "https://sub1.${var.fqdn}/login/redirect",
     "https://portal.${var.fqdn}/dashboard",
     "https://portal.${var.fqdn}/login/redirect",
     "https://guacamole.${var.fqdn}/guacamole",
@@ -128,7 +126,6 @@ resource "aws_cognito_user_pool_client" "this" {
   logout_urls = [
     "http://localhost:4200/index.html",
     "http://localhost:5000/index.html",
-    "https://sub1.${var.fqdn}/index.html",
     "https://portal.${var.fqdn}/index.html",
     "https://guacamole.${var.fqdn}/guacamole"
   ]
@@ -137,12 +134,6 @@ resource "aws_cognito_user_pool_client" "this" {
 
   supported_identity_providers = ["COGNITO", "DOT-PIV"]
   depends_on                   = [aws_cognito_identity_provider.dot_piv]
-}
-
-locals {
-  client_id_dev  = "8bb2d24b-2e18-451a-8a5a-34f0ef3caaba"
-  client_id_prod = "9cfb5e72-7b26-4b73-a19d-d592c95acd72"
-  client_id      = var.common.environment == "dev" ? local.client_id_dev : local.client_id_prod
 }
 
 resource "aws_cognito_identity_provider" "dot_piv" {
@@ -161,8 +152,8 @@ resource "aws_cognito_identity_provider" "dot_piv" {
   # idp_identifiers = []
   provider_details = {
     # https://login.microsoftonline.com/c4cd245b-44f0-4395-a1aa-3848d258f78b/v2.0/.well-known/openid-configuration
-    client_id                     = local.client_id
-    client_secret                 = var.common.client_secret
+    client_id                     = local.dot_piv_client_id
+    client_secret                 = local.dot_piv_client_secret
     authorize_scopes              = "email openid profile offline_access"
     attributes_request_method     = "GET"
     attributes_url_add_attributes = false
