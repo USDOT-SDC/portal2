@@ -396,18 +396,35 @@ def download_rpms(s3: Any, bucket: str, prefix: str, local_dir: Path) -> list[st
         List of downloaded filenames.
     """
     local_dir.mkdir(parents=True, exist_ok=True)
+
     paginator = s3.get_paginator("list_objects_v2")
-    downloaded: list[str] = []
+    remote: dict[str, tuple[str, int]] = {}
     for page in paginator.paginate(Bucket=bucket, Prefix=prefix):
         for obj in page.get("Contents", []):
             key = obj["Key"]
             filename = Path(key).name
             if not filename.endswith(".rpm"):
                 continue
-            dest = local_dir / filename
-            logger.info("Downloading s3://%s/%s -> %s", bucket, key, dest)
-            s3.download_file(bucket, key, str(dest))
-            downloaded.append(filename)
+            remote[filename] = (key, obj["Size"])
+
+    stale = [p for p in local_dir.glob("*.rpm") if p.name not in remote]
+    if stale:
+        logger.info("Removing %d superseded RPM(s) from %s...", len(stale), local_dir)
+        for path in stale:
+            path.unlink()
+
+    downloaded: list[str] = []
+    skipped = 0
+    for filename, (key, size) in remote.items():
+        dest = local_dir / filename
+        if dest.exists() and dest.stat().st_size == size:
+            skipped += 1
+            continue
+        logger.info("Downloading s3://%s/%s -> %s", bucket, key, dest)
+        s3.download_file(bucket, key, str(dest))
+        downloaded.append(filename)
+
+    logger.info("Skipped %d unchanged RPM(s) already present locally.", skipped)
     return downloaded
 
 
